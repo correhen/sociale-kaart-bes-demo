@@ -10,62 +10,93 @@
   <header class="site-header">
     <a class="brand" href="index.html">Sociale Kaart BES <span>demo</span></a>
     <nav>
-      <a href="organisaties.html">Organisaties</a>
-      <a href="aanbod.html">Hulp & aanbod</a>
-      <a href="activiteiten.html">Activiteiten</a>
+      <a href="organisaties.html" data-i18n="navOrganizations">Organisaties</a>
+      <a href="aanbod.html" data-i18n="navServices">Hulp & aanbod</a>
+      <a href="activiteiten.html" data-i18n="navEvents">Activiteiten</a>
     </nav>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-text">
-        <p class="eyebrow">Bonaire · Saba · Sint Eustatius</p>
-        <h1>Vind snel hulp, ondersteuning en activiteiten op jouw eiland.</h1>
-        <p>Een gebruiksvriendelijke voorzet voor een sociale kaart die start bij de vraag van inwoners, jongeren en ouders — niet bij de organisatielijst.</p>
+        <p class="eyebrow" data-i18n="homeEyebrow">Bonaire - Saba - Sint Eustatius</p>
+        <h1 data-i18n="homeTitle">Vind wat jij nodig hebt. Dicht bij jou.</h1>
+        <p data-i18n="homeIntro">Zoek snel hulp, activiteiten en organisaties op jouw eiland. Warm, dichtbij en makkelijk te gebruiken.</p>
+        <form class="hero-search" action="aanbod.html">
+          <label class="sr-only" for="homeSearch" data-i18n="homeSearchLabel">Zoeken</label>
+          <input id="homeSearch" name="q" type="search" placeholder="Waar zoek je naar?" data-i18n-placeholder="homeSearchPlaceholder" />
+          <input id="homeSearchIsland" name="island" type="hidden" />
+          <button type="submit" data-i18n="homeSearchButton">Zoek</button>
+        </form>
         <div class="hero-actions">
-          <a class="button primary" href="aanbod.html?direct=true">Ik zoek hulp</a>
-          <a class="button" href="activiteiten.html">Ik wil iets doen</a>
-          <a class="button" href="aanbod.html?audience=ouders">Voor ouders</a>
+          <a id="homeHelpLink" class="button primary" href="aanbod.html" data-i18n="homeHelpButton">Hulp & ondersteuning</a>
+          <a id="homeActivityLink" class="button magenta" href="activiteiten.html" data-i18n="homeActivityButton">Activiteiten</a>
+          <a id="homeOrgLink" class="button purple" href="organisaties.html" data-i18n="homeOrganizationsButton">Organisaties</a>
         </div>
       </div>
-      <div class="hero-card">
-        <h2>Kies je eiland</h2>
-        <div class="island-grid">
-          <a href="aanbod.html?island=bonaire">Bonaire</a>
-          <a href="aanbod.html?island=saba">Saba</a>
-          <a href="aanbod.html?island=statia">Sint Eustatius</a>
+      <aside class="hero-visual">
+        <picture>
+          <source id="homeHeroSource" srcset="assets/img/hero/herobanner.webp" type="image/webp" />
+          <img id="homeHeroImage" src="assets/img/hero/herobanner.png" alt="Sociale Kaart BES community" />
+        </picture>
+        <div class="hero-photo-caption">
+          <span id="homeHeroIsland">BES</span>
+          <strong data-i18n="homeHeroCaption">Jouw sociale kaart, dichtbij.</strong>
         </div>
-      </div>
+      </aside>
+    </section>
+
+    <section class="section audience-strip">
+      <article>
+        <span class="mini-icon turquoise">?</span>
+        <h2 data-i18n="homeYouthTitle">Voor jongeren</h2>
+        <p data-i18n="homeYouthText">Vind iemand om mee te praten, iets om te doen of hulp bij school, geld en thuis.</p>
+      </article>
+      <article>
+        <span class="mini-icon magenta">+</span>
+        <h2 data-i18n="homeParentsProsTitle">Voor ouders en professionals</h2>
+        <p data-i18n="homeParentsProsText">Snel overzicht van organisaties en aanbod om goed door te verwijzen.</p>
+      </article>
     </section>
 
     <section class="section">
       <div class="section-head">
-        <h2>Populaire onderwerpen</h2>
-        <p>Herkenbare ingangen, geïnspireerd op vraaggerichte sociale kaarten.</p>
+        <h2 data-i18n="homeYouthServicesTitle">Hulp voor jongeren</h2>
+        <p data-i18n="homeYouthServicesText">Een paar directe ingangen uit de demo-data.</p>
       </div>
-      <div class="topic-grid" id="topicGrid"></div>
+      <div class="cards wide" id="youthSupport"></div>
     </section>
 
     <section class="section two-col">
       <div>
         <div class="section-head">
-          <h2>Direct hulp nodig?</h2>
-          <p>Toon hier aanbod dat snel bereikbaar moet zijn.</p>
+          <h2 data-i18n="homeParentsServicesTitle">Voor ouders en professionals</h2>
+          <p data-i18n="homeParentsServicesText">Ondersteuning voor gezin, opvoeding en praktische vragen.</p>
         </div>
-        <div class="cards" id="directHelp"></div>
+        <div class="cards" id="parentSupport"></div>
       </div>
       <div>
         <div class="section-head">
-          <h2>Deze week te doen</h2>
-          <p>Activiteiten maken de sociale kaart levendiger.</p>
+          <h2 data-i18n="homeEventsTitle">Activiteiten binnenkort</h2>
+          <p data-i18n="homeEventsText">Activiteiten maken de sociale kaart levendiger.</p>
         </div>
         <div class="cards" id="upcomingEvents"></div>
       </div>
     </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 data-i18n="homeTopicsTitle">Populaire thema's</h2>
+        <p data-i18n="homeTopicsText">Herkenbare ingangen, geinspireerd op vraaggerichte sociale kaarten.</p>
+      </div>
+      <div class="topic-grid" id="topicGrid"></div>
+    </section>
   </main>
 
-  <footer>
-    <p>Demo voor bespreking met stagiair/opdrachtgever. Data is fictief.</p>
+  <footer class="site-footer">
+    <strong>Sociale Kaart BES</strong>
+    <p data-i18n="footerTagline">Voor hulp, activiteiten en ondersteuning op Bonaire, Sint Eustatius en Saba.</p>
+    <small data-i18n="footerCredit">Design & development support by Nos Boneiru</small>
   </footer>
 
   <script src="assets/app.js"></script>

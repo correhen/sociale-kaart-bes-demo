@@ -10,26 +10,30 @@
   <header class="site-header">
     <a class="brand" href="index.html">Sociale Kaart BES <span>demo</span></a>
     <nav>
-      <a class="active" href="organisaties.html">Organisaties</a>
-      <a href="aanbod.html">Hulp & aanbod</a>
-      <a href="activiteiten.html">Activiteiten</a>
+      <a class="active" href="organisaties.html" data-i18n="navOrganizations">Organisaties</a>
+      <a href="aanbod.html" data-i18n="navServices">Hulp & aanbod</a>
+      <a href="activiteiten.html" data-i18n="navEvents">Activiteiten</a>
     </nav>
   </header>
   <main>
     <section class="page-intro">
-      <h1>Organisaties</h1>
-      <p>Bekijk organisaties op Bonaire, Saba en Sint Eustatius. In de echte versie komt hier actuele, gecontroleerde informatie.</p>
+      <h1 data-i18n="organizationsTitle">Organisaties</h1>
+      <p data-i18n="organizationsIntro">Bekijk organisaties op Bonaire, Saba en Sint Eustatius. In de echte versie komt hier actuele, gecontroleerde informatie.</p>
     </section>
     <section class="filter-panel">
-      <input id="q" placeholder="Zoek op naam of omschrijving" />
-      <select id="island"><option value="">Alle eilanden</option></select>
-      <select id="theme"><option value="">Alle thema's</option></select>
-      <select id="audience"><option value="">Alle doelgroepen</option></select>
-      <button id="reset">Reset</button>
+      <input id="q" placeholder="Zoek op naam of omschrijving" data-i18n-placeholder="searchOrganizations" />
+      <select id="island"><option value="" data-i18n="filterAllIslands">Alle eilanden</option></select>
+      <select id="theme"><option value="" data-i18n="filterAllThemes">Alle thema's</option></select>
+      <select id="audience"><option value="" data-i18n="filterAllAudiences">Alle doelgroepen</option></select>
+      <button id="reset" data-i18n="resetButton">Reset</button>
     </section>
     <section class="cards wide" id="results"></section>
   </main>
-  <footer><p>Demo. Data is fictief.</p></footer>
+  <footer class="site-footer">
+    <strong>Sociale Kaart BES</strong>
+    <p data-i18n="footerTagline">Voor hulp, activiteiten en ondersteuning op Bonaire, Sint Eustatius en Saba.</p>
+    <small data-i18n="footerCredit">Design & development support by Nos Boneiru</small>
+  </footer>
   <script src="assets/app.js"></script>
   <script>initOrganizations();</script>
 </body>

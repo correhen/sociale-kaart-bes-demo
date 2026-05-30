@@ -10,27 +10,37 @@
   <header class="site-header">
     <a class="brand" href="index.html">Sociale Kaart BES <span>demo</span></a>
     <nav>
-      <a href="organisaties.html">Organisaties</a>
-      <a class="active" href="aanbod.html">Hulp & aanbod</a>
-      <a href="activiteiten.html">Activiteiten</a>
+      <a href="organisaties.html" data-i18n="navOrganizations">Organisaties</a>
+      <a class="active" href="aanbod.html" data-i18n="navServices">Hulp & aanbod</a>
+      <a href="activiteiten.html" data-i18n="navEvents">Activiteiten</a>
     </nav>
   </header>
   <main>
-    <section class="page-intro">
-      <h1>Hulp & aanbod</h1>
-      <p>Zoek niet alleen op organisatie, maar op wat iemand nodig heeft. Dit wordt het hart van de sociale kaart.</p>
+    <section class="page-intro page-intro-media">
+      <div>
+        <h1 data-i18n="servicesTitle">Hulp & aanbod</h1>
+        <p data-i18n="servicesIntro">Zoek niet alleen op organisatie, maar op wat iemand nodig heeft. Dit wordt het hart van de sociale kaart.</p>
+      </div>
+      <picture class="intro-photo">
+        <source srcset="assets/img/hero/guidance.webp" type="image/webp" />
+        <img src="assets/img/hero/guidance.png" alt="Persoonlijke begeleiding en ondersteuning" />
+      </picture>
     </section>
     <section class="filter-panel">
-      <input id="q" placeholder="Waar zoek je hulp bij?" />
-      <select id="island"><option value="">Alle eilanden</option></select>
-      <select id="theme"><option value="">Alle thema's</option></select>
-      <select id="audience"><option value="">Alle doelgroepen</option></select>
-      <label class="check"><input type="checkbox" id="direct" /> Directe hulp</label>
-      <button id="reset">Reset</button>
+      <input id="q" placeholder="Waar zoek je hulp bij?" data-i18n-placeholder="searchServices" />
+      <select id="island"><option value="" data-i18n="filterAllIslands">Alle eilanden</option></select>
+      <select id="theme"><option value="" data-i18n="filterAllThemes">Alle thema's</option></select>
+      <select id="audience"><option value="" data-i18n="filterAllAudiences">Alle doelgroepen</option></select>
+      <label class="check"><input type="checkbox" id="direct" /> <span data-i18n="directHelp">Directe hulp</span></label>
+      <button id="reset" data-i18n="resetButton">Reset</button>
     </section>
     <section class="cards wide" id="results"></section>
   </main>
-  <footer><p>Demo. Data is fictief.</p></footer>
+  <footer class="site-footer">
+    <strong>Sociale Kaart BES</strong>
+    <p data-i18n="footerTagline">Voor hulp, activiteiten en ondersteuning op Bonaire, Sint Eustatius en Saba.</p>
+    <small data-i18n="footerCredit">Design & development support by Nos Boneiru</small>
+  </footer>
   <script src="assets/app.js"></script>
   <script>initServices();</script>
 </body>
