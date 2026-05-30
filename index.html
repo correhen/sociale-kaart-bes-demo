@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sociale Kaart BES - Demo</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Sociale Kaart BES <span>demo</span></a>
+    <nav>
+      <a href="organisaties.html">Organisaties</a>
+      <a href="aanbod.html">Hulp & aanbod</a>
+      <a href="activiteiten.html">Activiteiten</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Bonaire · Saba · Sint Eustatius</p>
+        <h1>Vind snel hulp, ondersteuning en activiteiten op jouw eiland.</h1>
+        <p>Een gebruiksvriendelijke voorzet voor een sociale kaart die start bij de vraag van inwoners, jongeren en ouders — niet bij de organisatielijst.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="aanbod.html?direct=true">Ik zoek hulp</a>
+          <a class="button" href="activiteiten.html">Ik wil iets doen</a>
+          <a class="button" href="aanbod.html?audience=ouders">Voor ouders</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h2>Kies je eiland</h2>
+        <div class="island-grid">
+          <a href="aanbod.html?island=bonaire">Bonaire</a>
+          <a href="aanbod.html?island=saba">Saba</a>
+          <a href="aanbod.html?island=statia">Sint Eustatius</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Populaire onderwerpen</h2>
+        <p>Herkenbare ingangen, geïnspireerd op vraaggerichte sociale kaarten.</p>
+      </div>
+      <div class="topic-grid" id="topicGrid"></div>
+    </section>
+
+    <section class="section two-col">
+      <div>
+        <div class="section-head">
+          <h2>Direct hulp nodig?</h2>
+          <p>Toon hier aanbod dat snel bereikbaar moet zijn.</p>
+        </div>
+        <div class="cards" id="directHelp"></div>
+      </div>
+      <div>
+        <div class="section-head">
+          <h2>Deze week te doen</h2>
+          <p>Activiteiten maken de sociale kaart levendiger.</p>
+        </div>
+        <div class="cards" id="upcomingEvents"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Demo voor bespreking met stagiair/opdrachtgever. Data is fictief.</p>
+  </footer>
+
+  <script src="assets/app.js"></script>
+  <script>initHome();</script>
+</body>
+</html>

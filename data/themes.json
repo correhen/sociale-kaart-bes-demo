@@ -1,0 +1,8 @@
+[
+  {"slug":"mentale-gezondheid","name":"Mentale gezondheid","description":"Praten, stress, zorgen en hulp bij vastlopen."},
+  {"slug":"school-studie","name":"School & studie","description":"Huiswerk, opleiding, begeleiding en toekomst."},
+  {"slug":"werk-geld","name":"Werk & geld","description":"Werk zoeken, budget, schulden en inkomen."},
+  {"slug":"opvoeding-gezin","name":"Opvoeding & gezin","description":"Ouders, verzorgers, gezin en ondersteuning thuis."},
+  {"slug":"vrije-tijd","name":"Vrije tijd","description":"Sport, cultuur, ontmoeting en meedoen."},
+  {"slug":"veiligheid","name":"Veiligheid","description":"Hulp bij onveiligheid, geweld of acute zorgen."}
+]

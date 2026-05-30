@@ -1,0 +1,6 @@
+[
+  {"id":1,"organization_id":1,"title":"Open inloop jongeren","island":"bonaire","themes":["vrije-tijd","mentale-gezondheid"],"audiences":["jongeren"],"date":"2026-05-18","time":"15:00","short":"Kom langs voor een praatje, spel of vraag."},
+  {"id":2,"organization_id":3,"title":"Homework club","island":"saba","themes":["school-studie"],"audiences":["jongeren"],"date":"2026-05-19","time":"16:00","short":"Quiet study moment with support."},
+  {"id":3,"organization_id":4,"title":"Budget basics for families","island":"statia","themes":["werk-geld"],"audiences":["ouders","volwassenen"],"date":"2026-05-20","time":"18:30","short":"Practical evening about family budgeting."},
+  {"id":4,"organization_id":2,"title":"Ouderavond omgaan met pubers","island":"bonaire","themes":["opvoeding-gezin"],"audiences":["ouders"],"date":"2026-05-22","time":"19:00","short":"Gesprek en tips voor ouders/verzorgers."}
+]

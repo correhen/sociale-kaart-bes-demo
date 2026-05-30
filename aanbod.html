@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hulp & aanbod - Sociale Kaart BES</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Sociale Kaart BES <span>demo</span></a>
+    <nav>
+      <a href="organisaties.html">Organisaties</a>
+      <a class="active" href="aanbod.html">Hulp & aanbod</a>
+      <a href="activiteiten.html">Activiteiten</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page-intro">
+      <h1>Hulp & aanbod</h1>
+      <p>Zoek niet alleen op organisatie, maar op wat iemand nodig heeft. Dit wordt het hart van de sociale kaart.</p>
+    </section>
+    <section class="filter-panel">
+      <input id="q" placeholder="Waar zoek je hulp bij?" />
+      <select id="island"><option value="">Alle eilanden</option></select>
+      <select id="theme"><option value="">Alle thema's</option></select>
+      <select id="audience"><option value="">Alle doelgroepen</option></select>
+      <label class="check"><input type="checkbox" id="direct" /> Directe hulp</label>
+      <button id="reset">Reset</button>
+    </section>
+    <section class="cards wide" id="results"></section>
+  </main>
+  <footer><p>Demo. Data is fictief.</p></footer>
+  <script src="assets/app.js"></script>
+  <script>initServices();</script>
+</body>
+</html>

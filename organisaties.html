@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Organisaties - Sociale Kaart BES</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Sociale Kaart BES <span>demo</span></a>
+    <nav>
+      <a class="active" href="organisaties.html">Organisaties</a>
+      <a href="aanbod.html">Hulp & aanbod</a>
+      <a href="activiteiten.html">Activiteiten</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page-intro">
+      <h1>Organisaties</h1>
+      <p>Bekijk organisaties op Bonaire, Saba en Sint Eustatius. In de echte versie komt hier actuele, gecontroleerde informatie.</p>
+    </section>
+    <section class="filter-panel">
+      <input id="q" placeholder="Zoek op naam of omschrijving" />
+      <select id="island"><option value="">Alle eilanden</option></select>
+      <select id="theme"><option value="">Alle thema's</option></select>
+      <select id="audience"><option value="">Alle doelgroepen</option></select>
+      <button id="reset">Reset</button>
+    </section>
+    <section class="cards wide" id="results"></section>
+  </main>
+  <footer><p>Demo. Data is fictief.</p></footer>
+  <script src="assets/app.js"></script>
+  <script>initOrganizations();</script>
+</body>
+</html>
