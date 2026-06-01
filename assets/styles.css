@@ -274,7 +274,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 .island-grid a::after{content:"";position:absolute;right:-28px;top:-18px;width:84px;height:84px;border:14px solid rgba(255,255,255,.22);border-radius:28px;transform:rotate(18deg)}
 .island-bonaire{background:linear-gradient(135deg,var(--turquoise),#087d87)}
 .island-statia{background:linear-gradient(135deg,var(--magenta),#a92672)}
-.island-saba{background:linear-gradient(135deg,var(--yellow),#f59e0b);color:#352800!important}
+.island-grid .island-saba{background:linear-gradient(135deg,var(--yellow),#f59e0b);color:#352800}
 
 .section{margin:34px 0}
 .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px}
@@ -524,6 +524,8 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 .preference-modal p{margin:0 0 18px;color:var(--muted)}
 .choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
 .choice-grid button{
+  width:100%;
+  min-width:0;
   min-height:76px;
   border:2px solid transparent;
   border-radius:22px;
@@ -557,7 +559,20 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   height:8px;
   background:var(--turquoise);
 }
-.choice-grid .island-choice span{position:relative;z-index:1;display:block;margin-top:86px;font-size:1.08rem}
+.choice-grid .island-choice span{
+  position:relative;
+  z-index:2;
+  display:inline-block;
+  margin-top:86px;
+  max-width:100%;
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(0,27,63,.78);
+  color:#fff;
+  font-size:1.08rem;
+  line-height:1.15;
+  text-shadow:0 1px 2px rgba(0,0,0,.4);
+}
 .choice-grid .island-bonaire{background-image:url("img/hero/bonaire.webp")}
 .choice-grid .island-bonaire::after{background:var(--turquoise)}
 .choice-grid .island-statia{background-image:url("img/hero/statia.webp")}
@@ -602,6 +617,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   .filter-panel{grid-template-columns:1fr;border-radius:20px}
   .suggestions{top:4.5rem}
   .choice-grid{grid-template-columns:1fr}
+  .preference-modal{width:100%;padding:24px}
   .choice-grid .island-choice{min-height:94px}
   .choice-grid .island-choice span{margin-top:28px}
   .intro-photo,.intro-photo img{min-height:180px}

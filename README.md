@@ -1,5 +1,7 @@
 # Sociale Kaart BES - Demo
 
+> Deze demo bevat voorbeelddata. Organisatienamen, aanbod en activiteiten moeten door de stagiair/opdrachtgever worden gecontroleerd voordat publicatie plaatsvindt.
+
 Statische demo voor bespreking met stagiair/opdrachtgever.
 
 ## Openen
