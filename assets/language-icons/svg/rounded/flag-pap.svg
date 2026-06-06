@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Papiamentu - Bonaire flag icon">
+  <defs>
+    <clipPath id="clip">
+      <rect x="32" y="64" width="448" height="384" rx="84"/>
+    </clipPath>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect x="32" y="64" width="448" height="384" rx="84" fill="#FFFFFF" filter="url(#shadow)"/>
+  <g clip-path="url(#clip)" transform="translate(32 64) scale(0.875 1)">
+  <image x="0" y="0" width="512" height="384" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgMjcwIDE4MCIgZmlsbD0iIzEwMTgyMCI+CjxwYXRoIGQ9Ik0wIDBIMjcwVjE4MEgweiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNMjcwIDBWMTgwSDB6IiBmaWxsPSIjMDAzMDg3Ii8+CjxwYXRoIGQ9Ik0wIDc1VjBIMTEyLjV6IiBmaWxsPSIjZmZkNzAwIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc1IDc3LjUpIj4KPHBhdGggZD0iTTAtNDUgMjUuOTgwNzYyIDAgMCA0NS0yNS45ODA3NjIgMHpNNDUgMCAwIDI1Ljk4MDc2Mi00NSAwIDAtMjUuOTgwNzYyeiIvPgo8Y2lyY2xlIHI9IjM4Ljk3MTE0MyIvPgo8Y2lyY2xlIHI9IjMzLjc1IiBmaWxsPSIjZmZmIi8+CjxwYXRoIGQ9Im0wIDIyLjUtMTkuNDg1NTcyLTMzLjc1aDM4Ljk3MTE0M3ptMC00NSAxOS40ODU1NzIgMzMuNzVoLTM4Ljk3MTE0M3oiIGZpbGw9IiNkNTAwMzIiLz4KPC9nPgo8L3N2Zz4=" preserveAspectRatio="xMidYMid slice"/>
+  </g>
+  <rect x="32" y="64" width="448" height="384" rx="84" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="3"/>
+</svg>

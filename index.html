@@ -1,105 +1,80 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="nl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sociale Kaart BES - Demo</title>
+  <title>Kadena Hubenil / Sociale Kaart Bonaire</title>
   <link rel="stylesheet" href="assets/styles.css" />
 </head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="index.html">Sociale Kaart BES <span>demo</span></a>
-    <nav>
-      <a href="organisaties.html" data-i18n="navOrganizations">Organisaties</a>
-      <a href="aanbod.html" data-i18n="navServices">Hulp & aanbod</a>
-      <a href="activiteiten.html" data-i18n="navEvents">Activiteiten</a>
+<body class="choice-page landing-page" data-page="audience-choice">
+  <header class="site-header kh-header">
+    <a class="brand" href="index.html">Kadena Hubenil</a>
+    <nav aria-label="Hoofdnavigatie">
+      <a href="jongeren/" data-audience-link="youth">Jongere</a>
+      <a href="professionals/" data-audience-link="professional">Professional</a>
+      <a href="jongeren/organisaties/" data-i18n="organizationsNav">Organisaties</a>
     </nav>
+    <div data-language-slot></div>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="hero-text">
-        <p class="eyebrow" data-i18n="homeEyebrow">Bonaire - Saba - Sint Eustatius</p>
-        <h1 data-i18n="homeTitle">Vind wat jij nodig hebt. Dicht bij jou.</h1>
-        <p data-i18n="homeIntro">Zoek snel hulp, activiteiten en organisaties op jouw eiland. Warm, dichtbij en makkelijk te gebruiken.</p>
-        <form class="hero-search" action="aanbod.html">
-          <label class="sr-only" for="homeSearch" data-i18n="homeSearchLabel">Zoeken</label>
-          <input id="homeSearch" name="q" type="search" placeholder="Waar zoek je naar?" data-i18n-placeholder="homeSearchPlaceholder" />
-          <input id="homeSearchIsland" name="island" type="hidden" />
-          <button type="submit" data-i18n="homeSearchButton">Zoek</button>
-        </form>
-        <div class="hero-actions">
-          <a id="homeHelpLink" class="button primary" href="aanbod.html" data-i18n="homeHelpButton">Hulp & ondersteuning</a>
-          <a id="homeActivityLink" class="button magenta" href="activiteiten.html" data-i18n="homeActivityButton">Activiteiten</a>
-          <a id="homeOrgLink" class="button purple" href="organisaties.html" data-i18n="homeOrganizationsButton">Organisaties</a>
-        </div>
+    <section class="choice-hero" aria-label="Kies je ingang">
+      <img class="home-accent home-accent--yellow" src="assets/img/accents/kadena-swoosh-yellow.svg" width="360" height="108" alt="" aria-hidden="true" />
+      <img class="home-accent home-accent--aqua" src="assets/img/accents/kadena-swoosh-aqua.svg" width="320" height="112" alt="" aria-hidden="true" />
+      <img class="home-accent home-accent--burst" src="assets/img/accents/kadena-burst.svg" width="160" height="160" alt="" aria-hidden="true" />
+      <div class="choice-cards">
+        <a class="choice-entry landing-card landing-card--youth youth-entry" href="jongeren/" data-audience-link="youth">
+          <div class="landing-card__content">
+            <span data-i18n="homeYouthLabel">IK BEN JONGERE</span>
+            <strong data-i18n="homeYouthTitle">Ik zoek hulp of informatie</strong>
+            <small data-i18n="homeYouthText">Vind snel organisaties, activiteiten en hulp op Bonaire.</small>
+            <b class="landing-card__cta"><span data-i18n="homeContinue">Verder</span> <span class="landing-card__arrow" aria-hidden="true">&rarr;</span></b>
+          </div>
+          <div class="landing-card__media">
+            <picture>
+              <source media="(max-width: 700px)" srcset="assets/img/web/landing-jongeren-600.webp" />
+              <img class="landing-card__image" src="assets/img/web/landing-jongeren-900.webp" width="900" height="1125" loading="eager" fetchpriority="high" alt="Jongeren op Bonaire" />
+            </picture>
+          </div>
+        </a>
+        <a class="choice-entry landing-card landing-card--professional professional-entry" href="professionals/" data-audience-link="professional">
+          <div class="landing-card__content">
+            <span data-i18n="homeProLabel">WERK JE MET JONGEREN?</span>
+            <strong data-i18n="homeProTitle">Voor professionals</strong>
+            <small data-i18n="homeProText">Zoek organisaties en verwijsinformatie.</small>
+            <b class="landing-card__cta"><span data-i18n="homeProCta">Naar professionals</span> <span class="landing-card__arrow" aria-hidden="true">&rarr;</span></b>
+          </div>
+          <div class="landing-card__media">
+            <picture>
+              <source media="(max-width: 700px)" srcset="assets/img/web/landing-professionals-450.webp" />
+              <img class="landing-card__image" src="assets/img/web/landing-professionals-700.webp" width="700" height="875" loading="lazy" alt="Professional op Bonaire" />
+            </picture>
+          </div>
+        </a>
       </div>
-      <aside class="hero-visual">
-        <picture>
-          <source id="homeHeroSource" srcset="assets/img/hero/herobanner.webp" type="image/webp" />
-          <img id="homeHeroImage" src="assets/img/hero/herobanner.png" alt="Sociale Kaart BES community" />
-        </picture>
-        <div class="hero-photo-caption">
-          <span id="homeHeroIsland">BES</span>
-          <strong data-i18n="homeHeroCaption">Jouw sociale kaart, dichtbij.</strong>
-        </div>
-      </aside>
     </section>
 
-    <section class="section audience-strip">
+    <section class="youth-highlights home-highlights" aria-label="Wat je hier vindt">
       <article>
-        <span class="mini-icon turquoise">?</span>
-        <h2 data-i18n="homeYouthTitle">Voor jongeren</h2>
-        <p data-i18n="homeYouthText">Vind iemand om mee te praten, iets om te doen of hulp bij school, geld en thuis.</p>
+        <strong data-i18n="highlightLanguageTitle">In jouw taal</strong>
+        <p data-i18n="highlightLanguageText">Duidelijk en simpel uitgelegd.</p>
       </article>
       <article>
-        <span class="mini-icon magenta">+</span>
-        <h2 data-i18n="homeParentsProsTitle">Voor ouders en professionals</h2>
-        <p data-i18n="homeParentsProsText">Snel overzicht van organisaties en aanbod om goed door te verwijzen.</p>
+        <strong data-i18n="highlightLocalTitle">Lokaal &amp; dichtbij</strong>
+        <p data-i18n="highlightLocalText">Organisaties op Bonaire die je helpen.</p>
       </article>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2 data-i18n="homeYouthServicesTitle">Hulp voor jongeren</h2>
-        <p data-i18n="homeYouthServicesText">Een paar directe ingangen uit de demo-data.</p>
-      </div>
-      <div class="cards wide" id="youthSupport"></div>
-    </section>
-
-    <section class="section two-col">
-      <div>
-        <div class="section-head">
-          <h2 data-i18n="homeParentsServicesTitle">Voor ouders en professionals</h2>
-          <p data-i18n="homeParentsServicesText">Ondersteuning voor gezin, opvoeding en praktische vragen.</p>
-        </div>
-        <div class="cards" id="parentSupport"></div>
-      </div>
-      <div>
-        <div class="section-head">
-          <h2 data-i18n="homeEventsTitle">Activiteiten binnenkort</h2>
-          <p data-i18n="homeEventsText">Activiteiten maken de sociale kaart levendiger.</p>
-        </div>
-        <div class="cards" id="upcomingEvents"></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2 data-i18n="homeTopicsTitle">Populaire thema's</h2>
-        <p data-i18n="homeTopicsText">Herkenbare ingangen, geinspireerd op vraaggerichte sociale kaarten.</p>
-      </div>
-      <div class="topic-grid" id="topicGrid"></div>
+      <article>
+        <strong data-i18n="highlightCalmTitle">Rustig zoeken</strong>
+        <p data-i18n="highlightCalmText">Kijk eerst wat bij jouw situatie past.</p>
+      </article>
     </section>
   </main>
 
   <footer class="site-footer">
-    <strong>Sociale Kaart BES</strong>
-    <p data-i18n="footerTagline">Voor hulp, activiteiten en ondersteuning op Bonaire, Sint Eustatius en Saba.</p>
-    <small data-i18n="footerCredit">Design & development support by Nos Boneiru</small>
+    <p>&copy; 2026 Kadena Hubenil &middot; Nos Boneiru</p>
   </footer>
 
   <script src="assets/app.js"></script>
-  <script>initHome();</script>
+  <script>initAudienceChoice();</script>
 </body>
 </html>

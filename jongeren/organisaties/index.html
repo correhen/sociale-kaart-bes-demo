@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Organisaties - Kadena Hubenil</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body class="audience-youth" data-page="organization-list" data-audience="youth">
+  <header class="site-header kh-header">
+    <a class="brand" href="../../index.html">Kadena Hubenil</a>
+    <nav>
+      <a href="../" data-audience-link="youth">Jongere</a>
+      <a href="../../professionals/" data-audience-link="professional">Professional</a>
+      <a class="active" href="./" data-i18n="organizationsNav">Organisaties</a>
+    </nav>
+    <div data-language-slot></div>
+  </header>
+
+  <main>
+    <section class="page-intro kh-list-intro">
+      <h1 data-i18n="youthOrganizationsTitle">Organisaties die er voor jou zijn</h1>
+      <p data-i18n="youthOrganizationsSubtitle">Zoek op onderwerp, naam of situatie. We helpen je snel de juiste plek te vinden.</p>
+    </section>
+    <section class="filter-panel kh-filter-panel">
+      <div class="organization-search">
+        <input id="q" type="search" placeholder="Waar zoek je hulp bij?" data-i18n-placeholder="organizationSearchPlaceholder" aria-autocomplete="list" aria-expanded="false" aria-controls="organizationSearchResults" />
+        <div id="organizationSearchResults" class="search-suggestions organization-suggestions" role="listbox" hidden></div>
+      </div>
+      <select id="theme"><option value="" data-i18n="allThemes">Alle thema's</option></select>
+      <button id="reset" type="button" data-i18n="reset">Reset</button>
+    </section>
+    <section class="cards wide" id="results"></section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kadena Hubenil &middot; Nos Boneiru</p>
+  </footer>
+
+  <script>window.SEED_BASE = '../../';</script>
+  <script src="../../assets/app.js"></script>
+  <script>initAudienceOrganizations('youth');</script>
+</body>
+</html>

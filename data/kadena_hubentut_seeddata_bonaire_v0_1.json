@@ -1,0 +1,2428 @@
+{
+  "metadata": {
+    "project": "Kadena Hubenil / Sociale Kaart Bonaire",
+    "version": "0.1-demo",
+    "created_at": "2026-06-01",
+    "purpose": "Demo-seeddata voor publieke jongerenomgeving en professionele omgeving. Alles is overschrijfbaar wanneer officiële organisatieformats binnenkomen.",
+    "default_island": "bonaire",
+    "future_island_ready": [
+      "statia",
+      "saba"
+    ],
+    "languages": [
+      "nl",
+      "pap",
+      "en",
+      "es"
+    ],
+    "primary_language": "nl",
+    "translation_note": "Papiamentu, Spaans en Engels zijn voorbereid als vertaalvelden. Waar demovertalingen zijn ingevuld, moeten Papiamentu en Spaans redactioneel gecontroleerd worden.",
+    "scope_note": "Statische MVP voor Bonaire; datastructuur houdt later uitbreiding naar Saba en Statia mogelijk.",
+    "brand": {
+      "youth": "Kadena Hubenil",
+      "professional": "Sociale Kaart Bonaire",
+      "logo": "assets/brand/logo-kadena-hubenil.png"
+    }
+  },
+  "audiences": [
+    {
+      "id": "youth",
+      "label_nl": "Jongere",
+      "style": "kleurijk/energiek"
+    },
+    {
+      "id": "professional",
+      "label_nl": "Professional",
+      "style": "sober/zakelijk/overheid"
+    },
+    {
+      "id": "parents",
+      "label_nl": "Ouder/verzorger",
+      "style": "ondersteunend"
+    }
+  ],
+  "themes": [
+    {
+      "id": "help_support",
+      "slug": "hulp-ondersteuning",
+      "order": 1,
+      "color": "#03A8AF",
+      "labels": {
+        "youth": {
+          "nl": "Hulp en ondersteuning",
+          "pap": "Yudansa i sosten"
+        },
+        "professional": {
+          "nl": "Jeugdhulp & ondersteuning",
+          "pap": "Kuido i Sosten pa Hóben"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Hulp en ondersteuning",
+          "short": "Jeugdhulp & ondersteuning"
+        },
+        "pap": {
+          "name": "Yudansa i sosten",
+          "short": "Kuido i Sosten pa Hóben",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "Help and support",
+          "short": "Youth care and support",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Ayuda y apoyo",
+          "short": "Ayuda juvenil y apoyo",
+          "translation_status": "ai_draft"
+        }
+      }
+    },
+    {
+      "id": "school_future",
+      "slug": "school-toekomst",
+      "order": 2,
+      "color": "#F4B612",
+      "labels": {
+        "youth": {
+          "nl": "School en toekomst",
+          "pap": "Skol i futuro"
+        },
+        "professional": {
+          "nl": "Onderwijs & ontwikkeling",
+          "pap": "Edukashon i Desaroyo"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "School en toekomst",
+          "short": "Onderwijs & ontwikkeling"
+        },
+        "pap": {
+          "name": "Skol i futuro",
+          "short": "Edukashon i Desaroyo",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "School and future",
+          "short": "Education and development",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Escuela y futuro",
+          "short": "Educación y desarrollo",
+          "translation_status": "ai_draft"
+        }
+      }
+    },
+    {
+      "id": "health_wellbeing",
+      "slug": "gezondheid-welzijn",
+      "order": 3,
+      "color": "#58AD3F",
+      "labels": {
+        "youth": {
+          "nl": "Gezondheid en welzijn",
+          "pap": "Salú i bienestar"
+        },
+        "professional": {
+          "nl": "Gezondheid & welzijn",
+          "pap": "Salú i Bienestar"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Gezondheid en welzijn",
+          "short": "Gezondheid & welzijn"
+        },
+        "pap": {
+          "name": "Salú i bienestar",
+          "short": "Salú i Bienestar",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "Health and wellbeing",
+          "short": "Health and wellbeing",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Salud y bienestar",
+          "short": "Salud y bienestar",
+          "translation_status": "ai_draft"
+        }
+      }
+    },
+    {
+      "id": "safety_rights",
+      "slug": "veiligheid-rechten",
+      "order": 4,
+      "color": "#964BA8",
+      "labels": {
+        "youth": {
+          "nl": "Veiligheid en je rechten",
+          "pap": "Seguridat i hustisia"
+        },
+        "professional": {
+          "nl": "Veiligheid & justitie",
+          "pap": "Seguridat i Hustisia"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Veiligheid en je rechten",
+          "short": "Veiligheid & justitie"
+        },
+        "pap": {
+          "name": "Seguridat i hustisia",
+          "short": "Seguridat i Hustisia",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "Safety and your rights",
+          "short": "Safety and justice",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Seguridad y tus derechos",
+          "short": "Seguridad y justicia",
+          "translation_status": "ai_draft"
+        }
+      }
+    },
+    {
+      "id": "family_system",
+      "slug": "familie-omgang",
+      "order": 5,
+      "color": "#FB8304",
+      "labels": {
+        "youth": {
+          "nl": "Familie en omgang",
+          "pap": "Apoyo di famia"
+        },
+        "professional": {
+          "nl": "Gezins- en systeemondersteuning",
+          "pap": "Sosten di Famia i Sistemátiko"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Familie en omgang",
+          "short": "Gezins- en systeemondersteuning"
+        },
+        "pap": {
+          "name": "Apoyo di famia",
+          "short": "Sosten di Famia i Sistemátiko",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "Family and contact",
+          "short": "Family and system support",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Familia y contacto",
+          "short": "Apoyo familiar y sistémico",
+          "translation_status": "ai_draft"
+        }
+      }
+    },
+    {
+      "id": "free_time_development",
+      "slug": "vrije-tijd-ontwikkeling",
+      "order": 6,
+      "color": "#174A91",
+      "labels": {
+        "youth": {
+          "nl": "Vrije tijd en ontwikkeling",
+          "pap": "Tempu liber i hòbi"
+        },
+        "professional": {
+          "nl": "Vrije tijdsbesteding & talentenontwikkeling",
+          "pap": "Aktividatnan pa desaroyo di Talento"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Vrije tijd en ontwikkeling",
+          "short": "Vrije tijdsbesteding & talentenontwikkeling"
+        },
+        "pap": {
+          "name": "Tempu liber i hòbi",
+          "short": "Aktividatnan pa desaroyo di Talento",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "Free time and development",
+          "short": "Leisure and talent development",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Tiempo libre y desarrollo",
+          "short": "Tiempo libre y desarrollo de talentos",
+          "translation_status": "ai_draft"
+        }
+      }
+    },
+    {
+      "id": "housing_stay",
+      "slug": "wonen-verblijf",
+      "order": 7,
+      "color": "#5D6F92",
+      "labels": {
+        "youth": {
+          "nl": "Wonen en verblijf",
+          "pap": "Residensia temporal"
+        },
+        "professional": {
+          "nl": "Woonbegeleiding & opvangvoorzieningen",
+          "pap": "Fasilidatnan di residensia"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Wonen en verblijf",
+          "short": "Woonbegeleiding & opvangvoorzieningen"
+        },
+        "pap": {
+          "name": "Residensia temporal",
+          "short": "Fasilidatnan di residensia",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "Housing and stay",
+          "short": "Supported housing and shelter",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Vivienda y alojamiento",
+          "short": "Acompañamiento residencial y acogida",
+          "translation_status": "ai_draft"
+        }
+      }
+    },
+    {
+      "id": "direct_help",
+      "slug": "directe-hulp",
+      "order": 8,
+      "color": "#F76B05",
+      "labels": {
+        "youth": {
+          "nl": "Directe hulp",
+          "pap": "Yudansa di emergensia"
+        },
+        "professional": {
+          "nl": "Acute hulp & noodsituatie",
+          "pap": "Yudansa di emergensia"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Directe hulp",
+          "short": "Acute hulp & noodsituatie"
+        },
+        "pap": {
+          "name": "Yudansa di emergensia",
+          "short": "Yudansa di emergensia",
+          "translation_status": "reviewed_by_papiamentu_speakers"
+        },
+        "en": {
+          "name": "Direct help",
+          "short": "Urgent help and emergency situations",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Ayuda directa",
+          "short": "Ayuda urgente y emergencias",
+          "translation_status": "ai_draft"
+        }
+      }
+    }
+  ],
+  "organizations": [
+    {
+      "id": "org_akseso",
+      "name": "Akseso",
+      "slug": "akseso",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "help_support",
+        "family_system"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Akseso",
+        "Sentro Akseso Boneiru",
+        "akseso"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "https://www.akseso.cw/",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Akseso",
+          "youth_title": "Akseso",
+          "youth_short": "Je kunt bij Akseso terecht als je thuis, op school, met je gezondheid of met praktische problemen hulp nodig hebt.",
+          "youth_where_can_you_go": "Je kunt bij Akseso terecht als je thuis, op school, met je gezondheid of met praktische problemen hulp nodig hebt.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Akseso is een toegangspunt voor ondersteuning rond jeugd, gezin en praktische hulpvragen op Bonaire.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Toegangspunt / ondersteuning",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Akseso",
+          "youth_title": "Akseso",
+          "youth_short": "Je kunt bij Akseso terecht als je thuis, op school, met je gezondheid of met praktische problemen hulp nodig hebt.",
+          "professional_summary": "Akseso is een toegangspunt voor ondersteuning rond jeugd, gezin en praktische hulpvragen op Bonaire.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Akseso",
+          "youth_short": "Je kunt bij Akseso terecht als je thuis, op school, met je gezondheid of met praktische problemen hulp nodig hebt.",
+          "professional_summary": "Akseso is een toegangspunt voor ondersteuning rond jeugd, gezin en praktische hulpvragen op Bonaire.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Akseso",
+          "youth_short": "Je kunt bij Akseso terecht als je thuis, op school, met je gezondheid of met praktische problemen hulp nodig hebt.",
+          "professional_summary": "Akseso is een toegangspunt voor ondersteuning rond jeugd, gezin en praktische hulpvragen op Bonaire.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_zjcn",
+      "name": "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+      "slug": "zorg-en-jeugd-caribisch-nederland",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "help_support",
+        "family_system"
+      ],
+      "secondary_theme_ids": [
+        "housing_stay"
+      ],
+      "search_keywords_nl": [
+        "BWB",
+        "Begeleid Wonen Bonaire",
+        "Jeugdzorg Caribisch Nederland",
+        "ZJCN",
+        "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+        "zorg en jeugd caribisch nederland"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+          "youth_title": "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+          "youth_short": "Zorg en Jeugd Caribisch Nederland kan helpen als er meer ondersteuning nodig is voor jou of je gezin.",
+          "youth_where_can_you_go": "Zorg en Jeugd Caribisch Nederland kan helpen als er meer ondersteuning nodig is voor jou of je gezin.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Zorg en Jeugd Caribisch Nederland (ZJCN) biedt en organiseert jeugdhulp en gezinsondersteuning in Caribisch Nederland.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Jeugdhulp / gezinsondersteuning",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+          "youth_title": "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+          "youth_short": "Zorg en Jeugd Caribisch Nederland kan helpen als er meer ondersteuning nodig is voor jou of je gezin.",
+          "professional_summary": "Zorg en Jeugd Caribisch Nederland (ZJCN) biedt en organiseert jeugdhulp en gezinsondersteuning in Caribisch Nederland.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+          "youth_short": "Zorg en Jeugd Caribisch Nederland kan helpen als er meer ondersteuning nodig is voor jou of je gezin.",
+          "professional_summary": "Zorg en Jeugd Caribisch Nederland (ZJCN) biedt en organiseert jeugdhulp en gezinsondersteuning in Caribisch Nederland.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Zorg en Jeugd Caribisch Nederland (ZJCN)",
+          "youth_short": "Zorg en Jeugd Caribisch Nederland kan helpen als er meer ondersteuning nodig is voor jou of je gezin.",
+          "professional_summary": "Zorg en Jeugd Caribisch Nederland (ZJCN) biedt en organiseert jeugdhulp en gezinsondersteuning in Caribisch Nederland.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      },
+      "service_labels": [
+        "Begeleid Wonen Bonaire (BWB)"
+      ]
+    },
+    {
+      "id": "org_eoz",
+      "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+      "slug": "expertisecenter-onderwijs-zorg-bonaire",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "school_future"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "EOZ",
+        "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+        "expertisecenter onderwijs zorg bonaire"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "youth_title": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "youth_short": "Als school moeilijk gaat of je extra ondersteuning nodig hebt, kan Expertisecenter Onderwijs Zorg Bonaire (EOZ) samen met school meedenken.",
+          "youth_where_can_you_go": "Als school moeilijk gaat of je extra ondersteuning nodig hebt, kan Expertisecenter Onderwijs Zorg Bonaire (EOZ) samen met school meedenken.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Expertisecenter Onderwijs Zorg Bonaire (EOZ) ondersteunt leerlingen en studenten die vastlopen in het onderwijs.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Onderwijszorg",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "youth_title": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "youth_short": "Als school moeilijk gaat of je extra ondersteuning nodig hebt, kan Expertisecenter Onderwijs Zorg Bonaire (EOZ) samen met school meedenken.",
+          "professional_summary": "Expertisecenter Onderwijs Zorg Bonaire (EOZ) ondersteunt leerlingen en studenten die vastlopen in het onderwijs.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "youth_short": "Als school moeilijk gaat of je extra ondersteuning nodig hebt, kan Expertisecenter Onderwijs Zorg Bonaire (EOZ) samen met school meedenken.",
+          "professional_summary": "Expertisecenter Onderwijs Zorg Bonaire (EOZ) ondersteunt leerlingen en studenten die vastlopen in het onderwijs.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "youth_short": "Als school moeilijk gaat of je extra ondersteuning nodig hebt, kan Expertisecenter Onderwijs Zorg Bonaire (EOZ) samen met school meedenken.",
+          "professional_summary": "Expertisecenter Onderwijs Zorg Bonaire (EOZ) ondersteunt leerlingen en studenten die vastlopen in het onderwijs.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_fundashon_forma",
+      "name": "Fundashon Forma",
+      "slug": "fundashon-forma",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "school_future"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Fundashon FORMA",
+        "Fundashon Forma",
+        "SKJ",
+        "fundashon forma"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Fundashon Forma",
+          "youth_title": "Fundashon Forma",
+          "youth_short": "Fundashon Forma helpt met leren, vaardigheden en stappen richting opleiding of werk.",
+          "youth_where_can_you_go": "Fundashon Forma helpt met leren, vaardigheden en stappen richting opleiding of werk.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Fundashon Forma biedt onderwijs-, ontwikkel- en trajectbegeleiding voor jongeren en volwassenen.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Onderwijs / ontwikkeling",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Fundashon Forma",
+          "youth_title": "Fundashon Forma",
+          "youth_short": "Fundashon Forma helpt met leren, vaardigheden en stappen richting opleiding of werk.",
+          "professional_summary": "Fundashon Forma biedt onderwijs-, ontwikkel- en trajectbegeleiding voor jongeren en volwassenen.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Fundashon Forma",
+          "youth_short": "Fundashon Forma helpt met leren, vaardigheden en stappen richting opleiding of werk.",
+          "professional_summary": "Fundashon Forma biedt onderwijs-, ontwikkel- en trajectbegeleiding voor jongeren en volwassenen.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Fundashon Forma",
+          "youth_short": "Fundashon Forma helpt met leren, vaardigheden en stappen richting opleiding of werk.",
+          "professional_summary": "Fundashon Forma biedt onderwijs-, ontwikkel- en trajectbegeleiding voor jongeren en volwassenen.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_rebound",
+      "name": "Rebound",
+      "slug": "rebound",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "school_future"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Rebound",
+        "rebound"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Rebound",
+          "youth_title": "Rebound",
+          "youth_short": "Rebound kan helpen als school tijdelijk niet goed lukt en je ondersteuning nodig hebt om weer verder te komen.",
+          "youth_where_can_you_go": "Rebound kan helpen als school tijdelijk niet goed lukt en je ondersteuning nodig hebt om weer verder te komen.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Rebound biedt tijdelijke onderwijs- en begeleidingsondersteuning voor jongeren die extra structuur nodig hebben.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Onderwijsondersteuning",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Rebound",
+          "youth_title": "Rebound",
+          "youth_short": "Rebound kan helpen als school tijdelijk niet goed lukt en je ondersteuning nodig hebt om weer verder te komen.",
+          "professional_summary": "Rebound biedt tijdelijke onderwijs- en begeleidingsondersteuning voor jongeren die extra structuur nodig hebben.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Rebound",
+          "youth_short": "Rebound kan helpen als school tijdelijk niet goed lukt en je ondersteuning nodig hebt om weer verder te komen.",
+          "professional_summary": "Rebound biedt tijdelijke onderwijs- en begeleidingsondersteuning voor jongeren die extra structuur nodig hebben.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Rebound",
+          "youth_short": "Rebound kan helpen als school tijdelijk niet goed lukt en je ondersteuning nodig hebt om weer verder te komen.",
+          "professional_summary": "Rebound biedt tijdelijke onderwijs- en begeleidingsondersteuning voor jongeren die extra structuur nodig hebben.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_mhc",
+      "name": "Mental Health Caribbean (MHC)",
+      "slug": "mental-health-caribbean",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "health_wellbeing"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Hi-5",
+        "MHC",
+        "Mental Health Caribbean (MHC)",
+        "Mental Health Caribbean Kind Jeugd",
+        "mental health caribbean"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Mental Health Caribbean (MHC)",
+          "youth_title": "Mental Health Caribbean (MHC)",
+          "youth_short": "Als je veel angst, somberheid, boosheid, stress of andere psychische klachten ervaart, kan Mental Health Caribbean (MHC) helpen.",
+          "youth_where_can_you_go": "Als je veel angst, somberheid, boosheid, stress of andere psychische klachten ervaart, kan Mental Health Caribbean (MHC) helpen.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Mental Health Caribbean (MHC) biedt geestelijke gezondheidszorg en begeleiding.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Geestelijke gezondheidszorg",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Mental Health Caribbean (MHC)",
+          "youth_title": "Mental Health Caribbean (MHC)",
+          "youth_short": "Als je veel angst, somberheid, boosheid, stress of andere psychische klachten ervaart, kan Mental Health Caribbean (MHC) helpen.",
+          "professional_summary": "Mental Health Caribbean (MHC) biedt geestelijke gezondheidszorg en begeleiding.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Mental Health Caribbean (MHC)",
+          "youth_short": "Als je veel angst, somberheid, boosheid, stress of andere psychische klachten ervaart, kan Mental Health Caribbean (MHC) helpen.",
+          "professional_summary": "Mental Health Caribbean (MHC) biedt geestelijke gezondheidszorg en begeleiding.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Mental Health Caribbean (MHC)",
+          "youth_short": "Als je veel angst, somberheid, boosheid, stress of andere psychische klachten ervaart, kan Mental Health Caribbean (MHC) helpen.",
+          "professional_summary": "Mental Health Caribbean (MHC) biedt geestelijke gezondheidszorg en begeleiding.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_ggd_bonaire",
+      "name": "GGD Bonaire",
+      "slug": "ggd-bonaire",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "health_wellbeing"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "GGD Bonaire",
+        "Salubridat Públiko",
+        "ggd bonaire"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "GGD Bonaire",
+          "youth_title": "GGD Bonaire",
+          "youth_short": "GGD Bonaire geeft informatie en hulp rond gezondheid, preventie en publieke gezondheid.",
+          "youth_where_can_you_go": "GGD Bonaire geeft informatie en hulp rond gezondheid, preventie en publieke gezondheid.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "GGD Bonaire werkt aan publieke gezondheid, preventie en gezondheidsvoorlichting.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Publieke gezondheid",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "GGD Bonaire",
+          "youth_title": "GGD Bonaire",
+          "youth_short": "GGD Bonaire geeft informatie en hulp rond gezondheid, preventie en publieke gezondheid.",
+          "professional_summary": "GGD Bonaire werkt aan publieke gezondheid, preventie en gezondheidsvoorlichting.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "GGD Bonaire",
+          "youth_short": "GGD Bonaire geeft informatie en hulp rond gezondheid, preventie en publieke gezondheid.",
+          "professional_summary": "GGD Bonaire werkt aan publieke gezondheid, preventie en gezondheidsvoorlichting.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "GGD Bonaire",
+          "youth_short": "GGD Bonaire geeft informatie en hulp rond gezondheid, preventie en publieke gezondheid.",
+          "professional_summary": "GGD Bonaire werkt aan publieke gezondheid, preventie en gezondheidsvoorlichting.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_fkpd",
+      "name": "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+      "slug": "fundashon-kuido-pa-personanan-desabilita",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "health_wellbeing"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "FKPD",
+        "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+        "fundashon kuido pa personanan desabilita"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+          "youth_title": "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+          "youth_short": "Fundashon Kuido pa Personanan Desabilitá (FKPD) ondersteunt mensen met een beperking en hun omgeving.",
+          "youth_where_can_you_go": "Fundashon Kuido pa Personanan Desabilitá (FKPD) ondersteunt mensen met een beperking en hun omgeving.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Fundashon Kuido pa Personanan Desabilitá (FKPD) biedt ondersteuning voor personen met een beperking.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Ondersteuning bij beperking",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+          "youth_title": "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+          "youth_short": "Fundashon Kuido pa Personanan Desabilitá (FKPD) ondersteunt mensen met een beperking en hun omgeving.",
+          "professional_summary": "Fundashon Kuido pa Personanan Desabilitá (FKPD) biedt ondersteuning voor personen met een beperking.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+          "youth_short": "Fundashon Kuido pa Personanan Desabilitá (FKPD) ondersteunt mensen met een beperking en hun omgeving.",
+          "professional_summary": "Fundashon Kuido pa Personanan Desabilitá (FKPD) biedt ondersteuning voor personen met een beperking.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
+          "youth_short": "Fundashon Kuido pa Personanan Desabilitá (FKPD) ondersteunt mensen met een beperking en hun omgeving.",
+          "professional_summary": "Fundashon Kuido pa Personanan Desabilitá (FKPD) biedt ondersteuning voor personen met een beperking.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_kpcn",
+      "name": "Korps Politie Caribisch Nederland (KPCN)",
+      "slug": "korps-politie-caribisch-nederland",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "safety_rights",
+        "direct_help"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "KPCN",
+        "Korps Politie Caribisch Nederland (KPCN)",
+        "korps politie caribisch nederland",
+        "politie"
+      ],
+      "contact": {
+        "phone": "911",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Korps Politie Caribisch Nederland (KPCN)",
+          "youth_title": "Korps Politie Caribisch Nederland (KPCN)",
+          "youth_short": "Bel de politie als je direct gevaar ziet of hulp nodig hebt bij veiligheid.",
+          "youth_where_can_you_go": "Bel de politie als je direct gevaar ziet of hulp nodig hebt bij veiligheid.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Korps Politie Caribisch Nederland (KPCN) is de politieorganisatie voor veiligheid en noodsituaties.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Politie / veiligheid",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Korps Politie Caribisch Nederland (KPCN)",
+          "youth_title": "Korps Politie Caribisch Nederland (KPCN)",
+          "youth_short": "Bel de politie als je direct gevaar ziet of hulp nodig hebt bij veiligheid.",
+          "professional_summary": "Korps Politie Caribisch Nederland (KPCN) is de politieorganisatie voor veiligheid en noodsituaties.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Korps Politie Caribisch Nederland (KPCN)",
+          "youth_short": "Bel de politie als je direct gevaar ziet of hulp nodig hebt bij veiligheid.",
+          "professional_summary": "Korps Politie Caribisch Nederland (KPCN) is de politieorganisatie voor veiligheid en noodsituaties.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Korps Politie Caribisch Nederland (KPCN)",
+          "youth_short": "Bel de politie als je direct gevaar ziet of hulp nodig hebt bij veiligheid.",
+          "professional_summary": "Korps Politie Caribisch Nederland (KPCN) is de politieorganisatie voor veiligheid en noodsituaties.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_voogdijraad_cn",
+      "name": "Voogdijraad Caribisch Nederland",
+      "slug": "voogdijraad-caribisch-nederland",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "safety_rights",
+        "family_system"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Voogdijraad Caribisch Nederland",
+        "voogdijraad caribisch nederland"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Voogdijraad Caribisch Nederland",
+          "youth_title": "Voogdijraad Caribisch Nederland",
+          "youth_short": "De Voogdijraad komt in beeld bij vragen over bescherming, gezag en veiligheid van kinderen.",
+          "youth_where_can_you_go": "De Voogdijraad komt in beeld bij vragen over bescherming, gezag en veiligheid van kinderen.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "De Voogdijraad Caribisch Nederland voert wettelijke taken uit rond kinderbescherming, gezag en jeugdstrafrecht.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Kinderbescherming / wettelijke taken",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Voogdijraad Caribisch Nederland",
+          "youth_title": "Voogdijraad Caribisch Nederland",
+          "youth_short": "De Voogdijraad komt in beeld bij vragen over bescherming, gezag en veiligheid van kinderen.",
+          "professional_summary": "De Voogdijraad Caribisch Nederland voert wettelijke taken uit rond kinderbescherming, gezag en jeugdstrafrecht.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Voogdijraad Caribisch Nederland",
+          "youth_short": "De Voogdijraad komt in beeld bij vragen over bescherming, gezag en veiligheid van kinderen.",
+          "professional_summary": "De Voogdijraad Caribisch Nederland voert wettelijke taken uit rond kinderbescherming, gezag en jeugdstrafrecht.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Voogdijraad Caribisch Nederland",
+          "youth_short": "De Voogdijraad komt in beeld bij vragen over bescherming, gezag en veiligheid van kinderen.",
+          "professional_summary": "De Voogdijraad Caribisch Nederland voert wettelijke taken uit rond kinderbescherming, gezag en jeugdstrafrecht.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_reclassering_cn",
+      "name": "Reclassering Caribisch Nederland",
+      "slug": "reclassering-caribisch-nederland",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "safety_rights"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Reclassering Caribisch Nederland",
+        "reclassering caribisch nederland"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Reclassering Caribisch Nederland",
+          "youth_title": "Reclassering Caribisch Nederland",
+          "youth_short": "Reclassering Caribisch Nederland begeleidt mensen die met justitie te maken hebben.",
+          "youth_where_can_you_go": "Reclassering Caribisch Nederland begeleidt mensen die met justitie te maken hebben.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Reclassering Caribisch Nederland werkt binnen justitiële trajecten aan begeleiding, toezicht en terugkeer.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Reclassering / justitie",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Reclassering Caribisch Nederland",
+          "youth_title": "Reclassering Caribisch Nederland",
+          "youth_short": "Reclassering Caribisch Nederland begeleidt mensen die met justitie te maken hebben.",
+          "professional_summary": "Reclassering Caribisch Nederland werkt binnen justitiële trajecten aan begeleiding, toezicht en terugkeer.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Reclassering Caribisch Nederland",
+          "youth_short": "Reclassering Caribisch Nederland begeleidt mensen die met justitie te maken hebben.",
+          "professional_summary": "Reclassering Caribisch Nederland werkt binnen justitiële trajecten aan begeleiding, toezicht en terugkeer.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Reclassering Caribisch Nederland",
+          "youth_short": "Reclassering Caribisch Nederland begeleidt mensen die met justitie te maken hebben.",
+          "professional_summary": "Reclassering Caribisch Nederland werkt binnen justitiële trajecten aan begeleiding, toezicht en terugkeer.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_jong_bonaire",
+      "name": "Jong Bonaire",
+      "slug": "jong-bonaire",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "free_time_development"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Jong Bonaire",
+        "jong bonaire"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Jong Bonaire",
+          "youth_title": "Jong Bonaire",
+          "youth_short": "Bij Jong Bonaire kun je terecht voor activiteiten, ontmoeting, talentontwikkeling en begeleiding.",
+          "youth_where_can_you_go": "Bij Jong Bonaire kun je terecht voor activiteiten, ontmoeting, talentontwikkeling en begeleiding.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Jong Bonaire biedt jongerenwerk, activiteiten en ontwikkelingsmogelijkheden.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Jongerenwerk / activiteiten",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Jong Bonaire",
+          "youth_title": "Jong Bonaire",
+          "youth_short": "Bij Jong Bonaire kun je terecht voor activiteiten, ontmoeting, talentontwikkeling en begeleiding.",
+          "professional_summary": "Jong Bonaire biedt jongerenwerk, activiteiten en ontwikkelingsmogelijkheden.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Jong Bonaire",
+          "youth_short": "Bij Jong Bonaire kun je terecht voor activiteiten, ontmoeting, talentontwikkeling en begeleiding.",
+          "professional_summary": "Jong Bonaire biedt jongerenwerk, activiteiten en ontwikkelingsmogelijkheden.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Jong Bonaire",
+          "youth_short": "Bij Jong Bonaire kun je terecht voor activiteiten, ontmoeting, talentontwikkeling en begeleiding.",
+          "professional_summary": "Jong Bonaire biedt jongerenwerk, activiteiten en ontwikkelingsmogelijkheden.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_rosa_di_sharon",
+      "name": "Fundashon Rosa di Sharon",
+      "slug": "fundashon-rosa-di-sharon",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "housing_stay"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Fundashon Rosa di Sharon",
+        "fundashon rosa di sharon"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Fundashon Rosa di Sharon",
+          "youth_title": "Fundashon Rosa di Sharon",
+          "youth_short": "Fundashon Rosa di Sharon biedt opvang of ondersteuning rond wonen wanneer dat nodig is.",
+          "youth_where_can_you_go": "Fundashon Rosa di Sharon biedt opvang of ondersteuning rond wonen wanneer dat nodig is.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Fundashon Rosa di Sharon is relevant voor opvang en woonondersteuning.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Opvang / woonondersteuning",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Fundashon Rosa di Sharon",
+          "youth_title": "Fundashon Rosa di Sharon",
+          "youth_short": "Fundashon Rosa di Sharon biedt opvang of ondersteuning rond wonen wanneer dat nodig is.",
+          "professional_summary": "Fundashon Rosa di Sharon is relevant voor opvang en woonondersteuning.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Fundashon Rosa di Sharon",
+          "youth_short": "Fundashon Rosa di Sharon biedt opvang of ondersteuning rond wonen wanneer dat nodig is.",
+          "professional_summary": "Fundashon Rosa di Sharon is relevant voor opvang en woonondersteuning.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Fundashon Rosa di Sharon",
+          "youth_short": "Fundashon Rosa di Sharon biedt opvang of ondersteuning rond wonen wanneer dat nodig is.",
+          "professional_summary": "Fundashon Rosa di Sharon is relevant voor opvang en woonondersteuning.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_tabitha",
+      "name": "Tabitha",
+      "slug": "tabitha",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "housing_stay"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Tabitha",
+        "tabitha"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Tabitha",
+          "youth_title": "Tabitha",
+          "youth_short": "Tabitha biedt ondersteuning rond wonen, opvang of begeleiding.",
+          "youth_where_can_you_go": "Tabitha biedt ondersteuning rond wonen, opvang of begeleiding.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Tabitha is relevant voor woonbegeleiding en opvangvoorzieningen.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Woonbegeleiding / opvang",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Tabitha",
+          "youth_title": "Tabitha",
+          "youth_short": "Tabitha biedt ondersteuning rond wonen, opvang of begeleiding.",
+          "professional_summary": "Tabitha is relevant voor woonbegeleiding en opvangvoorzieningen.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Tabitha",
+          "youth_short": "Tabitha biedt ondersteuning rond wonen, opvang of begeleiding.",
+          "professional_summary": "Tabitha is relevant voor woonbegeleiding en opvangvoorzieningen.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Tabitha",
+          "youth_short": "Tabitha biedt ondersteuning rond wonen, opvang of begeleiding.",
+          "professional_summary": "Tabitha is relevant voor woonbegeleiding en opvangvoorzieningen.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_stichting_project",
+      "name": "Stichting Project",
+      "slug": "stichting-project",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "housing_stay"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Stichting Project",
+        "stichting project"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Stichting Project",
+          "youth_title": "Stichting Project",
+          "youth_short": "Stichting Project kan ondersteuning bieden rond wonen, begeleiding en weer grip krijgen op je situatie.",
+          "youth_where_can_you_go": "Stichting Project kan ondersteuning bieden rond wonen, begeleiding en weer grip krijgen op je situatie.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Stichting Project biedt begeleiding en ondersteuning rond wonen en praktische hulpvragen.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Begeleiding / wonen",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Stichting Project",
+          "youth_title": "Stichting Project",
+          "youth_short": "Stichting Project kan ondersteuning bieden rond wonen, begeleiding en weer grip krijgen op je situatie.",
+          "professional_summary": "Stichting Project biedt begeleiding en ondersteuning rond wonen en praktische hulpvragen.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Stichting Project",
+          "youth_short": "Stichting Project kan ondersteuning bieden rond wonen, begeleiding en weer grip krijgen op je situatie.",
+          "professional_summary": "Stichting Project biedt begeleiding en ondersteuning rond wonen en praktische hulpvragen.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Stichting Project",
+          "youth_short": "Stichting Project kan ondersteuning bieden rond wonen, begeleiding en weer grip krijgen op je situatie.",
+          "professional_summary": "Stichting Project biedt begeleiding en ondersteuning rond wonen en praktische hulpvragen.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_guana_chat_918",
+      "name": "Guana Chat 918",
+      "slug": "guana-chat-918",
+      "island": "bonaire",
+      "status": "active",
+      "visibility": {
+        "default": true
+      },
+      "target_audiences": [
+        "youth",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "direct_help"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "918",
+        "Guana Chat 918",
+        "guana chat 918",
+        "hulplijn",
+        "kindertelefoon"
+      ],
+      "contact": {
+        "phone": "918",
+        "email": "",
+        "website": "https://guanachat918.com/",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Guana Chat 918",
+          "youth_title": "Guana Chat 918",
+          "youth_short": "Zit je ergens mee? Je kunt gratis en anoniem bellen met Guana Chat via 918. Je mag bellen over alles wat je bezighoudt.",
+          "youth_where_can_you_go": "Zit je ergens mee? Je kunt gratis en anoniem bellen met Guana Chat via 918. Je mag bellen over alles wat je bezighoudt.",
+          "youth_how_it_works": "Bel gratis en anoniem via 918. Je kunt laagdrempelig praten over wat je bezighoudt.",
+          "professional_summary": "Guana Chat 918 is een gratis en anonieme hulplijn voor kinderen en jongeren in Caribisch Nederland. Professionals kunnen jongeren wijzen op 918 wanneer zij behoefte hebben aan een laagdrempelige plek om te praten.",
+          "professional_referral_or_access": "Professionals kunnen jongeren wijzen op bellen via 918. Openingstijd 14:00 - 18:00 moet voor lancering worden gecontroleerd.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Kindertelefoon / Child and Youth Help Line",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Guana Chat 918",
+          "youth_title": "Guana Chat 918",
+          "youth_short": "Zit je ergens mee? Je kunt gratis en anoniem bellen met Guana Chat via 918. Je mag bellen over alles wat je bezighoudt.",
+          "professional_summary": "Guana Chat 918 is een gratis en anonieme hulplijn voor kinderen en jongeren in Caribisch Nederland. Professionals kunnen jongeren wijzen op 918 wanneer zij behoefte hebben aan een laagdrempelige plek om te praten.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Guana Chat 918",
+          "youth_short": "Zit je ergens mee? Je kunt gratis en anoniem bellen met Guana Chat via 918. Je mag bellen over alles wat je bezighoudt.",
+          "professional_summary": "Guana Chat 918 is een gratis en anonieme hulplijn voor kinderen en jongeren in Caribisch Nederland. Professionals kunnen jongeren wijzen op 918 wanneer zij behoefte hebben aan een laagdrempelige plek om te praten.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Guana Chat 918",
+          "youth_short": "Zit je ergens mee? Je kunt gratis en anoniem bellen met Guana Chat via 918. Je mag bellen over alles wat je bezighoudt.",
+          "professional_summary": "Guana Chat 918 is een gratis en anonieme hulplijn voor kinderen en jongeren in Caribisch Nederland. Professionals kunnen jongeren wijzen op 918 wanneer zij behoefte hebben aan een laagdrempelige plek om te praten.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true,
+        "opening_hours_verify_before_launch": true
+      },
+      "demo_status": "needs_verification",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      },
+      "opening_hours": {
+        "value": "14:00 - 18:00",
+        "status": "verify_before_launch"
+      }
+    },
+    {
+      "id": "org_halt_cn",
+      "name": "Halt Caribisch Nederland",
+      "slug": "halt-caribisch-nederland",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "safety_rights"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Halt Caribisch Nederland",
+        "halt caribisch nederland"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Halt Caribisch Nederland",
+          "youth_title": "Halt Caribisch Nederland",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "youth_where_can_you_go": "Gearchiveerde demo-extra.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Demo-extra",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Halt Caribisch Nederland",
+          "youth_title": "Halt Caribisch Nederland",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Halt Caribisch Nederland",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Halt Caribisch Nederland",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_bureau_slachtofferhulp",
+      "name": "Bureau Slachtofferhulp",
+      "slug": "bureau-slachtofferhulp",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "safety_rights"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Bureau Slachtofferhulp",
+        "bureau slachtofferhulp"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Bureau Slachtofferhulp",
+          "youth_title": "Bureau Slachtofferhulp",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "youth_where_can_you_go": "Gearchiveerde demo-extra.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Demo-extra",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Bureau Slachtofferhulp",
+          "youth_title": "Bureau Slachtofferhulp",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Bureau Slachtofferhulp",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Bureau Slachtofferhulp",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_olb_schoolspullen",
+      "name": "Openbaar Lichaam Bonaire - schoolspullen",
+      "slug": "olb-vergoeding-schoolspullen",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "school_future"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Openbaar Lichaam Bonaire - schoolspullen",
+        "olb vergoeding schoolspullen"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Openbaar Lichaam Bonaire - schoolspullen",
+          "youth_title": "Openbaar Lichaam Bonaire - schoolspullen",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "youth_where_can_you_go": "Gearchiveerde demo-extra.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Demo-extra",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Openbaar Lichaam Bonaire - schoolspullen",
+          "youth_title": "Openbaar Lichaam Bonaire - schoolspullen",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Openbaar Lichaam Bonaire - schoolspullen",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Openbaar Lichaam Bonaire - schoolspullen",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_stichting_jongeren_toekomst",
+      "name": "Stichting Jongeren en Toekomst Bonaire",
+      "slug": "stichting-jongeren-en-toekomst-bonaire",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "school_future"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Stichting Jongeren en Toekomst Bonaire",
+        "stichting jongeren en toekomst bonaire"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Stichting Jongeren en Toekomst Bonaire",
+          "youth_title": "Stichting Jongeren en Toekomst Bonaire",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "youth_where_can_you_go": "Gearchiveerde demo-extra.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Demo-extra",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Stichting Jongeren en Toekomst Bonaire",
+          "youth_title": "Stichting Jongeren en Toekomst Bonaire",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Stichting Jongeren en Toekomst Bonaire",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Stichting Jongeren en Toekomst Bonaire",
+          "youth_short": "Gearchiveerde demo-extra.",
+          "professional_summary": "Gearchiveerde demo-extra.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_guiami",
+      "name": "Guiami",
+      "slug": "guiami",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "safety_rights",
+        "family_system"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Guiami",
+        "guiami"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Guiami",
+          "youth_title": "Guiami",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "youth_where_can_you_go": "Gearchiveerde legacy-entry.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Legacy-entry",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Guiami",
+          "youth_title": "Guiami",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Guiami",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Guiami",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_sgb",
+      "name": "Scholengemeenschap Bonaire (SGB)",
+      "slug": "scholengemeenschap-bonaire",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "school_future"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Scholengemeenschap Bonaire (SGB)",
+        "scholengemeenschap bonaire"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Scholengemeenschap Bonaire (SGB)",
+          "youth_title": "Scholengemeenschap Bonaire (SGB)",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "youth_where_can_you_go": "Gearchiveerde legacy-entry.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Legacy-entry",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Scholengemeenschap Bonaire (SGB)",
+          "youth_title": "Scholengemeenschap Bonaire (SGB)",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Scholengemeenschap Bonaire (SGB)",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Scholengemeenschap Bonaire (SGB)",
+          "youth_short": "Gearchiveerde legacy-entry.",
+          "professional_summary": "Gearchiveerde legacy-entry.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_jeugdzorg_cn_legacy",
+      "name": "Jeugdzorg Caribisch Nederland",
+      "slug": "jeugdzorg-caribisch-nederland",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "help_support"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Jeugdzorg Caribisch Nederland",
+        "jeugdzorg caribisch nederland"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Jeugdzorg Caribisch Nederland",
+          "youth_title": "Jeugdzorg Caribisch Nederland",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "youth_where_can_you_go": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Legacy-entry",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Jeugdzorg Caribisch Nederland",
+          "youth_title": "Jeugdzorg Caribisch Nederland",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Jeugdzorg Caribisch Nederland",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Jeugdzorg Caribisch Nederland",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_mhc_kind_jeugd_legacy",
+      "name": "Mental Health Caribbean - Kind & Jeugd",
+      "slug": "mental-health-caribbean-kind-jeugd",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "health_wellbeing"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Mental Health Caribbean - Kind & Jeugd",
+        "mental health caribbean kind jeugd"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Mental Health Caribbean - Kind & Jeugd",
+          "youth_title": "Mental Health Caribbean - Kind & Jeugd",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "youth_where_can_you_go": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Legacy-entry",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Mental Health Caribbean - Kind & Jeugd",
+          "youth_title": "Mental Health Caribbean - Kind & Jeugd",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Mental Health Caribbean - Kind & Jeugd",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Mental Health Caribbean - Kind & Jeugd",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_fundashon_forma_skj_legacy",
+      "name": "Fundashon Forma / SKJ",
+      "slug": "fundashon-forma-skj",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "school_future"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Fundashon Forma / SKJ",
+        "fundashon forma skj"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Fundashon Forma / SKJ",
+          "youth_title": "Fundashon Forma / SKJ",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "youth_where_can_you_go": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Legacy-entry",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Fundashon Forma / SKJ",
+          "youth_title": "Fundashon Forma / SKJ",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Fundashon Forma / SKJ",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Fundashon Forma / SKJ",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_ggd_bonaire_legacy",
+      "name": "GGD Bonaire / Salubridat Públiko",
+      "slug": "ggd-bonaire-salubridat-publiko",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "health_wellbeing"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "GGD Bonaire / Salubridat Públiko",
+        "ggd bonaire salubridat publiko"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "GGD Bonaire / Salubridat Públiko",
+          "youth_title": "GGD Bonaire / Salubridat Públiko",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "youth_where_can_you_go": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Legacy-entry",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "GGD Bonaire / Salubridat Públiko",
+          "youth_title": "GGD Bonaire / Salubridat Públiko",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "GGD Bonaire / Salubridat Públiko",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "GGD Bonaire / Salubridat Públiko",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    },
+    {
+      "id": "org_sentro_akseso_legacy",
+      "name": "Sentro Akseso Boneiru",
+      "slug": "sentro-akseso-boneiru",
+      "island": "bonaire",
+      "status": "demo_extra_archived",
+      "visibility": {
+        "default": false
+      },
+      "target_audiences": [
+        "youth",
+        "parents",
+        "professional"
+      ],
+      "primary_theme_ids": [
+        "help_support"
+      ],
+      "secondary_theme_ids": [],
+      "search_keywords_nl": [
+        "Sentro Akseso Boneiru",
+        "sentro akseso boneiru"
+      ],
+      "contact": {
+        "phone": "",
+        "email": "",
+        "website": "",
+        "address": {
+          "nl": "Nog aan te vullen"
+        }
+      },
+      "translations": {
+        "nl": {
+          "name": "Sentro Akseso Boneiru",
+          "youth_title": "Sentro Akseso Boneiru",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "youth_where_can_you_go": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
+          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "type": "Legacy-entry",
+          "age_range": "Jongeren en gezinnen op Bonaire"
+        },
+        "pap": {
+          "name": "Sentro Akseso Boneiru",
+          "youth_title": "Sentro Akseso Boneiru",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "translation_status": "needs_papiamentu_review"
+        },
+        "en": {
+          "name": "Sentro Akseso Boneiru",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "translation_status": "ai_draft"
+        },
+        "es": {
+          "name": "Sentro Akseso Boneiru",
+          "youth_short": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "professional_summary": "Gearchiveerde legacy-entry; gebruik Akseso.",
+          "translation_status": "ai_draft"
+        }
+      },
+      "review_flags": {
+        "needs_content_review": true,
+        "replace_with_official_format_when_available": true
+      },
+      "demo_status": "demo_extra_archived",
+      "source_format": {
+        "general_information": {},
+        "service_offer": {},
+        "access_and_referral": {},
+        "practical_information": {},
+        "professional_information": {}
+      }
+    }
+  ]
+}

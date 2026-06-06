@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Organisatieoverzicht - Kadena Hubenil</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body class="audience-professional" data-page="organization-list" data-audience="professional">
+  <header class="site-header kh-header professional-header">
+    <a class="brand" href="../../index.html">Kadena Hubenil</a>
+    <nav>
+      <a href="../../jongeren/" data-audience-link="youth">Jongere</a>
+      <a href="../" data-audience-link="professional">Professional</a>
+      <a class="active" href="./" data-i18n="organizationsNav">Organisaties</a>
+    </nav>
+    <div class="header-actions professional-actions">
+      <a href="../../organisatie-aanmelden.html" data-i18n="registerOrganization">Organisatie aanmelden</a>
+      <a href="../../feedback.html" data-i18n="feedbackNav">Feedback</a>
+    </div>
+    <div data-language-slot></div>
+  </header>
+
+  <main>
+    <section class="page-intro kh-list-intro professional-intro">
+      <h1 data-i18n="professionalOrganizationsTitle">Organisatieoverzicht</h1>
+      <p data-i18n="professionalOrganizationsSubtitle">Zoek organisaties, thema's en verwijsinformatie.</p>
+    </section>
+    <section class="filter-panel kh-filter-panel professional-filter">
+      <div class="organization-search">
+        <input id="q" type="search" placeholder="Zoek op naam, doelgroep, thema of verwijsroute" data-i18n-placeholder="professionalListSearchPlaceholder" aria-autocomplete="list" aria-expanded="false" aria-controls="organizationSearchResults" />
+        <div id="organizationSearchResults" class="search-suggestions organization-suggestions" role="listbox" hidden></div>
+      </div>
+      <select id="theme"><option value="" data-i18n="allThemes">Alle thema's</option></select>
+      <button id="reset" type="button" data-i18n="reset">Reset</button>
+    </section>
+    <section class="cards wide" id="results"></section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kadena Hubenil &middot; Nos Boneiru</p>
+  </footer>
+
+  <script>window.SEED_BASE = '../../';</script>
+  <script src="../../assets/app.js"></script>
+  <script>initAudienceOrganizations('professional');</script>
+</body>
+</html>

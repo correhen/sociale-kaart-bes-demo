@@ -1,0 +1,71 @@
+﻿<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voor professionals - Kadena Hubenil</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body class="audience-professional" data-page="audience-home" data-audience="professional">
+  <header class="site-header kh-header professional-header">
+    <a class="brand" href="../index.html">Kadena Hubenil</a>
+    <nav>
+      <a href="../jongeren/" data-audience-link="youth">Jongere</a>
+      <a class="active" href="./" data-audience-link="professional">Professional</a>
+      <a href="organisaties/" data-i18n="organizationsNav">Organisaties</a>
+    </nav>
+    <div class="header-actions professional-actions">
+      <a href="../organisatie-aanmelden.html" data-i18n="registerOrganization">Organisatie aanmelden</a>
+      <a href="../feedback.html" data-i18n="feedbackNav">Feedback</a>
+    </div>
+    <div data-language-slot></div>
+  </header>
+
+  <main>
+    <section class="kh-home professional-home">
+      <div class="professional-home__content">
+      <h1 data-i18n="professionalHeroTitle">Voor professionals</h1>
+      <p data-i18n="professionalHeroSubtitle">Vind organisaties, contactgegevens en verwijsinformatie voor jongeren en gezinnen op Bonaire.</p>
+      <form id="audienceSearch" class="hero-search kh-search">
+        <label class="sr-only" for="q">Zoeken</label>
+        <input id="q" name="q" type="search" placeholder="Zoek organisatie, thema of verwijsroute" data-i18n-placeholder="professionalSearchPlaceholder" aria-autocomplete="list" aria-expanded="false" aria-controls="audienceSearchResults" />
+        <button type="submit" data-i18n="searchButton">Zoek</button>
+        <div id="audienceSearchResults" class="search-suggestions professional-search-suggestions" role="listbox" hidden></div>
+      </form>
+      <div class="hero-actions">
+        <a class="button primary" href="organisaties/" data-i18n="organizationsOverview">Organisatieoverzicht</a>
+        <a class="button" href="../organisatie-aanmelden.html" data-i18n="registerOrganization">Organisatie aanmelden</a>
+        <a class="button" href="../feedback.html" data-i18n="giveFeedback">Feedback geven</a>
+        <a class="button ghost" href="../jongeren/" data-audience-link="youth" data-i18n="switchToYouth">Wissel naar jongeren</a>
+      </div>
+      </div>
+      <picture class="professional-home__media" aria-hidden="true">
+        <source media="(max-width: 700px)" srcset="../assets/img/web/landing-professionals-450.webp" />
+        <img src="../assets/img/web/landing-professionals-700.webp" width="700" height="875" loading="eager" alt="" />
+      </picture>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 data-i18n="themesTitle">Thema's</h2>
+      </div>
+      <div class="kh-theme-grid professional-themes" id="themeTiles"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 id="featuredOrganizationsTitle" data-i18n="popularOrganizations">Populaire organisaties</h2>
+      </div>
+      <div class="cards wide" id="featuredOrganizations"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kadena Hubenil &middot; Nos Boneiru</p>
+  </footer>
+
+  <script>window.SEED_BASE = '../';</script>
+  <script src="../assets/app.js"></script>
+  <script>initAudienceHome('professional');</script>
+</body>
+</html>

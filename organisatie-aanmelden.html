@@ -1,0 +1,56 @@
+﻿<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Organisatie aanmelden - Sociale Kaart Bonaire</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body class="form-page" data-form-kind="organization_signup">
+  <header class="site-header kh-header">
+    <a class="brand" href="index.html">Kadena Hubenil</a>
+    <nav>
+      <a href="jongeren/" data-audience-link="youth">Jongere</a>
+      <a href="professionals/" data-audience-link="professional">Professional</a>
+      <a href="jongeren/organisaties/" data-i18n="organizationsNav">Organisaties</a>
+    </nav>
+    <div data-language-slot></div>
+  </header>
+
+  <main>
+    <section class="form-shell">
+      <div>
+        <h1 data-i18n="signupTitle">Nieuwe organisatie of aanbod doorgeven</h1>
+        <p data-i18n="signupIntro">Ken je een organisatie of aanbod dat jongeren op Bonaire kan helpen? Geef het hier door.</p>
+      </div>
+      <form data-local-form>
+        <label><span><span data-i18n="orgNameLabel">Organisatienaam</span> <b class="required-mark" aria-hidden="true">*</b></span><input name="organization_name" required /></label>
+        <label><span><span data-i18n="contactPersonLabel">Contactpersoon</span> <b class="required-mark" aria-hidden="true">*</b></span><input name="contact_person" required /></label>
+        <label><span><span data-i18n="emailLabel">E-mail</span> <b class="required-mark" aria-hidden="true">*</b></span><input name="email" type="email" required autocomplete="email" /></label>
+        <label><span data-i18n="phoneLabel">Telefoon</span><input name="phone" autocomplete="tel" /></label>
+        <label><span><span data-i18n="descriptionLabel">Korte omschrijving</span> <b class="required-mark" aria-hidden="true">*</b></span><textarea name="description" required rows="4"></textarea></label>
+        <fieldset class="choice-fieldset">
+          <legend data-i18n="formThemesLabel">Thema's</legend>
+          <div class="choice-chip-group" id="themeChoices"></div>
+        </fieldset>
+        <fieldset class="choice-fieldset">
+          <legend data-i18n="formAudienceLabel">Doelgroep</legend>
+          <div class="choice-chip-group" id="audienceChoices"></div>
+        </fieldset>
+        <label><span data-i18n="messageLabel">Bericht / opmerking</span><textarea name="message" rows="4"></textarea></label>
+        <input id="language" name="language" type="hidden" />
+        <input id="audience" name="audience" type="hidden" />
+        <button class="button primary" type="submit" data-i18n="submitSignup">Aanmelden</button>
+        <p class="form-status" data-form-status></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kadena Hubenil &middot; Nos Boneiru</p>
+  </footer>
+
+  <script src="assets/app.js"></script>
+  <script>initFeedbackForm('organization_signup');</script>
+</body>
+</html>

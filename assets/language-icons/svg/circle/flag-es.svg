@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Español - Spain round flag icon">
+  <defs>
+    <clipPath id="clip">
+      <circle cx="256" cy="256" r="216"/>
+    </clipPath>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-opacity="0.20"/>
+    </filter>
+  </defs>
+  <circle cx="256" cy="256" r="216" fill="#FFFFFF" filter="url(#shadow)"/>
+  <g clip-path="url(#clip)" transform="translate(-42 64) scale(1.165 1)">
+
+  <rect width="512" height="96" y="0" fill="#AA151B"/>
+  <rect width="512" height="192" y="96" fill="#F1BF00"/>
+  <rect width="512" height="96" y="288" fill="#AA151B"/>
+  </g>
+  <circle cx="256" cy="256" r="216" fill="none" stroke="#000000" stroke-opacity="0.10" stroke-width="3"/>
+</svg>

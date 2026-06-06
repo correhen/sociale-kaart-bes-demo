@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback - Kadena Hubenil / Sociale Kaart Bonaire</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body class="form-page" data-form-kind="feedback">
+  <header class="site-header kh-header">
+    <a class="brand" href="index.html">Kadena Hubenil</a>
+    <nav>
+      <a href="jongeren/" data-audience-link="youth">Jongere</a>
+      <a href="professionals/" data-audience-link="professional">Professional</a>
+      <a href="jongeren/organisaties/" data-i18n="organizationsNav">Organisaties</a>
+    </nav>
+    <div data-language-slot></div>
+  </header>
+
+  <main>
+    <section class="form-shell">
+      <div>
+        <h1 data-i18n="feedbackTitle">Help deze pagina actueel te houden</h1>
+        <p data-i18n="feedbackIntro">Geef door wat mist, onduidelijk is of gecontroleerd moet worden.</p>
+      </div>
+      <form data-local-form>
+        <label><span data-i18n="nameLabel">Naam</span><input name="name" autocomplete="name" /></label>
+        <label><span data-i18n="emailLabel">E-mail</span><input name="email" type="email" autocomplete="email" /></label>
+        <label><span data-i18n="organizationLabel">Organisatie</span><select id="organization" name="organization"><option value="" data-i18n="noSpecificOrganization">Geen specifieke organisatie</option></select></label>
+        <label><span><span data-i18n="messageLabel">Bericht</span> <b class="required-mark" aria-hidden="true">*</b></span><textarea name="message" required rows="5"></textarea></label>
+        <input id="language" name="language" type="hidden" />
+        <input id="audience" name="audience" type="hidden" />
+        <button class="button primary" type="submit" data-i18n="submitFeedback">Verstuur feedback</button>
+        <p class="form-status" data-form-status></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kadena Hubenil &middot; Nos Boneiru</p>
+  </footer>
+
+  <script src="assets/app.js"></script>
+  <script>initFeedbackForm('feedback');</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nederlands - Netherlands flag icon">
+  <defs>
+    <clipPath id="clip">
+      <rect x="32" y="64" width="448" height="384" rx="84"/>
+    </clipPath>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect x="32" y="64" width="448" height="384" rx="84" fill="#FFFFFF" filter="url(#shadow)"/>
+  <g clip-path="url(#clip)" transform="translate(32 64) scale(0.875 1)">
+
+  <rect width="512" height="128" y="0" fill="#AE1C28"/>
+  <rect width="512" height="128" y="128" fill="#FFFFFF"/>
+  <rect width="512" height="128" y="256" fill="#21468B"/>
+  </g>
+  <rect x="32" y="64" width="448" height="384" rx="84" fill="none" stroke="#000000" stroke-opacity="0.08" stroke-width="3"/>
+</svg>

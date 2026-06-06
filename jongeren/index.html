@@ -1,0 +1,79 @@
+﻿<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kadena Hubenil - Bonaire</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body class="audience-youth" data-page="audience-home" data-audience="youth">
+  <header class="site-header kh-header">
+    <a class="brand" href="../index.html">Kadena Hubenil</a>
+    <nav>
+      <a class="active" href="./" data-audience-link="youth">Jongere</a>
+      <a href="../professionals/" data-audience-link="professional">Professional</a>
+      <a href="organisaties/" data-i18n="organizationsNav">Organisaties</a>
+    </nav>
+    <div data-language-slot></div>
+  </header>
+
+  <main>
+    <section class="youth-hero-shell" aria-labelledby="youthHeroTitle">
+      <img class="youth-accent youth-accent--yellow" src="../assets/img/accents/kadena-swoosh-yellow.svg" width="360" height="108" alt="" aria-hidden="true" />
+      <img class="youth-accent youth-accent--aqua" src="../assets/img/accents/kadena-swoosh-aqua.svg" width="320" height="112" alt="" aria-hidden="true" />
+      <img class="youth-accent youth-accent--burst" src="../assets/img/accents/kadena-burst.svg" width="160" height="160" alt="" aria-hidden="true" />
+      <div class="youth-hero-card">
+        <div class="youth-hero-copy">
+          <h1 id="youthHeroTitle" data-i18n="youthHeroTitle">Hulp, informatie &amp; kansen op Bonaire</h1>
+          <p>Alles wat je nodig hebt, op Ã©Ã©n plek.</p>
+          <form id="audienceSearch" class="hero-search kh-search youth-live-search" role="search">
+            <label class="sr-only" for="q">Zoeken</label>
+            <input id="q" name="q" type="search" placeholder="Waar zoek je hulp bij?" data-i18n-placeholder="searchPlaceholder" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="audienceSearchResults" />
+            <button type="submit" data-i18n="searchButton">Zoek</button>
+            <div id="audienceSearchResults" class="search-suggestions" role="listbox" hidden></div>
+          </form>
+          <div class="popular-themes" aria-label="Populaire thema's">
+            <span data-i18n="popularLabel">Populair:</span>
+            <a href="organisaties/?theme=hulp-ondersteuning" data-theme-chip="help_support">Hulp en ondersteuning</a>
+            <a href="organisaties/?theme=familie-omgang" data-theme-chip="family_system">Familie en omgang</a>
+            <a href="organisaties/?theme=school-toekomst" data-theme-chip="school_future">School en toekomst</a>
+            <a href="organisaties/?theme=gezondheid-welzijn" data-theme-chip="health_wellbeing">Gezondheid en welzijn</a>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="organisaties/" data-i18n="allOrganizations">Alle organisaties</a>
+          </div>
+        </div>
+        <div class="youth-hero-media" aria-hidden="true">
+          <picture>
+            <source media="(max-width: 680px)" srcset="../assets/img/web/jongeren-hero-600.webp" />
+            <source media="(max-width: 980px)" srcset="../assets/img/web/jongeren-hero-900.webp" />
+            <img src="../assets/img/web/jongeren-hero-1400.webp" width="1400" height="1400" loading="eager" fetchpriority="high" alt="" />
+          </picture>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 data-i18n="themesTitle">Thema's</h2>
+      </div>
+      <div class="kh-theme-grid" id="themeTiles"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 id="featuredOrganizationsTitle" data-i18n="recentOrganizations">Laatst bekeken organisaties</h2>
+      </div>
+      <div class="cards wide" id="featuredOrganizations"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Kadena Hubenil &middot; Nos Boneiru</p>
+  </footer>
+
+  <script>window.SEED_BASE = '../';</script>
+  <script src="../assets/app.js"></script>
+  <script>initAudienceHome('youth');</script>
+</body>
+</html>
