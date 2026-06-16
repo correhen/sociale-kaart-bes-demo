@@ -61,6 +61,78 @@ const THEME_LABELS = {
     direct_help: 'Ayuda directa'
   }
 };
+const PROFILE_I18N = {
+  youth: {
+    title: {
+      nl: 'Meer over deze organisatie',
+      pap: 'Mas tokante e organisashon aki',
+      en: 'More about this organisation',
+      es: 'Más sobre esta organización'
+    },
+    fields: [
+      { key: 'who_we_are', labels: { nl: 'Wie zijn wij?', pap: 'Ken nos ta?', en: 'Who are we?', es: '¿Quiénes somos?' } },
+      { key: 'who_for', labels: { nl: 'Voor wie zijn wij?', pap: 'Pa ken nos ta?', en: 'Who are we here for?', es: '¿Para quiénes estamos?' } },
+      { key: 'what_help', labels: { nl: 'Waarmee kunnen wij helpen?', pap: 'Ku kiko nos por yuda?', en: 'What can we help with?', es: '¿En qué podemos ayudar?' } },
+      { key: 'how_to_access', labels: { nl: 'Hoe kom je terecht?', pap: 'Kon bo por yega na nos?', en: 'How can you reach us?', es: '¿Cómo puedes llegar a nosotros?' } },
+      { key: 'how_we_help', labels: { nl: 'Hoe helpen wij?', pap: 'Kon nos ta yuda bo?', en: 'How do we help?', es: '¿Cómo te ayudamos?' } },
+      { key: 'duration', labels: { nl: 'Hoelang duurt de hulp?', pap: 'Kuantu tempu e yudansa ta dura?', en: 'How long does the support last?', es: '¿Cuánto dura la ayuda?' } },
+      { key: 'partners', labels: { nl: 'Met wie werken wij samen?', pap: 'Ku ken nos ta traha huntu?', en: 'Who do we work with?', es: '¿Con quiénes trabajamos?' } },
+      { key: 'contact', labels: { nl: 'Contact', pap: 'Kontakto', en: 'Contact', es: 'Contacto' } }
+    ]
+  },
+  professional: {
+    title: {
+      nl: 'Uitgebreide informatie voor professionals',
+      pap: 'Informashon amplio pa profesionalnan',
+      en: 'Detailed information for professionals',
+      es: 'Información detallada para profesionales'
+    },
+    groups: [
+      {
+        key: 'general',
+        labels: { nl: 'Algemene informatie', pap: 'Informashon general', en: 'General information', es: 'Información general' },
+        fields: [
+          { key: 'organisation_name', labels: { nl: 'Naam van de organisatie/instantie?', pap: 'Nòmber di e organisashon/instansia?', en: 'Name of the organisation/agency?', es: '¿Nombre de la organización/instancia?' } },
+          { key: 'short_description', labels: { nl: 'Korte omschrijving van de organisatie (wat doet u, wat zijn uw visie en missie?)', pap: 'Deskripshon kòrtiku di e organisashon: kiko boso ta hasi, kiko ta boso vishon i mishon?', en: 'Short description of the organisation: what do you do, and what are your vision and mission?', es: 'Breve descripción de la organización: ¿qué hacen y cuál es su visión y misión?' } },
+          { key: 'target_group', labels: { nl: 'Doelgroep?', pap: 'Grupo meta?', en: 'Target group?', es: 'Grupo destinatario' } },
+          { key: 'support_offer', labels: { nl: 'Hulpaanbod/dienstverlening? (Hoe komt u in samenwerking met de jeugdige?)', pap: 'Oferta di yudansa/servisio? Kon boso ta drenta den kolaborashon ku e hóben?', en: 'Support/services offered? How do you work with the young person?', es: 'Oferta de ayuda/servicios. ¿Cómo trabajan con el/la joven?' } },
+          { key: 'services', labels: { nl: 'Welke diensten biedt u aan?', pap: 'Kua servisionan boso ta ofresé?', en: 'Which services do you offer?', es: '¿Qué servicios ofrecen?' } },
+          { key: 'methods', labels: { nl: 'Welke werkwijzen, methodieken of trainingen worden ingezet?', pap: 'Kua forma di trabou, metodikanan òf entrenamentunan boso ta usa?', en: 'Which approaches, methods or training programmes are used?', es: '¿Qué formas de trabajo, metodologías o capacitaciones se utilizan?' } },
+          { key: 'execution', labels: { nl: 'Hoe ziet de uitvoering hiervan eruit?', pap: 'Kon e ehersisio di esaki ta mira den práktika?', en: 'What does this look like in practice?', es: '¿Cómo se lleva esto a cabo en la práctica?' } },
+          { key: 'problems', labels: { nl: 'Op welke problematiek of hulpvragen is het aanbod gericht?', pap: 'Riba kua problemátika òf preguntanan di yudansa e oferta ta enfoká?', en: 'Which problems or support needs is the offer aimed at?', es: '¿A qué problemáticas o necesidades de ayuda está dirigida la oferta?' } },
+          { key: 'trajectory', labels: { nl: 'Hoe verloopt een traject doorgaans?', pap: 'Kon un trayekto normalmente ta bai?', en: 'How does a support pathway usually proceed?', es: '¿Cómo suele desarrollarse un proceso de acompañamiento?' } },
+          { key: 'average_duration', labels: { nl: 'Wat is de gemiddelde duur van een traject?', pap: 'Kua ta e durashon promedio di un trayekto?', en: 'What is the average duration of a support pathway?', es: '¿Cuál es la duración promedio de un proceso?' } }
+        ]
+      },
+      {
+        key: 'referral',
+        labels: { nl: 'Verwijzing en toegankelijkheid', pap: 'Referensia i aksesibilidat', en: 'Referral and accessibility', es: 'Derivación y accesibilidad' },
+        fields: [
+          { key: 'when_appropriate', labels: { nl: 'Wanneer is doorverwijzing naar uw organisatie passend?', pap: 'Ki ora referí na boso organisashon ta adekuá?', en: 'When is referral to your organisation appropriate?', es: '¿Cuándo es apropiado derivar a alguien a su organización?' } },
+          { key: 'criteria', labels: { nl: 'Wat zijn de verwijscriteria? Is een verwijzing nodig, bijvoorbeeld via huisarts of andere professional, of is uw aanbod vrij toegankelijk?', pap: 'Kua ta e kriterianan di referensia? Un referensia ta nesesario, por ehèmpel via dokter di kas òf otro profeshonal, òf boso oferta ta libermente aksesibel?', en: 'What are the referral criteria? Is a referral required, for example through a general practitioner or another professional, or is your service freely accessible?', es: '¿Cuáles son los criterios de derivación? ¿Se necesita una derivación, por ejemplo a través del médico de cabecera u otro profesional, o el servicio es de libre acceso?' } },
+          { key: 'indications_required', labels: { nl: 'Zijn er indicaties nodig? Ja/nee.', pap: 'Indikashon ta nesesario? Si/no.', en: 'Are indications required? Yes/no.', es: '¿Se necesitan indicaciones? Sí/no.' } }
+        ]
+      },
+      {
+        key: 'practical',
+        labels: { nl: 'Praktische informatie', pap: 'Informashon práktiko', en: 'Practical information', es: 'Información práctica' },
+        fields: [
+          { key: 'contact_details', labels: { nl: 'Contactgegevens', pap: 'Detayenan di kontakto', en: 'Contact details', es: 'Datos de contacto' } },
+          { key: 'opening_hours', labels: { nl: 'Openingstijden', pap: 'Orario di apertura', en: 'Opening hours', es: 'Horario de atención' } },
+          { key: 'waiting_times', labels: { nl: 'Eventuele wachttijden', pap: 'Eventual tempu di espera', en: 'Any waiting times', es: 'Posibles tiempos de espera' } }
+        ]
+      },
+      {
+        key: 'additional',
+        labels: { nl: 'Aanvullende informatie voor hulpverleners', pap: 'Informashon adishonal pa dunadónan di yudansa', en: 'Additional information for care providers/professionals', es: 'Información adicional para profesionales' },
+        fields: [
+          { key: 'partners', labels: { nl: 'Samenwerkingspartners', pap: 'Partnernan di kolaborashon', en: 'Cooperation partners', es: 'Organizaciones colaboradoras' } },
+          { key: 'other_information', labels: { nl: 'Overige relevante informatie die belangrijk is voor verwijzers/professionals', pap: 'Otro informashon relevante ku ta importante pa referidónan/profeshonalnan', en: 'Other relevant information that is important for referrers/professionals', es: 'Otra información relevante que sea importante para derivadores/profesionales' } }
+        ]
+      }
+    ]
+  }
+};
 const SEARCH_SYNONYMS = {
   themes: {
     health_wellbeing: ['ziek', 'gezondheid', 'dokter', 'ggd', 'stress', 'somber', 'depressief', 'paniek', 'malu', 'salú', 'médiko', 'tristu', 'strès', 'sick', 'health', 'doctor', 'sad', 'depressed', 'ill', 'enfermo', 'salud', 'médico', 'triste', 'deprimido'],
@@ -88,10 +160,10 @@ const SEARCH_SYNONYMS = {
   }
 };
 const UI_TEXT = {
-  nl: { fallback: 'Wordt nog aangevuld', addressMissing: 'Adres wordt nog aangevuld', lastCheckedMissing: 'Nog niet ingevuld', noResults: 'Geen resultaten gevonden. Pas je zoekterm of filter aan.', view: 'Bekijk', backToOrganizations: 'Terug naar organisaties', infoNotice: 'Deze informatie wordt nog aangevuld en gecontroleerd.', professionalDescription: 'Professionele omschrijving', youthDescription: 'Waar kun je voor terecht?', referral: 'Aanmelding / verwijzing', contactHow: 'Hoe neem je contact op?', notes: 'Opmerkingen / controle-status', contact: 'Contact', address: 'Adres', audience: 'Doelgroep', age: 'Leeftijd', lastChecked: 'Laatst gecontroleerd', themes: "Thema's", serviceLabels: 'Onderdelen / labels', youth: 'Jongere', professional: 'Professional', parents: 'Ouder/verzorger', callLabel: 'Bel', mailLabel: 'Mail', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: 'Gegevens worden nog gecontroleerd' },
-  pap: { fallback: 'Ainda pa yena', addressMissing: 'Adres ta wordu yena despues', lastCheckedMissing: 'Ainda no yena', noResults: 'No a haya resultado. Kambia bo buskeda of filtro.', view: 'Wak', backToOrganizations: 'Bek na organisashonnan', infoNotice: 'E informashon aki ta wordu yena i kontrola.', professionalDescription: 'Deskripshon profesional', youthDescription: 'Pa kiko bo por bai aki?', referral: 'Registro / referensia', contactHow: 'Kon bo por tuma kontakto?', notes: 'Nota / status di kontrol', contact: 'Kontakto', address: 'Adres', audience: 'Grupo', age: 'Edat', lastChecked: 'Ultimo kontrol', themes: 'Temanan', serviceLabels: 'Partinan / labelnan', youth: 'Hoben', professional: 'Profesional', parents: 'Mayor/kuidado', callLabel: 'Yama', mailLabel: 'Mail', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: 'E datonan ta wordu kontrolá ainda' },
-  en: { fallback: 'To be completed', addressMissing: 'Address will be added', lastCheckedMissing: 'Not filled in yet', noResults: 'No results found. Adjust your search or filter.', view: 'View', backToOrganizations: 'Back to organizations', infoNotice: 'This information is being completed and checked.', professionalDescription: 'Professional description', youthDescription: 'What can you go here for?', referral: 'Access / referral', contactHow: 'How do you get in touch?', notes: 'Notes / review status', contact: 'Contact', address: 'Address', audience: 'Audience', age: 'Age', lastChecked: 'Last checked', themes: 'Themes', serviceLabels: 'Parts / labels', youth: 'Young person', professional: 'Professional', parents: 'Parent/carer', callLabel: 'Call', mailLabel: 'Email', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: 'Details are still being checked' },
-  es: { fallback: 'Por completar', addressMissing: 'La dirección se añadirá', lastCheckedMissing: 'Aún no completado', noResults: 'No se encontraron resultados. Ajusta tu busqueda o filtro.', view: 'Ver', backToOrganizations: 'Volver a organizaciones', infoNotice: 'Esta informacion se esta completando y verificando.', professionalDescription: 'Descripcion profesional', youthDescription: 'Para que puedes acudir?', referral: 'Acceso / derivacion', contactHow: 'Como contactar?', notes: 'Notas / estado de verificacion', contact: 'Contacto', address: 'Direccion', audience: 'Grupo', age: 'Edad', lastChecked: 'Ultima revision', themes: 'Temas', serviceLabels: 'Partes / etiquetas', youth: 'Joven', professional: 'Profesional', parents: 'Padre/madre/cuidador', callLabel: 'Llamar', mailLabel: 'Correo', websiteLabel: 'Sitio web', whatsappLabel: 'WhatsApp', statusChecked: 'Los datos aún se están revisando' }
+  nl: { fallback: 'Wordt nog aangevuld', addressMissing: 'Adres wordt nog aangevuld', lastCheckedMissing: 'Nog niet ingevuld', noResults: 'Geen resultaten gevonden. Pas je zoekterm of filter aan.', view: 'Bekijk', backToOrganizations: 'Terug naar organisaties', infoNotice: 'Deze informatie wordt nog aangevuld en gecontroleerd.', professionalDescription: 'Professionele omschrijving', youthDescription: 'Waar kun je voor terecht?', referral: 'Aanmelding / verwijzing', contactHow: 'Hoe neem je contact op?', notes: 'Opmerkingen / controle-status', contact: 'Contact', address: 'Adres', audience: 'Doelgroep', age: 'Leeftijd', lastChecked: 'Laatst gecontroleerd', themes: "Thema's", serviceLabels: 'Onderdelen / labels', youth: 'Jongere', professional: 'Professional', parents: 'Ouder/verzorger', callLabel: 'Bel', mailLabel: 'Mail', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: '' },
+  pap: { fallback: 'Ainda pa yena', addressMissing: 'Adres ta wordu yena despues', lastCheckedMissing: 'Ainda no yena', noResults: 'No a haya resultado. Kambia bo buskeda of filtro.', view: 'Wak', backToOrganizations: 'Bek na organisashonnan', infoNotice: 'E informashon aki ta wordu yena i kontrola.', professionalDescription: 'Deskripshon profesional', youthDescription: 'Pa kiko bo por bai aki?', referral: 'Registro / referensia', contactHow: 'Kon bo por tuma kontakto?', notes: 'Nota / status di kontrol', contact: 'Kontakto', address: 'Adres', audience: 'Grupo', age: 'Edat', lastChecked: 'Ultimo kontrol', themes: 'Temanan', serviceLabels: 'Partinan / labelnan', youth: 'Hoben', professional: 'Profesional', parents: 'Mayor/kuidado', callLabel: 'Yama', mailLabel: 'Mail', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: '' },
+  en: { fallback: 'To be completed', addressMissing: 'Address will be added', lastCheckedMissing: 'Not filled in yet', noResults: 'No results found. Adjust your search or filter.', view: 'View', backToOrganizations: 'Back to organizations', infoNotice: 'This information is being completed and checked.', professionalDescription: 'Professional description', youthDescription: 'What can you go here for?', referral: 'Access / referral', contactHow: 'How do you get in touch?', notes: 'Notes / review status', contact: 'Contact', address: 'Address', audience: 'Audience', age: 'Age', lastChecked: 'Last checked', themes: 'Themes', serviceLabels: 'Parts / labels', youth: 'Young person', professional: 'Professional', parents: 'Parent/carer', callLabel: 'Call', mailLabel: 'Email', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: '' },
+  es: { fallback: 'Por completar', addressMissing: 'La dirección se añadirá', lastCheckedMissing: 'Aún no completado', noResults: 'No se encontraron resultados. Ajusta tu busqueda o filtro.', view: 'Ver', backToOrganizations: 'Volver a organizaciones', infoNotice: 'Esta informacion se esta completando y verificando.', professionalDescription: 'Descripcion profesional', youthDescription: 'Para que puedes acudir?', referral: 'Acceso / derivacion', contactHow: 'Como contactar?', notes: 'Notas / estado de verificacion', contact: 'Contacto', address: 'Direccion', audience: 'Grupo', age: 'Edad', lastChecked: 'Ultima revision', themes: 'Temas', serviceLabels: 'Partes / etiquetas', youth: 'Joven', professional: 'Profesional', parents: 'Padre/madre/cuidador', callLabel: 'Llamar', mailLabel: 'Correo', websiteLabel: 'Sitio web', whatsappLabel: 'WhatsApp', statusChecked: '' }
 };
 Object.assign(UI_TEXT.nl, {
   navYouth: 'Jongere',
@@ -144,7 +216,7 @@ Object.assign(UI_TEXT.nl, {
   emergencyLabel: 'Nood',
   mailLabel: 'Mail',
   websiteLabel: 'Website',
-  statusChecked: 'Gegevens worden nog gecontroleerd',
+  statusChecked: '',
   goodToKnow: 'Goed om te weten',
   forWhom: 'Ook handig voor',
   themesTitle: "Thema's",
@@ -223,7 +295,7 @@ Object.assign(UI_TEXT.pap, {
   emergencyLabel: 'Emergensia',
   mailLabel: 'Mail',
   websiteLabel: 'Website',
-  statusChecked: 'E datonan ta wordu kontrolá ainda',
+  statusChecked: '',
   goodToKnow: 'Bon pa sa',
   forWhom: 'Tambe útil pa',
   themesTitle: 'Temanan',
@@ -302,7 +374,7 @@ Object.assign(UI_TEXT.en, {
   emergencyLabel: 'Emergency',
   mailLabel: 'Email',
   websiteLabel: 'Website',
-  statusChecked: 'Details are still being checked',
+  statusChecked: '',
   goodToKnow: 'Good to know',
   forWhom: 'Also useful for',
   themesTitle: 'Themes',
@@ -381,7 +453,7 @@ Object.assign(UI_TEXT.es, {
   emergencyLabel: 'Emergencia',
   mailLabel: 'Correo',
   websiteLabel: 'Sitio web',
-  statusChecked: 'Los datos aún se están revisando',
+  statusChecked: '',
   goodToKnow: 'Bueno saber',
   forWhom: 'También útil para',
   themesTitle: 'Temas',
@@ -868,6 +940,7 @@ function iconSvg(name){
     chat: '<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/>',
     clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
     pin: '<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+    print: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/>',
     arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>'
   };
   return `<svg class="icon icon-${escapeHtml(name)}" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths[name] || paths.arrow}</svg>`;
@@ -1322,7 +1395,7 @@ function organizationHref(org, audience){
 function hasMeaningfulValue(value){
   const text = String(value || '').trim();
   if(!text) return false;
-  return !/^(nog niet ingevuld|nog aan te vullen|wordt nog aangevuld|n\/a|-|undefined|null)$/i.test(text);
+  return !/^(nog niet ingevuld|nog aan te vullen|wordt nog aangevuld|n\/a|-)$/i.test(text);
 }
 
 function hasProfessionalContent(value){
@@ -1360,6 +1433,189 @@ function contactActionLinks(contact = {}, options = {}){
   if(email) links.push(`<a class="contact-action" href="mailto:${escapeHtml(email)}">${iconSvg('mail')}<span>${escapeHtml(ui('mailLabel'))}</span></a>`);
   if(website) links.push(`<a class="contact-action" href="${escapeHtml(website)}" target="_blank" rel="noopener">${iconSvg('globe')}<span>${escapeHtml(ui('websiteLabel'))}</span></a>`);
   return links.join('');
+}
+
+function detailSectionBody(section){
+  const paragraphs = Array.isArray(section.paragraphs) ? section.paragraphs : [];
+  const items = Array.isArray(section.items) ? section.items : [];
+  const body = getTranslatedValue(section.body);
+  const html = [];
+  if(body && hasMeaningfulValue(body)) html.push(`<p>${escapeHtml(body)}</p>`);
+  paragraphs
+    .map(getTranslatedValue)
+    .filter(hasMeaningfulValue)
+    .forEach(text => html.push(`<p>${escapeHtml(text)}</p>`));
+  if(items.length) {
+    const listItems = items
+      .map(getTranslatedValue)
+      .filter(hasMeaningfulValue)
+      .map(item => `<li>${escapeHtml(item)}</li>`)
+      .join('');
+    if(listItems) html.push(`<ul>${listItems}</ul>`);
+  }
+  return html.join('');
+}
+
+function profileLabel(config){
+  return getTranslatedValue(config?.labels || config?.title || '');
+}
+
+function profileAnswerText(value){
+  const text = getTranslatedValue(value, currentLanguage(), 'nl');
+  return hasMeaningfulValue(text) ? text : '';
+}
+
+function profileAnswerHtml(value){
+  const text = profileAnswerText(value);
+  if(!text) return '';
+  const blocks = text.split(/\n{2,}/).map(block => block.trim()).filter(Boolean);
+  return blocks.map(block => {
+    const lines = block.split(/\n/).map(line => line.trim()).filter(Boolean);
+    if(lines.length && lines.every(line => /^[-*]\s+/.test(line))) {
+      return `<ul>${lines.map(line => `<li>${escapeHtml(line.replace(/^[-*]\s+/, ''))}</li>`).join('')}</ul>`;
+    }
+    return `<p>${escapeHtml(lines.join('\n')).replace(/\n/g, '<br>')}</p>`;
+  }).join('');
+}
+
+function profileQuestionBlock(fieldConfig, value){
+  const body = profileAnswerHtml(value);
+  if(!body) return '';
+  return `<div class="detail-profile-field">
+    <h3>${escapeHtml(profileLabel(fieldConfig))}</h3>
+    <div class="detail-profile-field__body">${body}</div>
+  </div>`;
+}
+
+function legacyShouldOpenDetailSection(title, index, audience){
+  const normalized = normalizeText(title);
+  if(audience === 'professional') {
+    return index === 0 || [
+      'algemene informatie',
+      'verwijzing en toegankelijkheid',
+      'praktische informatie'
+    ].includes(normalized);
+  }
+  return index < 2;
+}
+
+function legacyDetailAccordionSections(org, audience){
+  const key = audience === 'professional' ? 'professional_sections' : 'youth_sections';
+  if(!Array.isArray(org[key])) return '';
+  const sections = org[key].map((section, index) => {
+    const title = getTranslatedValue(section.title);
+    const body = detailSectionBody(section);
+    if(!hasMeaningfulValue(title) || !body) return null;
+    const id = `detail-section-${audience}-${index}`;
+    const open = legacyShouldOpenDetailSection(title, index, audience);
+    return `<section class="detail-section detail-accordion${open ? ' is-open' : ''}">
+      <h2>
+        <button class="detail-accordion__trigger" type="button" aria-expanded="${open ? 'true' : 'false'}" aria-controls="${id}">
+          <span>${escapeHtml(title)}</span>
+          <span class="detail-accordion__icon" aria-hidden="true"></span>
+        </button>
+      </h2>
+      <div class="detail-accordion__panel" id="${id}"${open ? '' : ' hidden'}>${body}</div>
+    </section>`;
+  }).filter(Boolean);
+  if(!sections.length) return '';
+  const title = getTranslatedValue(PROFILE_I18N[audience]?.title) || (audience === 'professional' ? 'Uitgebreide informatie voor professionals' : 'Meer over deze organisatie');
+  return `<section class="detail-expanded-info" aria-label="${escapeHtml(title)}">
+    <div class="detail-expanded-info__header">
+      <h2>${escapeHtml(title)}</h2>
+      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>Print of bewaar als PDF</span></button>
+    </div>
+    <div class="detail-accordion-list">${sections.join('')}</div>
+  </section>`;
+}
+
+function youthProfileAccordionSections(org){
+  if(!org.youth_profile) return '';
+  let openCount = 0;
+  const sections = PROFILE_I18N.youth.fields.map(field => {
+    const body = profileAnswerHtml(org.youth_profile[field.key]);
+    if(!body) return null;
+    const id = `detail-profile-youth-${field.key}`;
+    const open = openCount < 2;
+    openCount += 1;
+    return `<section class="detail-section detail-accordion${open ? ' is-open' : ''}">
+      <h2>
+        <button class="detail-accordion__trigger" type="button" aria-expanded="${open ? 'true' : 'false'}" aria-controls="${id}">
+          <span>${escapeHtml(profileLabel(field))}</span>
+          <span class="detail-accordion__icon" aria-hidden="true"></span>
+        </button>
+      </h2>
+      <div class="detail-accordion__panel" id="${id}"${open ? '' : ' hidden'}>${body}</div>
+    </section>`;
+  }).filter(Boolean);
+  if(!sections.length) return '';
+  const title = getTranslatedValue(PROFILE_I18N.youth.title);
+  return `<section class="detail-expanded-info" aria-label="${escapeHtml(title)}">
+    <div class="detail-expanded-info__header">
+      <h2>${escapeHtml(title)}</h2>
+      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>Print of bewaar als PDF</span></button>
+    </div>
+    <div class="detail-accordion-list">${sections.join('')}</div>
+  </section>`;
+}
+
+function professionalProfileAccordionSections(org){
+  if(!org.professional_profile) return '';
+  const hasProfileContent = PROFILE_I18N.professional.groups.some(group => {
+    const profileGroup = org.professional_profile[group.key] || {};
+    return group.fields.some(field => field.key !== 'organisation_name' && profileAnswerHtml(profileGroup[field.key]));
+  });
+  if(!hasProfileContent) return '';
+  const sections = PROFILE_I18N.professional.groups.map(group => {
+    const profileGroup = org.professional_profile[group.key] || {};
+    const body = group.fields
+      .map(field => profileQuestionBlock(field, profileGroup[field.key]))
+      .filter(Boolean)
+      .join('');
+    if(!body) return null;
+    const id = `detail-profile-professional-${group.key}`;
+    const open = ['general','referral','practical'].includes(group.key);
+    return `<section class="detail-section detail-accordion${open ? ' is-open' : ''}">
+      <h2>
+        <button class="detail-accordion__trigger" type="button" aria-expanded="${open ? 'true' : 'false'}" aria-controls="${id}">
+          <span>${escapeHtml(profileLabel(group))}</span>
+          <span class="detail-accordion__icon" aria-hidden="true"></span>
+        </button>
+      </h2>
+      <div class="detail-accordion__panel" id="${id}"${open ? '' : ' hidden'}>${body}</div>
+    </section>`;
+  }).filter(Boolean);
+  if(!sections.length) return '';
+  const title = getTranslatedValue(PROFILE_I18N.professional.title);
+  return `<section class="detail-expanded-info" aria-label="${escapeHtml(title)}">
+    <div class="detail-expanded-info__header">
+      <h2>${escapeHtml(title)}</h2>
+      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>Print of bewaar als PDF</span></button>
+    </div>
+    <div class="detail-accordion-list">${sections.join('')}</div>
+  </section>`;
+}
+
+function detailAccordionSections(org, audience){
+  const profileSections = audience === 'professional'
+    ? professionalProfileAccordionSections(org)
+    : youthProfileAccordionSections(org);
+  return profileSections || legacyDetailAccordionSections(org, audience);
+}
+
+function initDetailAccordions(holder){
+  holder.querySelectorAll('.detail-accordion__trigger').forEach(button => {
+    button.addEventListener('click', () => {
+      const panel = document.getElementById(button.getAttribute('aria-controls'));
+      const expanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      button.closest('.detail-accordion')?.classList.toggle('is-open', !expanded);
+      if(panel) panel.hidden = expanded;
+    });
+  });
+  holder.querySelectorAll('[data-print-detail]').forEach(button => {
+    button.addEventListener('click', () => window.print());
+  });
 }
 
 function initOrganizationDetail(audience){
@@ -1410,6 +1666,7 @@ function renderOrganizationDetail(audience){
     const audienceText = org.audiences.map(audienceLabel).filter(Boolean).join(', ');
     const metaRows = [
       detailMetaRow(ui('address'), address),
+      detailMetaRow('Toegang', getTranslatedValue(org.access_label)),
       detailMetaRow(ui('lastChecked'), org.last_checked_at),
       detailMetaRow(ui('forWhom'), audienceText)
     ].filter(Boolean).join('');
@@ -1424,15 +1681,16 @@ function renderOrganizationDetail(audience){
           ${primaryThemeLabel ? `<span class="detail-theme-badge">${escapeHtml(primaryThemeLabel)}</span>` : ''}
           <h1>${escapeHtml(title)}</h1>
           ${headerSummary ? `<p>${escapeHtml(headerSummary)}</p>` : ''}
-          ${org.demo ? `<span class="detail-status">${escapeHtml(ui('statusChecked'))}</span>` : ''}
         </div>
         ${primaryThemeIcon}
         ${contactActions ? `<div class="detail-header__actions">${contactActions}</div>` : ''}
       </div>
       <section class="detail-grid youth-detail-grid">
         <div class="detail-main youth-detail-main">
-          ${primaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('youthDescription'))}</h2><p>${escapeHtml(primaryText)}</p></section>` : ''}
-          ${secondaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('contactHow'))}</h2><p>${escapeHtml(secondaryText)}</p></section>` : ''}
+          ${detailAccordionSections(org, 'youth') || [
+            primaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('youthDescription'))}</h2><p>${escapeHtml(primaryText)}</p></section>` : '',
+            secondaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('contactHow'))}</h2><p>${escapeHtml(secondaryText)}</p></section>` : ''
+          ].filter(Boolean).join('')}
         </div>
         <aside class="detail-side youth-detail-side">
           <section class="detail-section">
@@ -1448,6 +1706,7 @@ function renderOrganizationDetail(audience){
         </aside>
       </section>
     </article>`;
+    initDetailAccordions(holder);
     return;
   }
 
@@ -1457,7 +1716,8 @@ function renderOrganizationDetail(audience){
   const typeLabel = getOrganizationText(org, 'type') || primaryThemeLabel;
   const headerDescription = primaryText || typeLabel;
   const contactActions = contactActionLinks(org.contact);
-  const contentSections = [
+  const accordionSections = detailAccordionSections(org, 'professional');
+  const contentSections = accordionSections || [
     hasProfessionalContent(primaryText) ? `<section class="detail-section"><h2>${escapeHtml(ui('professionalDescription'))}</h2><p>${escapeHtml(primaryText)}</p></section>` : '',
     hasProfessionalContent(secondaryText) ? `<section class="detail-section"><h2>${escapeHtml(secondaryTitle)}</h2><p>${escapeHtml(secondaryText)}</p></section>` : '',
     hasProfessionalContent(notes) ? `<section class="detail-section"><h2>${escapeHtml(ui('notes'))}</h2><p>${escapeHtml(notes)}</p></section>` : ''
@@ -1469,6 +1729,7 @@ function renderOrganizationDetail(audience){
     detailMetaRow(ui('address'), address),
     detailMetaRow(ui('audience'), audienceText),
     detailMetaRow(ui('age'), ageText),
+    detailMetaRow('Toegang', getTranslatedValue(org.access_label)),
     detailMetaRow(ui('lastChecked'), org.last_checked_at)
   ].filter(Boolean).join('');
   const serviceLabels = Array.isArray(org.service_labels) && org.service_labels.length
@@ -1485,13 +1746,12 @@ function renderOrganizationDetail(audience){
         ${primaryThemeLabel ? `<span class="detail-theme-badge professional-theme-badge">${escapeHtml(primaryThemeLabel)}</span>` : ''}
         <h1>${escapeHtml(title)}</h1>
         ${headerDescription ? `<p>${escapeHtml(headerDescription)}</p>` : ''}
-        ${org.demo ? `<span class="detail-status professional-status">${escapeHtml(ui('statusChecked'))}</span>` : ''}
       </div>
       ${contactActions ? `<div class="detail-header__actions professional-header-actions">${contactActions}</div>` : ''}
     </div>
     <section class="detail-grid professional-detail-grid">
       <div class="detail-main professional-detail-main">
-        ${contentSections || `<section class="detail-section"><h2>${escapeHtml(ui('professionalDescription'))}</h2><p>${escapeHtml(headerDescription || fallbackText())}</p></section>`}
+        ${contentSections}
       </div>
       <aside class="detail-side professional-detail-side">
         ${contactActions ? `<section class="detail-section professional-contact-card"><h2>${escapeHtml(ui('contact'))}</h2><div class="contact-stack contact-actions">${contactActions}</div></section>` : ''}
@@ -1501,6 +1761,7 @@ function renderOrganizationDetail(audience){
       </aside>
     </section>
   </article>`;
+  initDetailAccordions(holder);
 }
 
 function recordRecentOrganization(org, audience){
