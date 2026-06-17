@@ -154,6 +154,20 @@ h3 {
   color: var(--danger);
 }
 
+.notice {
+  padding: 10px 12px;
+  border: 1px solid #b8dfd9;
+  border-radius: 6px;
+  background: #eefaf8;
+  color: #075e61;
+}
+
+.error-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--danger);
+}
+
 .filters {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) repeat(4, minmax(150px, 190px)) auto;
@@ -169,7 +183,8 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   min-height: 38px;
   padding: 8px 10px;
@@ -178,6 +193,10 @@ select {
   background: #fff;
   color: var(--text);
   font: inherit;
+}
+
+textarea {
+  resize: vertical;
 }
 
 button,
@@ -285,6 +304,24 @@ th {
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 18px;
+}
+
+.edit-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
 }
 
 .profile-answer {

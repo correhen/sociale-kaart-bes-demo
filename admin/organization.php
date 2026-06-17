@@ -16,6 +16,7 @@ $translations = [];
 $youthAnswers = [];
 $professionalAnswers = [];
 $languages = ['nl', 'pap', 'en', 'es'];
+$saved = (string)($_GET['saved'] ?? '') === '1';
 
 function translation_by_language(array $rows): array
 {
@@ -162,12 +163,19 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
   <?php admin_footer(); exit; ?>
 <?php endif; ?>
 
+<?php if ($saved): ?>
+  <p class="notice">Wijzigingen zijn opgeslagen.</p>
+<?php endif; ?>
+
 <div class="section-nav">
   <a class="button" href="#basis">Basis</a>
   <a class="button" href="#contact">Contact</a>
   <a class="button" href="#youth">Jongerenprofiel</a>
   <a class="button" href="#professional">Professionalprofiel</a>
   <a class="button" href="#translations">Vertalingen/status</a>
+  <?php if (admin_can_edit_organizations()): ?>
+    <a class="button primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Bewerken</a>
+  <?php endif; ?>
 </div>
 
 <section class="panel" id="basis">

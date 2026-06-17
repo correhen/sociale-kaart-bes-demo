@@ -64,16 +64,45 @@ In deze fase mogen alleen gebruikers met rol `admin`, `editor` of `viewer` inlog
 - `/admin/dashboard.php`: read-only statistieken.
 - `/admin/organizations.php`: read-only organisatielijst met filters.
 - `/admin/organization.php?id=...`: read-only organisatiedetail.
+- `/admin/organization_edit.php?id=...`: beperkte edit-flow voor status en contactgegevens.
 - `/admin/logout.php`: sessie uitloggen.
 
 De detailpagina toont lege velden bewust als `ontbreekt`, omdat beheer moet kunnen zien wat nog mist. Dit verschilt van de publieke site, waar lege velden verborgen worden.
+
+## Beperkte Edit-Flow
+
+In fase 2A mogen alleen gebruikers met rol `admin` of `editor` opslaan. `viewer` kan inloggen en lezen, maar kan geen wijzigingen opslaan.
+
+Bewerkbaar:
+
+- publicatiestatus;
+- bronstatus;
+- laatst gecontroleerd-datum;
+- telefoon;
+- WhatsApp;
+- e-mail;
+- website;
+- adres.
+
+Niet bewerkbaar in deze fase:
+
+- naam;
+- slug;
+- thema's;
+- eilanden;
+- doelgroepen;
+- jongerenprofiel;
+- professionalprofiel;
+- vertalingen;
+- gebruikers en rollen.
+
+Elke echte wijziging wordt geregistreerd in `audit_log` met actie `organization.update_basic`, de ingelogde gebruiker, het organisatie-id en JSON met oude en nieuwe waarden van alleen de gewijzigde velden.
 
 ## Bewust Nog Niet Gebouwd
 
 Deze fase bevat nog niet:
 
-- content-editor;
-- publiceren of status wijzigen;
+- volledige content-editor;
 - vertaalbewerking;
 - organisatieaccounts;
 - magic links;

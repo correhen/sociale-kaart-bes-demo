@@ -150,6 +150,21 @@ function admin_role_label(array $user): string
     return implode(', ', $user['roles'] ?? []);
 }
 
+function admin_has_role(string $role): bool
+{
+    $user = current_admin_user();
+    if (!$user) {
+        return false;
+    }
+
+    return in_array($role, $user['roles'] ?? [], true);
+}
+
+function admin_can_edit_organizations(): bool
+{
+    return admin_has_role('admin') || admin_has_role('editor');
+}
+
 function fetch_one(string $sql, array $params = []): ?array
 {
     $stmt = admin_db()->prepare($sql);
@@ -165,4 +180,23 @@ function fetch_all(string $sql, array $params = []): array
     $stmt->execute($params);
 
     return $stmt->fetchAll();
+}
+
+function write_audit_log(string $action, string $entityType, int $entityId, array $before, array $after): void
+{
+    $user = current_admin_user();
+    $stmt = admin_db()->prepare(
+        "INSERT INTO audit_log (user_id, action, entity_type, entity_id, before_json, after_json, ip_address, user_agent)
+        VALUES (:user_id, :action, :entity_type, :entity_id, :before_json, :after_json, :ip_address, :user_agent)"
+    );
+    $stmt->execute([
+        'user_id' => $user['id'] ?? null,
+        'action' => $action,
+        'entity_type' => $entityType,
+        'entity_id' => $entityId,
+        'before_json' => json_encode($before, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        'after_json' => json_encode($after, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        'ip_address' => substr((string)($_SERVER['REMOTE_ADDR'] ?? ''), 0, 45),
+        'user_agent' => substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
+    ]);
 }
