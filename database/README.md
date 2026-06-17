@@ -102,3 +102,67 @@ Deze tabellen zijn in MVP 1 al aanwezig, maar worden vooral later belangrijk:
 - JSON-kolommen op organisaties en contact: tijdelijke opvang voor legacy- of detailinformatie die nog niet in vaste velden past.
 
 Voor fase 2 kunnen tabellen voor activiteiten en hulpaanbod worden toegevoegd. Die moeten dezelfde patronen volgen: eilanden via koppeltabellen, vertalingen met status, publicatiestatus, en geen automatische inhoudelijke herschrijving.
+
+## Seed Import Genereren
+
+Het importscripttje leest de huidige statische brondata uit `data/kadena_hubentut_seeddata_bonaire_v0_1.json` en schrijft een SQL-importbestand zonder teksten te corrigeren, herschrijven of vertalen.
+
+Dry-run:
+
+```bash
+python tools/import_seed_to_sql.py --dry-run
+```
+
+SQL-bestand genereren:
+
+```bash
+python tools/import_seed_to_sql.py --output database/seed_import.sql
+```
+
+Het gegenereerde bestand gebruikt UTF-8 en behoudt bestaande inhoud exact, inclusief bestaande mojibake in de brondata.
+
+## Importeren In Plesk/phpMyAdmin
+
+Aanbevolen stappen:
+
+1. Maak in Plesk een nieuwe MySQL/MariaDB database aan.
+2. Maak een databasegebruiker aan met rechten op alleen deze database.
+3. Gebruik voor de database waar mogelijk charset/collation `utf8mb4` en `utf8mb4_unicode_ci`.
+4. Open phpMyAdmin vanuit Plesk.
+5. Selecteer de nieuwe database.
+6. Importeer eerst `database/schema.sql`.
+7. Importeer daarna `database/seed_import.sql`.
+8. Controleer de aantallen met SQL queries.
+
+Controlequeries:
+
+```sql
+SELECT COUNT(*) AS organizations FROM organizations;
+SELECT COUNT(*) AS themes FROM themes;
+SELECT COUNT(*) AS active_organizations
+FROM organizations
+WHERE status = 'published';
+SELECT COUNT(*) AS archived_organizations
+FROM organizations
+WHERE status = 'archived';
+SELECT COUNT(*) AS profile_answers
+FROM organization_profile_answers;
+```
+
+Verwachte aantallen voor de huidige seed:
+
+- 29 organisaties;
+- 8 thema's;
+- 18 gepubliceerde organisaties uit actieve seedentries;
+- 11 gearchiveerde organisaties;
+- 3016 profielantwoordrijen.
+
+## Lokale PHP Databaseconfig
+
+Kopieer lokaal:
+
+```bash
+cp config/database.example.php config/database.php
+```
+
+Vul daarna de lokale of Plesk databasegegevens in `config/database.php` in. Dit bestand staat in `.gitignore` en mag niet worden gecommit.
