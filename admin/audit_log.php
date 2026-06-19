@@ -44,6 +44,17 @@ function audit_summary(?string $beforeJson, ?string $afterJson): string
 {
     $before = audit_values($beforeJson);
     $after = audit_values($afterJson);
+    if (isset($before['answers']) || isset($after['answers'])) {
+        $audience = (string)($after['audience'] ?? $before['audience'] ?? 'profiel');
+        $answers = array_merge(
+            is_array($before['answers'] ?? null) ? $before['answers'] : [],
+            is_array($after['answers'] ?? null) ? $after['answers'] : []
+        );
+        $fields = array_keys($answers);
+
+        return $audience . ': ' . ($fields ? implode(', ', $fields) : 'geen veldwijzigingen');
+    }
+
     $fields = array_values(array_unique(array_merge(array_keys($before), array_keys($after))));
 
     if (!$fields) {
@@ -88,7 +99,7 @@ try {
 admin_header('Auditlog', 'audit_log');
 ?>
 <section class="panel">
-  <p class="muted">Read-only overzicht voor admin, editor en viewer. De nieuwste 250 registraties worden getoond.</p>
+  <p class="muted">Read-only overzicht voor admin, editor, translator en viewer. De nieuwste 250 registraties worden getoond.</p>
 </section>
 
 <?php if ($error !== ''): ?>

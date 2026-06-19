@@ -182,6 +182,12 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
   <?php if (admin_can_edit_organizations()): ?>
     <a class="button primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Bewerken</a>
   <?php endif; ?>
+  <a class="button<?= admin_can_edit_profiles() ? ' primary' : '' ?>" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=youth">
+    <?= admin_can_edit_profiles() ? 'Jongerenprofiel bewerken' : 'Jongerenprofiel bekijken' ?>
+  </a>
+  <a class="button<?= admin_can_edit_profiles() ? ' primary' : '' ?>" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional">
+    <?= admin_can_edit_profiles() ? 'Professionalprofiel bewerken' : 'Professionalprofiel bekijken' ?>
+  </a>
 </div>
 
 <section class="panel" id="basis">

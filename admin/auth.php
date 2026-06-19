@@ -5,7 +5,7 @@ declare(strict_types=1);
 session_name('kadena_admin');
 session_start();
 
-const ADMIN_ALLOWED_ROLES = ['admin', 'editor', 'viewer'];
+const ADMIN_ALLOWED_ROLES = ['admin', 'editor', 'translator', 'viewer'];
 
 function admin_db_config(): array
 {
@@ -163,6 +163,20 @@ function admin_has_role(string $role): bool
 function admin_can_edit_organizations(): bool
 {
     return admin_has_role('admin') || admin_has_role('editor');
+}
+
+function admin_can_edit_profiles(): bool
+{
+    return admin_can_edit_organizations() || admin_has_role('translator');
+}
+
+function admin_can_edit_profile_language(string $language): bool
+{
+    if (admin_can_edit_organizations()) {
+        return true;
+    }
+
+    return admin_has_role('translator') && $language !== 'nl';
 }
 
 function fetch_one(string $sql, array $params = []): ?array
