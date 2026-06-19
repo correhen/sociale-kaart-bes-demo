@@ -152,7 +152,13 @@ try {
     $youthAnswers = profile_matrix(array_values(array_filter($profileRows, static fn(array $row): bool => $row['audience_code'] === 'youth')));
     $professionalAnswers = profile_matrix(array_values(array_filter($profileRows, static fn(array $row): bool => $row['audience_code'] === 'professional')));
 } catch (Throwable $exception) {
-    $error = $exception->getMessage();
+    $knownMessages = [
+        'Geen geldige organisatie-id opgegeven.',
+        'Organisatie niet gevonden.',
+    ];
+    $error = in_array($exception->getMessage(), $knownMessages, true)
+        ? $exception->getMessage()
+        : 'De organisatie kon niet worden geladen. Probeer het later opnieuw.';
 }
 
 admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'organizations');
@@ -189,7 +195,7 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
     <dt>Zichtbaar publiek</dt><dd><?= ((int)$organization['visibility_public'] === 1) ? 'ja' : 'nee' ?></dd>
     <dt>Source locked</dt><dd><?= ((int)$organization['source_locked'] === 1) ? 'ja' : 'nee' ?></dd>
     <dt>Bijgewerkt</dt><dd><?= h((string)$organization['updated_at']) ?></dd>
-    <dt>Laatst gecontroleerd</dt><dd><?= empty_label($organization['last_checked_at']) ?></dd>
+    <dt>Laatst gecontroleerd</dt><dd><?= readable_date($organization['last_checked_at']) ?></dd>
   </dl>
 
   <h3>Eilanden</h3>

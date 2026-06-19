@@ -14,6 +14,11 @@ $errors = [];
 $organization = null;
 $contact = null;
 $values = [
+    'name' => '',
+    'professional_summary' => '',
+    'type_label' => '',
+    'age_range' => '',
+    'professional_referral_or_access' => '',
     'status' => '',
     'source_status' => '',
     'last_checked_at' => '',
@@ -24,9 +29,14 @@ $values = [
     'address_nl' => '',
 ];
 
-function editable_snapshot(array $organization, ?array $contact): array
+function editable_snapshot(array $organization, ?array $translation, ?array $contact): array
 {
     return [
+        'name' => (string)($translation['name'] ?? ''),
+        'professional_summary' => (string)($translation['professional_summary'] ?? ''),
+        'type_label' => (string)($translation['type_label'] ?? ''),
+        'age_range' => (string)($translation['age_range'] ?? ''),
+        'professional_referral_or_access' => (string)($translation['professional_referral_or_access'] ?? ''),
         'status' => (string)($organization['status'] ?? ''),
         'source_status' => (string)($organization['source_status'] ?? ''),
         'last_checked_at' => (string)($organization['last_checked_at'] ?? ''),
@@ -54,6 +64,11 @@ function valid_date_or_empty(string $value): bool
 function posted_values(): array
 {
     return [
+        'name' => trim((string)($_POST['name'] ?? '')),
+        'professional_summary' => trim((string)($_POST['professional_summary'] ?? '')),
+        'type_label' => trim((string)($_POST['type_label'] ?? '')),
+        'age_range' => trim((string)($_POST['age_range'] ?? '')),
+        'professional_referral_or_access' => trim((string)($_POST['professional_referral_or_access'] ?? '')),
         'status' => trim((string)($_POST['status'] ?? '')),
         'source_status' => trim((string)($_POST['source_status'] ?? '')),
         'last_checked_at' => trim((string)($_POST['last_checked_at'] ?? '')),
@@ -68,6 +83,9 @@ function posted_values(): array
 function validate_values(array $values): array
 {
     $errors = [];
+    if ($values['name'] === '') {
+        $errors[] = 'Organisatienaam mag niet leeg zijn.';
+    }
     if (!in_array($values['status'], ORGANIZATION_STATUSES, true)) {
         $errors[] = 'Ongeldige status.';
     }
@@ -120,7 +138,15 @@ try {
     }
 
     $contact = fetch_one('SELECT * FROM organization_contacts WHERE organization_id = :id', ['id' => $id]);
-    $values = editable_snapshot($organization, $contact);
+    $translation = fetch_one(
+        "SELECT *
+        FROM organization_translations
+        WHERE organization_id = :id
+          AND language_code = 'nl'
+        LIMIT 1",
+        ['id' => $id]
+    );
+    $values = editable_snapshot($organization, $translation, $contact);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!admin_can_edit_organizations()) {
@@ -134,7 +160,7 @@ try {
         $errors = array_merge($errors, validate_values($values));
 
         if (!$errors) {
-            $before = editable_snapshot($organization, $contact);
+            $before = editable_snapshot($organization, $translation, $contact);
             $after = $values;
             $changed = changed_values($before, $after);
 
@@ -142,38 +168,98 @@ try {
                 $pdo = admin_db();
                 $pdo->beginTransaction();
 
-                $updateOrg = $pdo->prepare(
-                    "UPDATE organizations
-                    SET status = :status,
-                        source_status = :source_status,
-                        last_checked_at = :last_checked_at
-                    WHERE id = :id"
-                );
-                $updateOrg->execute([
-                    'status' => $values['status'],
-                    'source_status' => $values['source_status'],
-                    'last_checked_at' => $values['last_checked_at'] === '' ? null : $values['last_checked_at'],
-                    'id' => $id,
-                ]);
+                $organizationFields = array_intersect_key($changed, array_flip([
+                    'status',
+                    'source_status',
+                    'last_checked_at',
+                ]));
+                if ($organizationFields) {
+                    $updateOrg = $pdo->prepare(
+                        "UPDATE organizations
+                        SET status = :status,
+                            source_status = :source_status,
+                            last_checked_at = :last_checked_at
+                        WHERE id = :id"
+                    );
+                    $updateOrg->execute([
+                        'status' => $values['status'],
+                        'source_status' => $values['source_status'],
+                        'last_checked_at' => $values['last_checked_at'] === '' ? null : $values['last_checked_at'],
+                        'id' => $id,
+                    ]);
+                }
 
-                $upsertContact = $pdo->prepare(
-                    "INSERT INTO organization_contacts (organization_id, phone, whatsapp, email, website, address_nl)
-                    VALUES (:organization_id, :phone, :whatsapp, :email, :website, :address_nl)
-                    ON DUPLICATE KEY UPDATE
-                        phone = VALUES(phone),
-                        whatsapp = VALUES(whatsapp),
-                        email = VALUES(email),
-                        website = VALUES(website),
-                        address_nl = VALUES(address_nl)"
-                );
-                $upsertContact->execute([
-                    'organization_id' => $id,
-                    'phone' => $values['phone'],
-                    'whatsapp' => $values['whatsapp'],
-                    'email' => $values['email'],
-                    'website' => $values['website'],
-                    'address_nl' => $values['address_nl'],
-                ]);
+                $translationFields = array_intersect_key($changed, array_flip([
+                    'name',
+                    'professional_summary',
+                    'type_label',
+                    'age_range',
+                    'professional_referral_or_access',
+                ]));
+                if ($translationFields) {
+                    $upsertTranslation = $pdo->prepare(
+                        "INSERT INTO organization_translations (
+                            organization_id,
+                            language_code,
+                            name,
+                            professional_summary,
+                            type_label,
+                            age_range,
+                            professional_referral_or_access
+                        )
+                        VALUES (
+                            :organization_id,
+                            'nl',
+                            :name,
+                            :professional_summary,
+                            :type_label,
+                            :age_range,
+                            :professional_referral_or_access
+                        )
+                        ON DUPLICATE KEY UPDATE
+                            name = VALUES(name),
+                            professional_summary = VALUES(professional_summary),
+                            type_label = VALUES(type_label),
+                            age_range = VALUES(age_range),
+                            professional_referral_or_access = VALUES(professional_referral_or_access)"
+                    );
+                    $upsertTranslation->execute([
+                        'organization_id' => $id,
+                        'name' => $values['name'],
+                        'professional_summary' => $values['professional_summary'],
+                        'type_label' => $values['type_label'],
+                        'age_range' => $values['age_range'],
+                        'professional_referral_or_access' => $values['professional_referral_or_access'],
+                    ]);
+                }
+
+                $contactFields = array_intersect_key($changed, array_flip([
+                    'phone',
+                    'whatsapp',
+                    'email',
+                    'website',
+                    'address_nl',
+                ]));
+                if ($contactFields) {
+                    $upsertContact = $pdo->prepare(
+                        "INSERT INTO organization_contacts (organization_id, phone, whatsapp, email, website, address_nl)
+                        VALUES (:organization_id, :phone, :whatsapp, :email, :website, :address_nl)
+                        ON DUPLICATE KEY UPDATE
+                            phone = VALUES(phone),
+                            whatsapp = VALUES(whatsapp),
+                            email = VALUES(email),
+                            website = VALUES(website),
+                            address_nl = VALUES(address_nl)"
+                    );
+                    $upsertContact->execute([
+                        'organization_id' => $id,
+                        'phone' => $values['phone'],
+                        'whatsapp' => $values['whatsapp'],
+                        'email' => $values['email'],
+                        'website' => $values['website'],
+                        'address_nl' => $values['address_nl'],
+                    ]);
+                }
 
                 write_audit_log(
                     'organization.update_basic',
@@ -186,7 +272,7 @@ try {
                 $pdo->commit();
             }
 
-            header('Location: organization.php?id=' . rawurlencode((string)$id) . '&saved=1');
+            header('Location: organization_edit.php?id=' . rawurlencode((string)$id) . '&saved=1');
             exit;
         }
     }
@@ -194,7 +280,14 @@ try {
     if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    $error = $exception->getMessage();
+    $knownMessages = [
+        'Geen geldige organisatie-id opgegeven.',
+        'Organisatie niet gevonden.',
+        'Je hebt geen rechten om organisaties op te slaan.',
+    ];
+    $error = in_array($exception->getMessage(), $knownMessages, true)
+        ? $exception->getMessage()
+        : 'De organisatie kon niet worden geladen of opgeslagen. Probeer het later opnieuw.';
 }
 
 admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Organisatie bewerken', 'organizations');
@@ -211,8 +304,12 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
   <?php admin_footer(); exit; ?>
 <?php endif; ?>
 
+<?php if ((string)($_GET['saved'] ?? '') === '1'): ?>
+  <p class="notice">De wijzigingen zijn succesvol opgeslagen.</p>
+<?php endif; ?>
+
 <section class="panel">
-  <p class="notice">In deze fase kun je alleen status en contactgegevens wijzigen.</p>
+  <p class="notice">In deze fase kun je Nederlandse basisgegevens, status en contactgegevens wijzigen.</p>
   <dl class="detail-list">
     <dt>Organisatie</dt>
     <dd><?= h($organization['name']) ?></dd>
@@ -236,6 +333,38 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
   <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
   <input type="hidden" name="id" value="<?= h((string)$id) ?>">
 
+  <section class="form-section">
+  <h2>Basisgegevens</h2>
+  <p class="muted">Alleen Nederlandse basisvelden. De slug en profielantwoorden blijven ongewijzigd.</p>
+  <label>
+    Organisatienaam (NL)
+    <input name="name" value="<?= h($values['name']) ?>" required>
+  </label>
+  <label>
+    Korte omschrijving / summary (NL)
+    <textarea name="professional_summary" rows="5"><?= h($values['professional_summary']) ?></textarea>
+  </label>
+  <div class="form-grid">
+    <label>
+      Type-label (NL)
+      <input name="type_label" value="<?= h($values['type_label']) ?>">
+    </label>
+    <label>
+      Leeftijd / age range (NL)
+      <input name="age_range" value="<?= h($values['age_range']) ?>">
+    </label>
+  </div>
+  <label>
+    Toegang / verwijzing (NL)
+    <textarea name="professional_referral_or_access" rows="5"><?= h($values['professional_referral_or_access']) ?></textarea>
+  </label>
+  <label>
+    Slug (alleen-lezen)
+    <input value="<?= h($organization['slug']) ?>" readonly>
+  </label>
+  </section>
+
+  <section class="form-section">
   <h2>Status</h2>
   <div class="form-grid">
     <label>
@@ -259,7 +388,9 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
       <input name="last_checked_at" type="date" value="<?= h($values['last_checked_at']) ?>">
     </label>
   </div>
+  </section>
 
+  <section class="form-section">
   <h2>Contactgegevens</h2>
   <div class="form-grid">
     <label>
@@ -283,6 +414,7 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
     Adres
     <textarea name="address_nl" rows="4"><?= h($values['address_nl']) ?></textarea>
   </label>
+  </section>
 
   <div class="form-actions">
     <button type="submit">Opslaan</button>

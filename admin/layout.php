@@ -23,6 +23,7 @@ function admin_header(string $title, string $active = ''): void
       <nav class="admin-nav" aria-label="Admin navigatie">
         <a class="<?= $active === 'dashboard' ? 'is-active' : '' ?>" href="dashboard.php">Dashboard</a>
         <a class="<?= $active === 'organizations' ? 'is-active' : '' ?>" href="organizations.php">Organisaties</a>
+        <a class="<?= $active === 'audit_log' ? 'is-active' : '' ?>" href="audit_log.php">Auditlog</a>
         <span>Thema's</span>
         <span>Feedback</span>
         <span>Gebruikers</span>
@@ -67,4 +68,34 @@ function empty_label(?string $value = null): string
     }
 
     return nl2br(h($text));
+}
+
+function readable_date(?string $value): string
+{
+    $date = trim((string)$value);
+    if ($date === '') {
+        return '<span class="muted">ontbreekt</span>';
+    }
+
+    $parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $date);
+    if (!$parsed || $parsed->format('Y-m-d') !== $date) {
+        return h($date);
+    }
+
+    return h($parsed->format('d-m-Y'));
+}
+
+function readable_datetime(?string $value): string
+{
+    $dateTime = trim((string)$value);
+    if ($dateTime === '') {
+        return '<span class="muted">ontbreekt</span>';
+    }
+
+    $parsed = DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $dateTime);
+    if (!$parsed || $parsed->format('Y-m-d H:i:s') !== $dateTime) {
+        return h($dateTime);
+    }
+
+    return h($parsed->format('d-m-Y H:i'));
 }

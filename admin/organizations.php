@@ -186,7 +186,7 @@ admin_header('Organisaties', 'organizations');
             <td><?= empty_label($organization['themes']) ?></td>
             <td><?= empty_label($organization['type_label']) ?></td>
             <td><?= h((string)$organization['updated_at']) ?></td>
-            <td><?= empty_label($organization['last_checked_at']) ?></td>
+            <td><?= readable_date($organization['last_checked_at']) ?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
