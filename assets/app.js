@@ -525,14 +525,33 @@ async function fetchJson(path, fallback){
   }
 }
 
+async function fetchPublicSeedData(){
+  const apiUrl = `${assetBase()}api/seeddata.php`;
+  try {
+    const response = await fetch(apiUrl, {
+      cache: 'no-store',
+      headers: { Accept: 'application/json' }
+    });
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    const seed = await response.json();
+    if(!seed || !Array.isArray(seed.themes) || !Array.isArray(seed.organizations)) {
+      throw new Error('Ongeldige API-data');
+    }
+    return seed;
+  } catch(error) {
+    console.warn('Publieke database-API niet beschikbaar; statische seeddata wordt gebruikt.', error);
+    return fetchJson('kadena_hubentut_seeddata_bonaire_v0_1.json', {
+      themes: [],
+      organizations: [],
+      metadata: {}
+    });
+  }
+}
+
 async function load_seed_data(){
   if(DATA.loaded) return DATA;
 
-  const seed = await fetchJson('kadena_hubentut_seeddata_bonaire_v0_1.json', {
-    themes: [],
-    organizations: [],
-    metadata: {}
-  });
+  const seed = await fetchPublicSeedData();
 
   const legacy = await Promise.all([
     fetchJson('services.json', []),
