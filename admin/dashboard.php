@@ -67,18 +67,34 @@ try {
 
 admin_header('Dashboard', 'dashboard');
 ?>
+<section class="page-intro">
+  <div>
+    <p class="eyebrow">Beheeromgeving</p>
+    <h2>Organisaties, profielen en vertalingen beheren</h2>
+    <p>Bekijk de actuele status en ga direct naar de belangrijkste beheertaken.</p>
+  </div>
+  <div class="quick-actions">
+    <a class="button primary" href="organizations.php">Organisaties beheren</a>
+    <a class="button" href="audit_log.php">Auditlog bekijken</a>
+    <?php if (admin_can_manage_users()): ?>
+      <a class="button" href="users.php">Gebruikers beheren</a>
+    <?php endif; ?>
+  </div>
+</section>
+
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
 <?php endif; ?>
 
 <section class="grid" aria-label="Organisatiestatistieken">
-  <div class="card"><span>Totaal organisaties</span><strong><?= h((string)($stats['total'] ?? 0)) ?></strong></div>
-  <div class="card"><span>Gepubliceerd</span><strong><?= h((string)($stats['published'] ?? 0)) ?></strong></div>
-  <div class="card"><span>Concepten</span><strong><?= h((string)($stats['draft'] ?? 0)) ?></strong></div>
-  <div class="card"><span>Gearchiveerd</span><strong><?= h((string)($stats['archived'] ?? 0)) ?></strong></div>
-  <div class="card"><span>Gewijzigd laatste 30 dagen</span><strong><?= h((string)($stats['recent'] ?? 0)) ?></strong></div>
+  <div class="card stat-card"><span>Totaal organisaties</span><strong><?= h((string)($stats['total'] ?? 0)) ?></strong></div>
+  <div class="card stat-card stat-success"><span>Gepubliceerd</span><strong><?= h((string)($stats['published'] ?? 0)) ?></strong></div>
+  <div class="card stat-card stat-warning"><span>Concepten</span><strong><?= h((string)($stats['draft'] ?? 0)) ?></strong></div>
+  <div class="card stat-card stat-neutral"><span>Gearchiveerd</span><strong><?= h((string)($stats['archived'] ?? 0)) ?></strong></div>
+  <div class="card stat-card stat-brand"><span>Gewijzigd laatste 30 dagen</span><strong><?= h((string)($stats['recent'] ?? 0)) ?></strong></div>
 </section>
 
+<div class="dashboard-columns">
 <section class="panel">
   <h2>Organisaties per eiland</h2>
   <div class="table-wrap">
@@ -113,6 +129,7 @@ admin_header('Dashboard', 'dashboard');
     </table>
   </div>
 </section>
+</div>
 
 <section class="panel">
   <h2>Ontbrekende organisatievertalingen</h2>

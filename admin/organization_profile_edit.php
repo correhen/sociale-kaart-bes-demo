@@ -145,13 +145,16 @@ function profile_posted_values(array $current, array $definition): array
                 if (!admin_can_edit_profile_language($language)) {
                     continue;
                 }
-                $cell = $posted[$postedGroupKey][$fieldKey][$language] ?? [];
+                if (!isset($posted[$postedGroupKey][$fieldKey][$language])) {
+                    continue;
+                }
+                $cell = $posted[$postedGroupKey][$fieldKey][$language];
                 $postedText = is_array($cell) && is_scalar($cell['answer_text'] ?? null)
                     ? (string)$cell['answer_text']
-                    : '';
+                    : $current[$groupKey][$fieldKey][$language]['answer_text'];
                 $postedStatus = is_array($cell) && is_scalar($cell['translation_status'] ?? null)
                     ? trim((string)$cell['translation_status'])
-                    : '';
+                    : $current[$groupKey][$fieldKey][$language]['translation_status'];
                 $values[$groupKey][$fieldKey][$language] = [
                     'answer_text' => $postedText,
                     'translation_status' => $postedStatus,
@@ -188,6 +191,9 @@ function profile_changes(array $before, array $after, array $definition): array
         foreach ($group['fields'] as $fieldKey => $label) {
             $sortOrder++;
             foreach (PROFILE_LANGUAGES as $language) {
+                if (!admin_can_edit_profile_language($language)) {
+                    continue;
+                }
                 $old = $before[$groupKey][$fieldKey][$language];
                 $new = $after[$groupKey][$fieldKey][$language];
                 $textChanged = audit_values_differ($old['answer_text'], $new['answer_text']);
@@ -381,7 +387,7 @@ admin_header(
 <?php endif; ?>
 
 <section class="panel">
-  <p class="notice">Bewerk hier de vaste profielvelden. Nederlands is de brontekst.</p>
+  <p class="notice">Nederlands is de brontekst. Vertalingen kunnen per taal worden bijgewerkt.</p>
   <dl class="detail-list">
     <dt>Organisatie</dt><dd><?= h((string)$organization['name']) ?></dd>
     <dt>Slug</dt><dd><code><?= h((string)$organization['slug']) ?></code></dd>
@@ -423,13 +429,13 @@ admin_header(
 
   <?php foreach ($definition as $groupKey => $group): ?>
     <section class="profile-group">
-      <h2><?= h((string)$group['label']) ?></h2>
+      <div class="section-heading"><div><p class="eyebrow"><?= h($profileLabel) ?></p><h2><?= h((string)$group['label']) ?></h2></div></div>
 
       <?php foreach ($group['fields'] as $fieldKey => $fieldLabel): ?>
         <article class="profile-field">
           <div class="profile-field-header">
             <h3><?= h((string)$fieldLabel) ?></h3>
-            <code><?= h((string)$fieldKey) ?></code>
+            <code class="field-key"><?= h((string)$fieldKey) ?></code>
           </div>
 
           <div class="profile-language-grid">
@@ -440,8 +446,12 @@ admin_header(
               $formGroupKey = $groupKey === '' ? '_root' : $groupKey;
               $inputBase = 'answers[' . $formGroupKey . '][' . $fieldKey . '][' . $language . ']';
               ?>
-              <section class="profile-language<?= $language === 'nl' ? ' is-source' : '' ?>">
-                <h4><?= h(strtoupper($language)) ?><?= $language === 'nl' ? ' - bron' : '' ?></h4>
+              <section class="profile-language<?= $language === 'nl' ? ' is-source' : '' ?><?= trim((string)$cell['answer_text']) === '' ? ' is-empty' : '' ?><?= !$canEditLanguage ? ' is-readonly' : '' ?>">
+                <div class="language-heading">
+                  <h4><?= h(strtoupper($language)) ?><?= $language === 'nl' ? ' - bron' : '' ?></h4>
+                  <?= status_badge((string)$cell['translation_status']) ?>
+                </div>
+                <?php if (!$canEditLanguage): ?><small class="readonly-note">Alleen-lezen voor jouw rol</small><?php endif; ?>
                 <label>
                   Antwoord
                   <textarea
@@ -466,7 +476,7 @@ admin_header(
     </section>
   <?php endforeach; ?>
 
-  <div class="form-actions">
+  <div class="form-actions sticky-actions">
     <?php if (admin_can_edit_profiles()): ?>
       <button type="submit">Profiel opslaan</button>
     <?php endif; ?>

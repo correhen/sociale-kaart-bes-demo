@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="login-page">
   <main class="login-panel">
+    <p class="eyebrow">Beheeromgeving</p>
     <h1>Admin login</h1>
     <p class="muted">Kadena Hubenil / Sociale Kaart BES</p>
 

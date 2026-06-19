@@ -337,7 +337,7 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
 <?php endif; ?>
 
 <section class="panel">
-  <p class="notice">In deze fase kun je Nederlandse basisgegevens, status en contactgegevens wijzigen.</p>
+  <p class="notice">Wijzigingen worden na opslaan via de publieke data-API zichtbaar op de website.</p>
   <dl class="detail-list">
     <dt>Organisatie</dt>
     <dd><?= h($organization['name']) ?></dd>
@@ -362,8 +362,8 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
   <input type="hidden" name="id" value="<?= h((string)$id) ?>">
 
   <section class="form-section">
-  <h2>Basisgegevens</h2>
-  <p class="muted">Alleen Nederlandse basisvelden. De slug en profielantwoorden blijven ongewijzigd.</p>
+  <div class="section-heading"><div><p class="eyebrow">Inhoud</p><h2>Basisgegevens</h2></div></div>
+  <p class="form-help">Alleen Nederlandse basisvelden. De slug en profielantwoorden blijven ongewijzigd.</p>
   <label>
     Organisatienaam (NL)
     <input name="name" value="<?= h($values['name']) ?>" required>
@@ -393,7 +393,8 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
   </section>
 
   <section class="form-section">
-  <h2>Status</h2>
+  <div class="section-heading"><div><p class="eyebrow">Publicatie</p><h2>Status</h2></div></div>
+  <p class="form-help">De publicatiestatus bepaalt of een organisatie gepubliceerd is. Bronstatus en controledatum helpen bij redactionele opvolging.</p>
   <div class="form-grid">
     <label>
       Publicatiestatus
@@ -402,6 +403,7 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
           <option value="<?= h($status) ?>" <?= $values['status'] === $status ? 'selected' : '' ?>><?= h($status) ?></option>
         <?php endforeach; ?>
       </select>
+      <small>Gebruik gepubliceerd alleen wanneer de gegevens publiek mogen verschijnen.</small>
     </label>
     <label>
       Bronstatus
@@ -410,16 +412,18 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
           <option value="<?= h($sourceStatus) ?>" <?= $values['source_status'] === $sourceStatus ? 'selected' : '' ?>><?= h($sourceStatus) ?></option>
         <?php endforeach; ?>
       </select>
+      <small>Geeft aan hoe actueel en betrouwbaar de broninformatie is.</small>
     </label>
     <label>
       Laatst gecontroleerd
       <input name="last_checked_at" type="date" value="<?= h($values['last_checked_at']) ?>">
+      <small>Datum waarop de organisatiegegevens voor het laatst inhoudelijk zijn gecontroleerd.</small>
     </label>
   </div>
   </section>
 
   <section class="form-section">
-  <h2>Contactgegevens</h2>
+  <div class="section-heading"><div><p class="eyebrow">Bereikbaarheid</p><h2>Contactgegevens</h2></div></div>
   <div class="form-grid">
     <label>
       Telefoon
@@ -444,9 +448,9 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
   </label>
   </section>
 
-  <div class="form-actions">
+  <div class="form-actions sticky-actions">
     <button type="submit">Opslaan</button>
-    <a class="button" href="organization.php?id=<?= h((string)$id) ?>">Annuleren</a>
+    <a class="button" href="organization.php?id=<?= h((string)$id) ?>">Annuleren / terug</a>
   </div>
 </form>
 <?php admin_footer(); ?>

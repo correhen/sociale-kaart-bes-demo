@@ -18,8 +18,11 @@ function admin_header(string $title, string $active = ''): void
 </head>
 <body>
   <header class="admin-header">
-    <div>
-      <a class="admin-brand" href="dashboard.php">Kadena Hubenil / Sociale Kaart BES Admin</a>
+    <div class="admin-header-main">
+      <a class="admin-brand" href="dashboard.php">
+        <span>Kadena Hubenil</span>
+        <small>Sociale Kaart BES · Admin</small>
+      </a>
       <nav class="admin-nav" aria-label="Admin navigatie">
         <a class="<?= $active === 'dashboard' ? 'is-active' : '' ?>" href="dashboard.php">Dashboard</a>
         <a class="<?= $active === 'organizations' ? 'is-active' : '' ?>" href="organizations.php">Organisaties</a>
@@ -35,14 +38,16 @@ function admin_header(string $title, string $active = ''): void
     </div>
     <?php if ($user): ?>
       <div class="admin-user">
-        <span><?= h($user['name'] ?? '') ?></span>
-        <small><?= h(admin_role_label($user)) ?></small>
-        <a href="logout.php">Uitloggen</a>
+        <div>
+          <span><?= h($user['name'] ?? '') ?></span>
+          <small><?= h(admin_role_label($user)) ?></small>
+        </div>
+        <a class="button button-small" href="logout.php">Uitloggen</a>
       </div>
     <?php endif; ?>
   </header>
   <main class="admin-main">
-    <div class="page-title">
+    <div class="page-title page-heading">
       <h1><?= h($title) ?></h1>
     </div>
 <?php

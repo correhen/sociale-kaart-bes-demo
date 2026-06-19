@@ -279,6 +279,10 @@ admin_header($isCreate ? 'Gebruiker aanmaken' : 'Gebruiker bewerken', 'users');
   </section>
 <?php endif; ?>
 
+<section class="page-intro compact">
+  <div><p class="eyebrow">Toegangsbeheer</p><h2><?= $isCreate ? 'Nieuw account' : 'Accountgegevens' ?></h2><p>Rollen bepalen welke onderdelen van de beheeromgeving toegankelijk zijn.</p></div>
+</section>
+
 <form method="post" action="user_edit.php<?= $isCreate ? '' : '?id=' . h((string)$id) ?>" class="panel edit-form">
   <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
   <?php if (!$isCreate): ?>
@@ -312,11 +316,14 @@ admin_header($isCreate ? 'Gebruiker aanmaken' : 'Gebruiker bewerken', 'users');
     </label>
   </div>
 
-  <label>
-    <?= $isCreate ? 'Wachtwoord' : 'Nieuw wachtwoord (optioneel)' ?>
-    <input name="password" type="password" minlength="12" autocomplete="new-password" <?= $isCreate ? 'required' : '' ?>>
-    <small>Minimaal 12 tekens. Het wachtwoord wordt nooit zichtbaar opgeslagen.</small>
-  </label>
+  <section class="form-section password-section">
+    <div class="section-heading"><div><p class="eyebrow">Beveiliging</p><h2><?= $isCreate ? 'Wachtwoord instellen' : 'Wachtwoord wijzigen' ?></h2></div></div>
+    <label>
+      <?= $isCreate ? 'Nieuw wachtwoord' : 'Nieuw wachtwoord (optioneel)' ?>
+      <input name="password" type="password" minlength="12" autocomplete="new-password" <?= $isCreate ? 'required' : '' ?>>
+      <small>Minimaal 12 tekens. <?= $isCreate ? '' : 'Leeg laten betekent dat het huidige wachtwoord niet wijzigt. ' ?>Het wachtwoord wordt nooit zichtbaar opgeslagen.</small>
+    </label>
+  </section>
 
   <?php if (!$isCreate && $user): ?>
     <dl class="detail-list">
@@ -325,7 +332,7 @@ admin_header($isCreate ? 'Gebruiker aanmaken' : 'Gebruiker bewerken', 'users');
     </dl>
   <?php endif; ?>
 
-  <div class="form-actions">
+  <div class="form-actions sticky-actions">
     <button type="submit">Opslaan</button>
     <a class="button" href="users.php">Terug naar gebruikers</a>
   </div>

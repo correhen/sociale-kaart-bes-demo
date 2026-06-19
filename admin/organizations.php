@@ -106,11 +106,23 @@ try {
 
 admin_header('Organisaties', 'organizations');
 ?>
+<section class="page-intro compact">
+  <div>
+    <p class="eyebrow">Organisatiebeheer</p>
+    <h2>Zoek, controleer en werk organisaties bij</h2>
+    <p><?= h((string)count($organizations)) ?> organisaties in dit overzicht.</p>
+  </div>
+</section>
+
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
 <?php endif; ?>
 
-<section class="panel">
+<section class="panel filter-panel">
+  <div class="panel-heading">
+    <div><h2>Filters</h2><p class="muted">Combineer zoekterm, status, eiland, bronstatus en thema.</p></div>
+    <a class="button button-small" href="organizations.php">Wis filters</a>
+  </div>
   <form class="filters" method="get" action="organizations.php">
     <label>
       Zoekterm
@@ -152,7 +164,7 @@ admin_header('Organisaties', 'organizations');
         <?php endforeach; ?>
       </select>
     </label>
-    <button type="submit">Filter</button>
+    <button type="submit">Toepassen</button>
   </form>
 </section>
 
@@ -170,11 +182,12 @@ admin_header('Organisaties', 'organizations');
           <th>Type</th>
           <th>Bijgewerkt</th>
           <th>Laatst gecontroleerd</th>
+          <th>Acties</th>
         </tr>
       </thead>
       <tbody>
         <?php if (!$organizations): ?>
-          <tr><td colspan="9" class="muted">Geen organisaties gevonden.</td></tr>
+          <tr><td colspan="10" class="empty-state">Geen organisaties gevonden. Pas de filters aan.</td></tr>
         <?php endif; ?>
         <?php foreach ($organizations as $organization): ?>
           <tr>
@@ -187,6 +200,12 @@ admin_header('Organisaties', 'organizations');
             <td><?= empty_label($organization['type_label']) ?></td>
             <td><?= h((string)$organization['updated_at']) ?></td>
             <td><?= readable_date($organization['last_checked_at']) ?></td>
+            <td class="table-actions">
+              <a class="button button-small" href="organization.php?id=<?= h((string)$organization['id']) ?>">Bekijken</a>
+              <?php if (admin_can_edit_organizations()): ?>
+                <a class="button button-small primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Bewerken</a>
+              <?php endif; ?>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>

@@ -193,7 +193,13 @@ function audit_normalize_value($value): string
         return $value ? '1' : '0';
     }
     if (is_scalar($value)) {
-        return trim((string)$value);
+        $text = str_replace(["\r\n", "\r"], "\n", (string)$value);
+        $lines = array_map(
+            static fn(string $line): string => rtrim($line, " \t"),
+            explode("\n", $text)
+        );
+
+        return trim(implode("\n", $lines));
     }
 
     return trim((string)json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));

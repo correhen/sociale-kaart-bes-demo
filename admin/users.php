@@ -40,9 +40,10 @@ try {
 
 admin_header('Gebruikers', 'users');
 ?>
-<div class="section-nav">
+<section class="page-intro compact">
+  <div><p class="eyebrow">Toegangsbeheer</p><h2>Adminaccounts en rollen</h2><p>Beheer toegang voor admins, editors, vertalers en lezers.</p></div>
   <a class="button primary" href="user_edit.php">Gebruiker aanmaken</a>
-</div>
+</section>
 
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
@@ -68,7 +69,7 @@ admin_header('Gebruikers', 'users');
             <tr>
               <td><a href="user_edit.php?id=<?= h((string)$user['id']) ?>"><?= h((string)$user['name']) ?></a></td>
               <td><?= h((string)$user['email']) ?></td>
-              <td><?= empty_label($user['roles']) ?></td>
+              <td><span class="badge badge-role"><?= h((string)($user['roles'] ?: 'geen rol')) ?></span></td>
               <td><?= status_badge((string)$user['status']) ?></td>
               <td><?= readable_datetime($user['last_login_at']) ?></td>
               <td><?= readable_datetime($user['created_at']) ?></td>

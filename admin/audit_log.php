@@ -110,7 +110,7 @@ function audit_field_label(string $field, string $action = ''): string
         $prefix = $parts ? 'Professionalprofiel' : 'Jongerenprofiel';
 
         return $prefix
-            . ' · '
+            . " \u{00B7} "
             . audit_profile_field_label($fieldKey)
             . ($language !== '' ? ' (' . $language . ')' : '');
     }
@@ -196,6 +196,25 @@ function audit_display_value($value): string
     return $text !== '' ? $text : 'Leeg';
 }
 
+function audit_status_transition(array $change): string
+{
+    $before = is_array($change['before'] ?? null) ? $change['before'] : [];
+    $after = is_array($change['after'] ?? null) ? $change['after'] : [];
+    if (
+        count($before) !== 1
+        || count($after) !== 1
+        || !array_key_exists('translation_status', $before)
+        || !array_key_exists('translation_status', $after)
+    ) {
+        return '';
+    }
+
+    return 'Vertaalstatus: '
+        . (string)$before['translation_status']
+        . ' -> '
+        . (string)$after['translation_status'];
+}
+
 try {
     $entries = fetch_all(
         "SELECT
@@ -272,7 +291,7 @@ admin_header('Auditlog', 'audit_log');
                   <br><small class="muted"><?= h((string)$entry['user_email']) ?></small>
                 <?php endif; ?>
               </td>
-              <td><?= h(audit_action_label((string)$entry['action'])) ?></td>
+              <td><span class="badge badge-action"><?= h(audit_action_label((string)$entry['action'])) ?></span></td>
               <td>
                 <?php if ($entry['entity_type'] === 'organization' && $entry['entity_id'] !== null): ?>
                   <a href="organization.php?id=<?= h((string)$entry['entity_id']) ?>"><?= h((string)($entry['entity_name'] ?? 'Organisatie')) ?></a>
@@ -283,7 +302,7 @@ admin_header('Auditlog', 'audit_log');
                 <?php endif; ?>
               </td>
               <td>
-                <strong><?= h((string)count($changes)) ?> gewijzigd</strong>
+                <span class="badge badge-count"><?= h((string)count($changes)) ?> gewijzigd</span>
                 <?php if ($changes): ?>
                   <ul class="audit-field-list">
                     <?php foreach (array_keys($changes) as $field): ?>
@@ -295,10 +314,15 @@ admin_header('Auditlog', 'audit_log');
                     <?php foreach ($changes as $field => $change): ?>
                       <section class="audit-change">
                         <h4><?= h(audit_field_label((string)$field, (string)$entry['action'])) ?></h4>
-                        <div class="audit-diff">
-                          <div><strong>Oud</strong><pre><?= h(audit_display_value($change['before'])) ?></pre></div>
-                          <div><strong>Nieuw</strong><pre><?= h(audit_display_value($change['after'])) ?></pre></div>
-                        </div>
+                        <?php $statusTransition = audit_status_transition($change); ?>
+                        <?php if ($statusTransition !== ''): ?>
+                          <p><?= h($statusTransition) ?></p>
+                        <?php else: ?>
+                          <div class="audit-diff">
+                            <div><strong>Oud</strong><pre><?= h(audit_display_value($change['before'])) ?></pre></div>
+                            <div><strong>Nieuw</strong><pre><?= h(audit_display_value($change['after'])) ?></pre></div>
+                          </div>
+                        <?php endif; ?>
                       </section>
                     <?php endforeach; ?>
                   </details>

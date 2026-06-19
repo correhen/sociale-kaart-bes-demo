@@ -169,6 +169,30 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
   <?php admin_footer(); exit; ?>
 <?php endif; ?>
 
+<section class="detail-hero">
+  <div>
+    <a class="back-link" href="organizations.php">← Terug naar overzicht</a>
+    <p class="eyebrow">Organisatie</p>
+    <h2><?= h((string)$organization['name']) ?></h2>
+    <div class="status-row">
+      <?= status_badge($organization['status']) ?>
+      <?= status_badge($organization['source_status']) ?>
+      <span class="badge"><?= ((int)$organization['visibility_public'] === 1) ? 'publiek zichtbaar' : 'niet publiek' ?></span>
+    </div>
+  </div>
+  <div class="detail-actions">
+    <?php if (admin_can_edit_organizations()): ?>
+      <a class="button primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Basisgegevens bewerken</a>
+    <?php endif; ?>
+    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=youth">
+      <?= admin_can_edit_profiles() ? 'Jongerenprofiel bewerken' : 'Jongerenprofiel bekijken' ?>
+    </a>
+    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional">
+      <?= admin_can_edit_profiles() ? 'Professionalprofiel bewerken' : 'Professionalprofiel bekijken' ?>
+    </a>
+  </div>
+</section>
+
 <?php if ($saved): ?>
   <p class="notice">Wijzigingen zijn opgeslagen.</p>
 <?php endif; ?>
@@ -179,19 +203,10 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
   <a class="button" href="#youth">Jongerenprofiel</a>
   <a class="button" href="#professional">Professionalprofiel</a>
   <a class="button" href="#translations">Vertalingen/status</a>
-  <?php if (admin_can_edit_organizations()): ?>
-    <a class="button primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Bewerken</a>
-  <?php endif; ?>
-  <a class="button<?= admin_can_edit_profiles() ? ' primary' : '' ?>" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=youth">
-    <?= admin_can_edit_profiles() ? 'Jongerenprofiel bewerken' : 'Jongerenprofiel bekijken' ?>
-  </a>
-  <a class="button<?= admin_can_edit_profiles() ? ' primary' : '' ?>" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional">
-    <?= admin_can_edit_profiles() ? 'Professionalprofiel bewerken' : 'Professionalprofiel bekijken' ?>
-  </a>
 </div>
 
-<section class="panel" id="basis">
-  <h2>Basis</h2>
+<section class="panel detail-section" id="basis">
+  <div class="panel-heading"><div><p class="eyebrow">Overzicht</p><h2>Basisgegevens</h2></div></div>
   <dl class="detail-list">
     <dt>ID</dt><dd><?= h((string)$organization['id']) ?></dd>
     <dt>Naam</dt><dd><?= h($organization['name']) ?></dd>
@@ -204,29 +219,31 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
     <dt>Laatst gecontroleerd</dt><dd><?= readable_date($organization['last_checked_at']) ?></dd>
   </dl>
 
-  <h3>Eilanden</h3>
-  <ul>
+  <div class="relation-grid">
+  <div><h3>Eilanden</h3>
+  <ul class="compact-list">
     <?php foreach ($islands as $island): ?>
       <li><?= h($island['name']) ?> <small class="muted"><?= h($island['code']) ?><?= (int)$island['is_primary'] === 1 ? ', primair' : '' ?></small></li>
     <?php endforeach; ?>
-  </ul>
+  </ul></div>
 
-  <h3>Thema's</h3>
-  <ul>
+  <div><h3>Thema's</h3>
+  <ul class="compact-list">
     <?php foreach ($themes as $theme): ?>
       <li><?= h($theme['name']) ?> <small class="muted"><?= h($theme['slug']) ?><?= (int)$theme['is_primary'] === 1 ? ', primair' : '' ?></small></li>
     <?php endforeach; ?>
-  </ul>
+  </ul></div>
 
-  <h3>Doelgroepen</h3>
-  <ul>
+  <div><h3>Doelgroepen</h3>
+  <ul class="compact-list">
     <?php foreach ($audiences as $audience): ?>
       <li><?= h($audience['label_nl']) ?> <small class="muted"><?= h($audience['code']) ?></small></li>
     <?php endforeach; ?>
-  </ul>
+  </ul></div>
+  </div>
 </section>
 
-<section class="panel" id="contact">
+<section class="panel detail-section" id="contact">
   <h2>Contact</h2>
   <dl class="detail-list">
     <dt>Telefoon</dt><dd><?= empty_label($contact['phone'] ?? '') ?></dd>
@@ -237,19 +254,19 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
   </dl>
 </section>
 
-<section class="panel" id="youth">
+<section class="panel detail-section" id="youth">
   <h2>Jongerenprofiel</h2>
   <p class="muted">Lege velden blijven zichtbaar voor beheercontrole.</p>
   <?php render_profile_table($youthAnswers, $languages); ?>
 </section>
 
-<section class="panel" id="professional">
+<section class="panel detail-section" id="professional">
   <h2>Professionalprofiel</h2>
   <p class="muted">Lege velden blijven zichtbaar voor beheercontrole.</p>
   <?php render_profile_table($professionalAnswers, $languages); ?>
 </section>
 
-<section class="panel" id="translations">
+<section class="panel detail-section" id="translations">
   <h2>Vertalingen/status</h2>
   <div class="table-wrap">
     <table>
