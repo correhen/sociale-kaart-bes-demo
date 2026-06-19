@@ -1772,6 +1772,81 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   color:var(--turquoise);
   font-weight:950;
 }
+.admin-public-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin:0 0 16px;
+  padding:10px 12px;
+  border:1px solid rgba(2,26,77,.12);
+  border-radius:12px;
+  background:#f7fafb;
+  color:var(--navy);
+  box-shadow:0 5px 16px rgba(2,26,77,.06);
+}
+.admin-public-toolbar > div{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  min-width:0;
+}
+.admin-public-toolbar strong{
+  overflow:hidden;
+  font-size:.88rem;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.admin-public-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:24px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#e7f5f4;
+  color:#05666c;
+  font-size:.72rem;
+  font-weight:950;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.admin-public-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:6px;
+}
+.admin-edit-link{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 9px;
+  border:1px solid #cbd8dc;
+  border-radius:8px;
+  background:#fff;
+  color:#075e65;
+  font-size:.76rem;
+  font-weight:900;
+  line-height:1.2;
+  text-decoration:none;
+}
+.admin-edit-link:hover,
+.admin-edit-link:focus-visible{
+  border-color:#63aeb3;
+  background:#eefafa;
+  color:#034d52;
+}
+.admin-section-edit{
+  float:right;
+  position:relative;
+  z-index:2;
+  margin:0 0 8px 10px;
+}
+.is-admin-mode .detail-expanded-info,
+.is-admin-mode .detail-side .detail-section{
+  position:relative;
+}
 .detail-header{
   display:flex;
   align-items:flex-start;
@@ -2501,6 +2576,21 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 }
 
 @media(max-width:760px){
+  .admin-public-toolbar{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .admin-public-actions{
+    justify-content:flex-start;
+  }
+  .admin-edit-link{
+    min-height:34px;
+  }
+  .admin-section-edit{
+    float:none;
+    width:max-content;
+    margin:0 0 10px;
+  }
   .youth-accent--aqua{
     display:none;
   }

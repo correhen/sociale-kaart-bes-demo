@@ -548,6 +548,28 @@ async function fetchPublicSeedData(){
   }
 }
 
+async function fetchAdminContext(){
+  if(DATA.adminContext) return DATA.adminContext;
+  if(DATA.adminContextPromise) return DATA.adminContextPromise;
+
+  DATA.adminContextPromise = fetch(`${assetBase()}api/admin_context.php`, {
+    cache: 'no-store',
+    credentials: 'same-origin',
+    headers: { Accept: 'application/json' }
+  }).then(async response => {
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    const context = await response.json();
+    DATA.adminContext = context?.authenticated ? context : { authenticated: false };
+    return DATA.adminContext;
+  }).catch(error => {
+    console.warn('Beheercontext kon niet worden geladen.', error);
+    DATA.adminContext = { authenticated: false };
+    return DATA.adminContext;
+  });
+
+  return DATA.adminContextPromise;
+}
+
 async function load_seed_data(){
   if(DATA.loaded) return DATA;
 
@@ -1644,6 +1666,7 @@ function initOrganizationDetail(audience){
     setAudiencePreference(audience);
     initShell();
     renderOrganizationDetail(audience);
+    fetchAdminContext().then(() => renderPublicAdminMode(audience));
   });
 }
 
@@ -1652,6 +1675,73 @@ function slugFromLocation(){
   if(p.get('slug')) return p.get('slug');
   const parts = location.pathname.split('/').filter(Boolean);
   return parts[parts.length - 1] === 'detail.html' ? '' : parts[parts.length - 1];
+}
+
+function adminOrganizationUrl(slug, target, audience = ''){
+  const params = new URLSearchParams({ slug, target });
+  if(audience) params.set('audience', audience);
+  return `${assetBase()}admin/organization_go.php?${params.toString()}`;
+}
+
+function publicAdminLink(label, href, className = ''){
+  return `<a class="admin-edit-link${className ? ` ${className}` : ''}" href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
+}
+
+function addSectionAdminLink(section, label, href){
+  if(!section || section.querySelector('.admin-section-edit')) return;
+  const link = document.createElement('a');
+  link.className = 'admin-edit-link admin-section-edit';
+  link.href = href;
+  link.textContent = label;
+  section.prepend(link);
+}
+
+function renderPublicAdminMode(audience){
+  const context = DATA.adminContext;
+  const holder = document.getElementById('organizationDetail');
+  const org = get_organization_by_slug(slugFromLocation());
+  if(!holder || !org || !context?.authenticated) return;
+
+  const permissions = context.permissions || {};
+  const article = holder.querySelector('.detail-shell');
+  if(!article) return;
+
+  document.body.classList.add('is-admin-mode');
+  holder.querySelectorAll('.admin-public-toolbar, .admin-section-edit').forEach(item => item.remove());
+
+  const actions = [];
+  if(permissions.can_view_admin) {
+    actions.push(publicAdminLink('Open in admin', adminOrganizationUrl(org.slug, 'view')));
+  }
+  if(permissions.can_edit_basic) {
+    actions.push(publicAdminLink('Basisgegevens bewerken', adminOrganizationUrl(org.slug, 'basic')));
+  }
+  if(permissions.can_edit_youth_profile) {
+    actions.push(publicAdminLink('Jongerenprofiel bewerken', adminOrganizationUrl(org.slug, 'profile', 'youth')));
+  }
+  if(permissions.can_edit_professional_profile) {
+    actions.push(publicAdminLink('Professionalprofiel bewerken', adminOrganizationUrl(org.slug, 'profile', 'professional')));
+  }
+
+  if(actions.length) {
+    article.insertAdjacentHTML('afterbegin', `<aside class="admin-public-toolbar" aria-label="Beheeropties">
+      <div><span class="admin-public-badge">Beheer</span><strong>${escapeHtml(getOrganizationText(org, 'name') || org.slug)}</strong></div>
+      <nav class="admin-public-actions">${actions.join('')}</nav>
+    </aside>`);
+  }
+
+  const profileHref = adminOrganizationUrl(org.slug, 'profile', audience);
+  const canEditProfile = audience === 'professional'
+    ? permissions.can_edit_professional_profile
+    : permissions.can_edit_youth_profile;
+  if(canEditProfile) {
+    const profileSection = holder.querySelector('.detail-main .detail-expanded-info, .detail-main .detail-section');
+    addSectionAdminLink(profileSection, `${audience === 'professional' ? 'Professionalprofiel' : 'Jongerenprofiel'} bewerken`, profileHref);
+  }
+  if(permissions.can_edit_basic) {
+    const contactSection = holder.querySelector('.professional-contact-card, .detail-side .detail-section');
+    addSectionAdminLink(contactSection, 'Basisgegevens/contact bewerken', adminOrganizationUrl(org.slug, 'basic'));
+  }
 }
 
 function renderOrganizationDetail(audience){
@@ -1726,6 +1816,7 @@ function renderOrganizationDetail(audience){
       </section>
     </article>`;
     initDetailAccordions(holder);
+    if(DATA.adminContext?.authenticated) renderPublicAdminMode(audience);
     return;
   }
 
@@ -1781,6 +1872,7 @@ function renderOrganizationDetail(audience){
     </section>
   </article>`;
   initDetailAccordions(holder);
+  if(DATA.adminContext?.authenticated) renderPublicAdminMode(audience);
 }
 
 function recordRecentOrganization(org, audience){
