@@ -64,26 +64,26 @@ function valid_date_or_empty(string $value): bool
 function posted_values(): array
 {
     return [
-        'name' => trim((string)($_POST['name'] ?? '')),
-        'professional_summary' => trim((string)($_POST['professional_summary'] ?? '')),
-        'type_label' => trim((string)($_POST['type_label'] ?? '')),
-        'age_range' => trim((string)($_POST['age_range'] ?? '')),
-        'professional_referral_or_access' => trim((string)($_POST['professional_referral_or_access'] ?? '')),
+        'name' => (string)($_POST['name'] ?? ''),
+        'professional_summary' => (string)($_POST['professional_summary'] ?? ''),
+        'type_label' => (string)($_POST['type_label'] ?? ''),
+        'age_range' => (string)($_POST['age_range'] ?? ''),
+        'professional_referral_or_access' => (string)($_POST['professional_referral_or_access'] ?? ''),
         'status' => trim((string)($_POST['status'] ?? '')),
         'source_status' => trim((string)($_POST['source_status'] ?? '')),
         'last_checked_at' => trim((string)($_POST['last_checked_at'] ?? '')),
-        'phone' => trim((string)($_POST['phone'] ?? '')),
-        'whatsapp' => trim((string)($_POST['whatsapp'] ?? '')),
-        'email' => trim((string)($_POST['email'] ?? '')),
-        'website' => trim((string)($_POST['website'] ?? '')),
-        'address_nl' => trim((string)($_POST['address_nl'] ?? '')),
+        'phone' => (string)($_POST['phone'] ?? ''),
+        'whatsapp' => (string)($_POST['whatsapp'] ?? ''),
+        'email' => (string)($_POST['email'] ?? ''),
+        'website' => (string)($_POST['website'] ?? ''),
+        'address_nl' => (string)($_POST['address_nl'] ?? ''),
     ];
 }
 
 function validate_values(array $values): array
 {
     $errors = [];
-    if ($values['name'] === '') {
+    if (trim($values['name']) === '') {
         $errors[] = 'Organisatienaam mag niet leeg zijn.';
     }
     if (!in_array($values['status'], ORGANIZATION_STATUSES, true)) {
@@ -92,10 +92,10 @@ function validate_values(array $values): array
     if (!in_array($values['source_status'], ORGANIZATION_SOURCE_STATUSES, true)) {
         $errors[] = 'Ongeldige bronstatus.';
     }
-    if ($values['email'] !== '' && !filter_var($values['email'], FILTER_VALIDATE_EMAIL)) {
+    if (trim($values['email']) !== '' && !filter_var(trim($values['email']), FILTER_VALIDATE_EMAIL)) {
         $errors[] = 'E-mail is ongeldig.';
     }
-    if ($values['website'] !== '' && !preg_match('/^https?:\/\//i', $values['website'])) {
+    if (trim($values['website']) !== '' && !preg_match('/^https?:\/\//i', trim($values['website']))) {
         $errors[] = 'Website moet beginnen met http:// of https://.';
     }
     if (!valid_date_or_empty($values['last_checked_at'])) {
@@ -109,12 +109,40 @@ function changed_values(array $before, array $after): array
 {
     $changed = [];
     foreach ($after as $key => $value) {
-        if ((string)($before[$key] ?? '') !== (string)$value) {
+        if (audit_values_differ($before[$key] ?? null, $value)) {
             $changed[$key] = $value;
         }
     }
 
     return $changed;
+}
+
+function basic_audit_key(string $field): string
+{
+    $keys = [
+        'name' => 'name.nl',
+        'professional_summary' => 'professional_summary.nl',
+        'type_label' => 'type_label.nl',
+        'age_range' => 'age_range.nl',
+        'professional_referral_or_access' => 'professional_referral_or_access.nl',
+        'phone' => 'contact.phone',
+        'whatsapp' => 'contact.whatsapp',
+        'email' => 'contact.email',
+        'website' => 'contact.website',
+        'address_nl' => 'contact.address_nl',
+    ];
+
+    return $keys[$field] ?? $field;
+}
+
+function basic_audit_values(array $values, array $changed): array
+{
+    $audit = [];
+    foreach (array_keys($changed) as $field) {
+        $audit[basic_audit_key($field)] = $values[$field] ?? null;
+    }
+
+    return $audit;
 }
 
 try {
@@ -265,8 +293,8 @@ try {
                     'organization.update_basic',
                     'organization',
                     $id,
-                    array_intersect_key($before, $changed),
-                    array_intersect_key($after, $changed)
+                    basic_audit_values($before, $changed),
+                    basic_audit_values($after, $changed)
                 );
 
                 $pdo->commit();

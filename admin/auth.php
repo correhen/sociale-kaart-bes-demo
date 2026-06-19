@@ -179,6 +179,31 @@ function admin_can_edit_profile_language(string $language): bool
     return admin_has_role('translator') && $language !== 'nl';
 }
 
+function admin_can_manage_users(): bool
+{
+    return admin_has_role('admin');
+}
+
+function audit_normalize_value($value): string
+{
+    if ($value === null) {
+        return '';
+    }
+    if (is_bool($value)) {
+        return $value ? '1' : '0';
+    }
+    if (is_scalar($value)) {
+        return trim((string)$value);
+    }
+
+    return trim((string)json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+}
+
+function audit_values_differ($before, $after): bool
+{
+    return audit_normalize_value($before) !== audit_normalize_value($after);
+}
+
 function fetch_one(string $sql, array $params = []): ?array
 {
     $stmt = admin_db()->prepare($sql);

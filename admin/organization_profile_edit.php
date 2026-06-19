@@ -147,7 +147,7 @@ function profile_posted_values(array $current, array $definition): array
                 }
                 $cell = $posted[$postedGroupKey][$fieldKey][$language] ?? [];
                 $postedText = is_array($cell) && is_scalar($cell['answer_text'] ?? null)
-                    ? trim((string)$cell['answer_text'])
+                    ? (string)$cell['answer_text']
                     : '';
                 $postedStatus = is_array($cell) && is_scalar($cell['translation_status'] ?? null)
                     ? trim((string)$cell['translation_status'])
@@ -190,11 +190,20 @@ function profile_changes(array $before, array $after, array $definition): array
             foreach (PROFILE_LANGUAGES as $language) {
                 $old = $before[$groupKey][$fieldKey][$language];
                 $new = $after[$groupKey][$fieldKey][$language];
-                if (
-                    $old['answer_text'] === $new['answer_text']
-                    && $old['translation_status'] === $new['translation_status']
-                ) {
+                $textChanged = audit_values_differ($old['answer_text'], $new['answer_text']);
+                $statusChanged = audit_values_differ($old['translation_status'], $new['translation_status']);
+                if (!$textChanged && !$statusChanged) {
                     continue;
+                }
+                $auditBefore = [];
+                $auditAfter = [];
+                if ($textChanged) {
+                    $auditBefore['answer_text'] = $old['answer_text'];
+                    $auditAfter['answer_text'] = $new['answer_text'];
+                }
+                if ($statusChanged) {
+                    $auditBefore['translation_status'] = $old['translation_status'];
+                    $auditAfter['translation_status'] = $new['translation_status'];
                 }
                 $changes[] = [
                     'group_key' => $groupKey,
@@ -203,6 +212,8 @@ function profile_changes(array $before, array $after, array $definition): array
                     'sort_order' => $sortOrder,
                     'before' => $old,
                     'after' => $new,
+                    'audit_before' => $auditBefore,
+                    'audit_after' => $auditAfter,
                 ];
             }
         }
@@ -219,7 +230,7 @@ function profile_audit_values(array $changes, string $side): array
             . $change['field_key']
             . '.'
             . $change['language_code'];
-        $answers[$key] = $change[$side];
+        $answers[$key] = $change['audit_' . $side];
     }
 
     return $answers;

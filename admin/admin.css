@@ -405,6 +405,43 @@ th {
   color: #495869;
 }
 
+.audit-field-list {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+
+.audit-details {
+  margin-top: 8px;
+}
+
+.audit-details summary {
+  color: var(--brand-dark);
+  cursor: pointer;
+}
+
+.audit-change {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.audit-diff {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.audit-diff pre {
+  max-width: 480px;
+  margin: 4px 0 0;
+  padding: 8px;
+  overflow: auto;
+  border-radius: 5px;
+  background: #f4f6f8;
+  font: inherit;
+  white-space: pre-wrap;
+}
+
 @media (max-width: 900px) {
   .admin-header,
   .page-title {
@@ -425,6 +462,10 @@ th {
   }
 
   .profile-language-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .audit-diff {
     grid-template-columns: 1fr;
   }
 }

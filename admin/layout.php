@@ -26,7 +26,11 @@ function admin_header(string $title, string $active = ''): void
         <a class="<?= $active === 'audit_log' ? 'is-active' : '' ?>" href="audit_log.php">Auditlog</a>
         <span>Thema's</span>
         <span>Feedback</span>
-        <span>Gebruikers</span>
+        <?php if (admin_can_manage_users()): ?>
+          <a class="<?= $active === 'users' ? 'is-active' : '' ?>" href="users.php">Gebruikers</a>
+        <?php else: ?>
+          <span>Gebruikers</span>
+        <?php endif; ?>
       </nav>
     </div>
     <?php if ($user): ?>

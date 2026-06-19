@@ -19,49 +19,181 @@ function audit_values(?string $json): array
     return is_array($decoded) ? $decoded : [];
 }
 
-function audit_field_label(string $field): string
+function audit_action_label(string $action): string
 {
     $labels = [
-        'name' => 'naam',
-        'professional_summary' => 'korte omschrijving',
-        'type_label' => 'type-label',
-        'age_range' => 'leeftijd',
-        'professional_referral_or_access' => 'toegang/verwijzing',
-        'status' => 'status',
-        'source_status' => 'bronstatus',
-        'last_checked_at' => 'laatst gecontroleerd',
-        'phone' => 'telefoon',
-        'whatsapp' => 'WhatsApp',
-        'email' => 'e-mail',
-        'website' => 'website',
-        'address_nl' => 'adres',
+        'organization.update_basic' => 'Basisgegevens gewijzigd',
+        'organization.update_profile' => 'Profiel gewijzigd',
+        'user.create' => 'Gebruiker aangemaakt',
+        'user.update' => 'Gebruiker gewijzigd',
+    ];
+
+    return $labels[$action] ?? $action;
+}
+
+function audit_profile_field_label(string $field): string
+{
+    $labels = [
+        'who_we_are' => 'Wie zijn wij?',
+        'who_for' => 'Voor wie zijn wij?',
+        'what_help' => 'Waarmee kunnen wij helpen?',
+        'how_to_access' => 'Hoe kom je terecht?',
+        'how_we_help' => 'Hoe helpen wij?',
+        'duration' => 'Hoelang duurt de hulp?',
+        'partners' => 'Samenwerkingspartners',
+        'contact' => 'Contact',
+        'organisation_name' => 'Organisatienaam',
+        'short_description' => 'Korte omschrijving',
+        'target_group' => 'Doelgroep',
+        'support_offer' => 'Hulpaanbod',
+        'services' => 'Diensten',
+        'methods' => 'Werkwijzen en methodieken',
+        'execution' => 'Uitvoering',
+        'problems' => 'Problematiek en hulpvragen',
+        'trajectory' => 'Trajectverloop',
+        'average_duration' => 'Gemiddelde duur',
+        'when_appropriate' => 'Passende doorverwijzing',
+        'criteria' => 'Verwijscriteria',
+        'indications_required' => 'Indicaties vereist',
+        'contact_details' => 'Contactgegevens',
+        'opening_hours' => 'Openingstijden',
+        'waiting_times' => 'Wachttijden',
+        'other_information' => 'Overige informatie',
     ];
 
     return $labels[$field] ?? str_replace('_', ' ', $field);
 }
 
-function audit_summary(?string $beforeJson, ?string $afterJson): string
+function audit_field_label(string $field, string $action = ''): string
 {
-    $before = audit_values($beforeJson);
-    $after = audit_values($afterJson);
-    if (isset($before['answers']) || isset($after['answers'])) {
-        $audience = (string)($after['audience'] ?? $before['audience'] ?? 'profiel');
-        $answers = array_merge(
-            is_array($before['answers'] ?? null) ? $before['answers'] : [],
-            is_array($after['answers'] ?? null) ? $after['answers'] : []
-        );
-        $fields = array_keys($answers);
-
-        return $audience . ': ' . ($fields ? implode(', ', $fields) : 'geen veldwijzigingen');
+    $basicLabels = [
+        'name.nl' => 'Organisatienaam (NL)',
+        'professional_summary.nl' => 'Korte omschrijving (NL)',
+        'type_label.nl' => 'Type-label (NL)',
+        'age_range.nl' => 'Leeftijd (NL)',
+        'professional_referral_or_access.nl' => 'Toegang/verwijzing (NL)',
+        'contact.phone' => 'Telefoon',
+        'contact.whatsapp' => 'WhatsApp',
+        'contact.email' => 'E-mail',
+        'contact.website' => 'Website',
+        'contact.address_nl' => 'Adres (NL)',
+        'status' => 'Publicatiestatus',
+        'source_status' => 'Bronstatus',
+        'last_checked_at' => 'Laatst gecontroleerd',
+        'name' => 'Organisatienaam',
+        'professional_summary' => 'Korte omschrijving',
+        'type_label' => 'Type-label',
+        'age_range' => 'Leeftijd',
+        'professional_referral_or_access' => 'Toegang/verwijzing',
+        'phone' => 'Telefoon',
+        'whatsapp' => 'WhatsApp',
+        'email' => 'E-mail',
+        'website' => 'Website',
+        'address_nl' => 'Adres (NL)',
+        'role' => 'Rol',
+        'user_status' => 'Gebruikersstatus',
+        'password' => 'Wachtwoord',
+    ];
+    if (isset($basicLabels[$field])) {
+        return $basicLabels[$field];
     }
 
-    $fields = array_values(array_unique(array_merge(array_keys($before), array_keys($after))));
-
-    if (!$fields) {
-        return 'Geen veldwijzigingen vastgelegd';
+    $parts = explode('.', $field);
+    $language = '';
+    $lastPart = end($parts);
+    if (in_array($lastPart, ['nl', 'pap', 'en', 'es'], true)) {
+        $language = strtoupper((string)array_pop($parts));
     }
 
-    return implode(', ', array_map('audit_field_label', $fields));
+    if ($action === 'organization.update_profile' && $parts) {
+        $fieldKey = (string)array_pop($parts);
+        $prefix = $parts ? 'Professionalprofiel' : 'Jongerenprofiel';
+
+        return $prefix
+            . ' · '
+            . audit_profile_field_label($fieldKey)
+            . ($language !== '' ? ' (' . $language . ')' : '');
+    }
+
+    return ucfirst(str_replace('_', ' ', $field))
+        . ($language !== '' ? ' (' . $language . ')' : '');
+}
+
+function audit_profile_cell($value): array
+{
+    if (!is_array($value)) {
+        return [];
+    }
+
+    $cell = [];
+    if (array_key_exists('answer_text', $value)) {
+        $cell['answer_text'] = (string)$value['answer_text'];
+    }
+    if (array_key_exists('translation_status', $value)) {
+        $cell['translation_status'] = (string)$value['translation_status'];
+    }
+
+    return $cell;
+}
+
+function audit_changes(array $before, array $after, string $action): array
+{
+    $changes = [];
+    if ($action === 'organization.update_profile' || isset($before['answers']) || isset($after['answers'])) {
+        $beforeAnswers = is_array($before['answers'] ?? null) ? $before['answers'] : [];
+        $afterAnswers = is_array($after['answers'] ?? null) ? $after['answers'] : [];
+        $keys = array_values(array_unique(array_merge(array_keys($beforeAnswers), array_keys($afterAnswers))));
+        foreach ($keys as $key) {
+            $old = audit_profile_cell($beforeAnswers[$key] ?? null);
+            $new = audit_profile_cell($afterAnswers[$key] ?? null);
+            $components = array_values(array_unique(array_merge(array_keys($old), array_keys($new))));
+            $differs = false;
+            foreach ($components as $component) {
+                if (audit_values_differ($old[$component] ?? null, $new[$component] ?? null)) {
+                    $differs = true;
+                    break;
+                }
+            }
+            if (!$differs) {
+                continue;
+            }
+            $changes[$key] = ['before' => $old, 'after' => $new];
+        }
+
+        return $changes;
+    }
+
+    $keys = array_values(array_unique(array_merge(array_keys($before), array_keys($after))));
+    foreach ($keys as $key) {
+        $old = $before[$key] ?? null;
+        $new = $after[$key] ?? null;
+        if (!audit_values_differ($old, $new)) {
+            continue;
+        }
+        $changes[$key] = ['before' => $old, 'after' => $new];
+    }
+
+    return $changes;
+}
+
+function audit_display_value($value): string
+{
+    if (is_array($value) && array_key_exists('answer_text', $value)) {
+        $text = trim((string)$value['answer_text']);
+        $display = $text !== '' ? $text : 'Leeg';
+        if (array_key_exists('translation_status', $value)) {
+            $display .= "\nStatus: " . (string)$value['translation_status'];
+        }
+
+        return $display;
+    }
+    if (is_array($value) && array_key_exists('translation_status', $value)) {
+        return 'Status: ' . (string)$value['translation_status'];
+    }
+
+    $text = trim((string)($value ?? ''));
+
+    return $text !== '' ? $text : 'Leeg';
 }
 
 try {
@@ -79,6 +211,7 @@ try {
             u.email AS user_email,
             CASE
                 WHEN a.entity_type = 'organization' THEN COALESCE(NULLIF(ot.name, ''), o.slug)
+                WHEN a.entity_type = 'user' THEN target_user.name
                 ELSE NULL
             END AS entity_name
         FROM audit_log a
@@ -89,6 +222,9 @@ try {
         LEFT JOIN organization_translations ot
             ON ot.organization_id = o.id
             AND ot.language_code = 'nl'
+        LEFT JOIN users target_user
+            ON a.entity_type = 'user'
+            AND target_user.id = a.entity_id
         ORDER BY a.created_at DESC, a.id DESC
         LIMIT 250"
     );
@@ -99,7 +235,7 @@ try {
 admin_header('Auditlog', 'audit_log');
 ?>
 <section class="panel">
-  <p class="muted">Read-only overzicht voor admin, editor, translator en viewer. De nieuwste 250 registraties worden getoond.</p>
+  <p class="muted">Read-only overzicht voor admin, editor, translator en viewer. Alleen inhoudelijk gewijzigde waarden worden getoond.</p>
 </section>
 
 <?php if ($error !== ''): ?>
@@ -113,8 +249,8 @@ admin_header('Auditlog', 'audit_log');
             <th>Datum/tijd</th>
             <th>Gebruiker</th>
             <th>Actie</th>
-            <th>Entiteit</th>
-            <th>Gewijzigde velden</th>
+            <th>Organisatie/entiteit</th>
+            <th>Wijzigingen</th>
             <th>IP-adres</th>
           </tr>
         </thead>
@@ -123,6 +259,11 @@ admin_header('Auditlog', 'audit_log');
             <tr><td colspan="6" class="muted">Er zijn nog geen auditregistraties.</td></tr>
           <?php endif; ?>
           <?php foreach ($entries as $entry): ?>
+            <?php
+            $before = audit_values($entry['before_json']);
+            $after = audit_values($entry['after_json']);
+            $changes = audit_changes($before, $after, (string)$entry['action']);
+            ?>
             <tr>
               <td><?= readable_datetime($entry['created_at']) ?></td>
               <td>
@@ -131,19 +272,38 @@ admin_header('Auditlog', 'audit_log');
                   <br><small class="muted"><?= h((string)$entry['user_email']) ?></small>
                 <?php endif; ?>
               </td>
-              <td><code><?= h((string)$entry['action']) ?></code></td>
+              <td><?= h(audit_action_label((string)$entry['action'])) ?></td>
               <td>
-                <?= h((string)$entry['entity_type']) ?>
-                <?php if ($entry['entity_id'] !== null): ?>
-                  #<?= h((string)$entry['entity_id']) ?>
-                <?php endif; ?>
                 <?php if ($entry['entity_type'] === 'organization' && $entry['entity_id'] !== null): ?>
-                  <br><a href="organization.php?id=<?= h((string)$entry['entity_id']) ?>"><?= h((string)($entry['entity_name'] ?? 'Organisatie openen')) ?></a>
-                <?php elseif (!empty($entry['entity_name'])): ?>
-                  <br><?= h((string)$entry['entity_name']) ?>
+                  <a href="organization.php?id=<?= h((string)$entry['entity_id']) ?>"><?= h((string)($entry['entity_name'] ?? 'Organisatie')) ?></a>
+                <?php elseif ($entry['entity_type'] === 'user' && $entry['entity_id'] !== null && admin_can_manage_users()): ?>
+                  <a href="user_edit.php?id=<?= h((string)$entry['entity_id']) ?>"><?= h((string)($entry['entity_name'] ?? 'Gebruiker')) ?></a>
+                <?php else: ?>
+                  <?= h((string)($entry['entity_name'] ?? $entry['entity_type'])) ?>
                 <?php endif; ?>
               </td>
-              <td><?= h(audit_summary($entry['before_json'], $entry['after_json'])) ?></td>
+              <td>
+                <strong><?= h((string)count($changes)) ?> gewijzigd</strong>
+                <?php if ($changes): ?>
+                  <ul class="audit-field-list">
+                    <?php foreach (array_keys($changes) as $field): ?>
+                      <li><?= h(audit_field_label((string)$field, (string)$entry['action'])) ?></li>
+                    <?php endforeach; ?>
+                  </ul>
+                  <details class="audit-details">
+                    <summary>Bekijk wijziging</summary>
+                    <?php foreach ($changes as $field => $change): ?>
+                      <section class="audit-change">
+                        <h4><?= h(audit_field_label((string)$field, (string)$entry['action'])) ?></h4>
+                        <div class="audit-diff">
+                          <div><strong>Oud</strong><pre><?= h(audit_display_value($change['before'])) ?></pre></div>
+                          <div><strong>Nieuw</strong><pre><?= h(audit_display_value($change['after'])) ?></pre></div>
+                        </div>
+                      </section>
+                    <?php endforeach; ?>
+                  </details>
+                <?php endif; ?>
+              </td>
               <td><code><?= h((string)$entry['ip_address']) ?></code></td>
             </tr>
           <?php endforeach; ?>
