@@ -715,6 +715,84 @@ tbody tr:last-child td {
   color: #495869;
 }
 
+.richtext-editor {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.richtext-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 7px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f5f8fa;
+}
+
+.richtext-toolbar__button {
+  min-height: 32px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.richtext-preview-toggle {
+  margin-left: auto;
+}
+
+.richtext-help {
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.richtext-preview {
+  padding: 14px;
+  border: 1px solid #b8d8d9;
+  border-radius: 8px;
+  background: #f8fdfd;
+  color: #27384d;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.richtext-preview p,
+.richtext-preview ul,
+.richtext-preview ol {
+  margin: 0;
+}
+
+.richtext-preview p + p,
+.richtext-preview p + ul,
+.richtext-preview p + ol,
+.richtext-preview ul + p,
+.richtext-preview ol + p {
+  margin-top: 10px;
+}
+
+.richtext-preview ul,
+.richtext-preview ol {
+  padding-left: 22px;
+}
+
+.richtext-preview li + li {
+  margin-top: 5px;
+}
+
+.richtext-preview a {
+  color: #087f78;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.richtext-preview-empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
 .audit-field-list {
   margin: 6px 0;
   padding-left: 18px;

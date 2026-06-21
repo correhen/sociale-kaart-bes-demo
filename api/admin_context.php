@@ -42,6 +42,10 @@ try {
         ADMIN_ALLOWED_ROLES
     ));
     $primaryRole = $roles[0] ?? 'viewer';
+    $editableProfileLanguages = array_values(array_filter(
+        ['nl', 'pap', 'en', 'es'],
+        static fn(string $language): bool => admin_can_edit_profile_language($language)
+    ));
 
     admin_context_response([
         'authenticated' => true,
@@ -55,7 +59,9 @@ try {
             'can_edit_youth_profile' => admin_can_edit_profiles(),
             'can_edit_professional_profile' => admin_can_edit_profiles(),
             'can_manage_users' => admin_can_manage_users(),
+            'editable_profile_languages' => $editableProfileLanguages,
         ],
+        'csrf_token' => csrf_token(),
     ]);
 } catch (Throwable) {
     admin_context_response(['authenticated' => false]);

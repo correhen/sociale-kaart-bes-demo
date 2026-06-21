@@ -73,7 +73,7 @@ const PROFILE_I18N = {
       { key: 'who_we_are', labels: { nl: 'Wie zijn wij?', pap: 'Ken nos ta?', en: 'Who are we?', es: '¿Quiénes somos?' } },
       { key: 'who_for', labels: { nl: 'Voor wie zijn wij?', pap: 'Pa ken nos ta?', en: 'Who are we here for?', es: '¿Para quiénes estamos?' } },
       { key: 'what_help', labels: { nl: 'Waarmee kunnen wij helpen?', pap: 'Ku kiko nos por yuda?', en: 'What can we help with?', es: '¿En qué podemos ayudar?' } },
-      { key: 'how_to_access', labels: { nl: 'Hoe kom je terecht?', pap: 'Kon bo por yega na nos?', en: 'How can you reach us?', es: '¿Cómo puedes llegar a nosotros?' } },
+      { key: 'how_to_access', labels: { nl: 'Hoe kom je bij ons terecht?', pap: 'Kon bo por yega na nos?', en: 'How can you reach us?', es: '¿Cómo puedes llegar a nosotros?' } },
       { key: 'how_we_help', labels: { nl: 'Hoe helpen wij?', pap: 'Kon nos ta yuda bo?', en: 'How do we help?', es: '¿Cómo te ayudamos?' } },
       { key: 'duration', labels: { nl: 'Hoelang duurt de hulp?', pap: 'Kuantu tempu e yudansa ta dura?', en: 'How long does the support last?', es: '¿Cuánto dura la ayuda?' } },
       { key: 'partners', labels: { nl: 'Met wie werken wij samen?', pap: 'Ku ken nos ta traha huntu?', en: 'Who do we work with?', es: '¿Con quiénes trabajamos?' } },
@@ -1481,11 +1481,11 @@ function detailSectionBody(section){
   const items = Array.isArray(section.items) ? section.items : [];
   const body = getTranslatedValue(section.body);
   const html = [];
-  if(body && hasMeaningfulValue(body)) html.push(`<p>${escapeHtml(body)}</p>`);
+  if(body && hasMeaningfulValue(body)) html.push(renderRichText(body));
   paragraphs
     .map(getTranslatedValue)
     .filter(hasMeaningfulValue)
-    .forEach(text => html.push(`<p>${escapeHtml(text)}</p>`));
+    .forEach(text => html.push(renderRichText(text)));
   if(items.length) {
     const listItems = items
       .map(getTranslatedValue)
@@ -1494,7 +1494,8 @@ function detailSectionBody(section){
       .join('');
     if(listItems) html.push(`<ul>${listItems}</ul>`);
   }
-  return html.join('');
+  const content = html.join('');
+  return content ? `<div class="rich-text">${content}</div>` : '';
 }
 
 function profileLabel(config){
@@ -1506,25 +1507,107 @@ function profileAnswerText(value){
   return hasMeaningfulValue(text) ? text : '';
 }
 
-function profileAnswerHtml(value){
-  const text = profileAnswerText(value);
-  if(!text) return '';
-  const blocks = text.split(/\n{2,}/).map(block => block.trim()).filter(Boolean);
-  return blocks.map(block => {
-    const lines = block.split(/\n/).map(line => line.trim()).filter(Boolean);
-    if(lines.length && lines.every(line => /^[-*]\s+/.test(line))) {
-      return `<ul>${lines.map(line => `<li>${escapeHtml(line.replace(/^[-*]\s+/, ''))}</li>`).join('')}</ul>`;
-    }
-    return `<p>${escapeHtml(lines.join('\n')).replace(/\n/g, '<br>')}</p>`;
-  }).join('');
+function rawProfileAnswer(value, language){
+  if(value && typeof value === 'object' && !Array.isArray(value)) {
+    return String(value[language] ?? '');
+  }
+  return language === 'nl' ? String(value ?? '') : '';
 }
 
-function profileQuestionBlock(fieldConfig, value){
+function editableProfileLanguages(){
+  const languages = DATA.adminContext?.permissions?.editable_profile_languages;
+  return Array.isArray(languages) ? languages.filter(language => LANGUAGES[language]) : [];
+}
+
+function canInlineEditProfiles(){
+  return Boolean(DATA.adminContext?.authenticated && editableProfileLanguages().length);
+}
+
+function richTextInline(text){
+  const formatPlainText = value => escapeHtml(value)
+    .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+  const linkPattern = /\[([^\]\n]+)\]\(([^)\s]+)\)/g;
+  let html = '';
+  let lastIndex = 0;
+  let match;
+
+  while((match = linkPattern.exec(text)) !== null) {
+    html += formatPlainText(text.slice(lastIndex, match.index));
+    const label = match[1];
+    const url = match[2].trim();
+    if(/^(?:https?:\/\/|mailto:)/i.test(url)) {
+      const external = /^https?:\/\//i.test(url);
+      html += `<a href="${escapeHtml(url)}"${external ? ' target="_blank"' : ''} rel="noopener noreferrer">${formatPlainText(label)}</a>`;
+    } else {
+      html += formatPlainText(match[0]);
+    }
+    lastIndex = linkPattern.lastIndex;
+  }
+
+  return html + formatPlainText(text.slice(lastIndex));
+}
+
+function renderRichText(text){
+  const source = String(text ?? '').replace(/\r\n?/g, '\n');
+  if(!source.trim()) return '';
+
+  const html = [];
+  let paragraph = [];
+  let listType = '';
+  let listItems = [];
+
+  const flushParagraph = () => {
+    if(!paragraph.length) return;
+    html.push(`<p>${paragraph.map(richTextInline).join('<br>')}</p>`);
+    paragraph = [];
+  };
+  const flushList = () => {
+    if(!listType) return;
+    html.push(`<${listType}>${listItems.map(item => `<li>${richTextInline(item)}</li>`).join('')}</${listType}>`);
+    listType = '';
+    listItems = [];
+  };
+
+  source.split('\n').forEach(line => {
+    const bullet = line.match(/^\s*(?:-|•|·|â€¢|Â·)\s+(.+)$/);
+    const numbered = line.match(/^\s*\d+[.)]\s+(.+)$/);
+    if(bullet || numbered) {
+      flushParagraph();
+      const nextListType = bullet ? 'ul' : 'ol';
+      if(listType && listType !== nextListType) flushList();
+      listType = nextListType;
+      listItems.push((bullet || numbered)[1].trim());
+      return;
+    }
+    if(!line.trim()) {
+      flushParagraph();
+      flushList();
+      return;
+    }
+    flushList();
+    paragraph.push(line.trim());
+  });
+
+  flushParagraph();
+  flushList();
+  return html.join('');
+}
+
+function profileAnswerHtml(value){
+  const html = renderRichText(profileAnswerText(value));
+  return html ? `<div class="rich-text profile-rich-text">${html}</div>` : '';
+}
+
+function profileQuestionBlock(fieldConfig, value, groupKey){
   const body = profileAnswerHtml(value);
-  if(!body) return '';
-  return `<div class="detail-profile-field">
-    <h3>${escapeHtml(profileLabel(fieldConfig))}</h3>
-    <div class="detail-profile-field__body">${body}</div>
+  if(!body && !canInlineEditProfiles()) return '';
+  return `<div class="detail-profile-field" data-profile-field data-profile-audience="professional" data-profile-group="${escapeHtml(groupKey)}" data-profile-key="${escapeHtml(fieldConfig.key)}">
+    <div class="detail-profile-field__heading">
+      <h3>${escapeHtml(profileLabel(fieldConfig))}</h3>
+      ${canInlineEditProfiles() ? '<button class="inline-profile-edit" type="button" data-inline-profile-edit>Bewerk</button>' : ''}
+    </div>
+    <div class="detail-profile-field__body">${body || '<p class="inline-profile-empty">Nog niet ingevuld in deze taal.</p>'}</div>
   </div>`;
 }
 
@@ -1575,18 +1658,19 @@ function youthProfileAccordionSections(org){
   let openCount = 0;
   const sections = PROFILE_I18N.youth.fields.map(field => {
     const body = profileAnswerHtml(org.youth_profile[field.key]);
-    if(!body) return null;
+    if(!body && !canInlineEditProfiles()) return null;
     const id = `detail-profile-youth-${field.key}`;
     const open = openCount < 2;
     openCount += 1;
-    return `<section class="detail-section detail-accordion${open ? ' is-open' : ''}">
+    return `<section class="detail-section detail-accordion${open ? ' is-open' : ''}" data-profile-field data-profile-audience="youth" data-profile-group="" data-profile-key="${escapeHtml(field.key)}">
       <h2>
         <button class="detail-accordion__trigger" type="button" aria-expanded="${open ? 'true' : 'false'}" aria-controls="${id}">
           <span>${escapeHtml(profileLabel(field))}</span>
           <span class="detail-accordion__icon" aria-hidden="true"></span>
         </button>
+        ${canInlineEditProfiles() ? '<button class="inline-profile-edit inline-profile-edit--accordion" type="button" data-inline-profile-edit>Bewerk</button>' : ''}
       </h2>
-      <div class="detail-accordion__panel" id="${id}"${open ? '' : ' hidden'}>${body}</div>
+      <div class="detail-accordion__panel" id="${id}"${open ? '' : ' hidden'}>${body || '<p class="inline-profile-empty">Nog niet ingevuld in deze taal.</p>'}</div>
     </section>`;
   }).filter(Boolean);
   if(!sections.length) return '';
@@ -1602,7 +1686,7 @@ function youthProfileAccordionSections(org){
 
 function professionalProfileAccordionSections(org){
   if(!org.professional_profile) return '';
-  const hasProfileContent = PROFILE_I18N.professional.groups.some(group => {
+  const hasProfileContent = canInlineEditProfiles() || PROFILE_I18N.professional.groups.some(group => {
     const profileGroup = org.professional_profile[group.key] || {};
     return group.fields.some(field => field.key !== 'organisation_name' && profileAnswerHtml(profileGroup[field.key]));
   });
@@ -1610,7 +1694,8 @@ function professionalProfileAccordionSections(org){
   const sections = PROFILE_I18N.professional.groups.map(group => {
     const profileGroup = org.professional_profile[group.key] || {};
     const body = group.fields
-      .map(field => profileQuestionBlock(field, profileGroup[field.key]))
+      .filter(field => field.key !== 'organisation_name')
+      .map(field => profileQuestionBlock(field, profileGroup[field.key], group.key))
       .filter(Boolean)
       .join('');
     if(!body) return null;
@@ -1666,7 +1751,7 @@ function initOrganizationDetail(audience){
     setAudiencePreference(audience);
     initShell();
     renderOrganizationDetail(audience);
-    fetchAdminContext().then(() => renderPublicAdminMode(audience));
+    fetchAdminContext().then(() => renderOrganizationDetail(audience));
   });
 }
 
@@ -1694,6 +1779,187 @@ function addSectionAdminLink(section, label, href){
   link.href = href;
   link.textContent = label;
   section.prepend(link);
+}
+
+function profileFieldConfig(audience, groupKey, fieldKey){
+  if(audience === 'youth') {
+    return PROFILE_I18N.youth.fields.find(field => field.key === fieldKey) || null;
+  }
+  const group = PROFILE_I18N.professional.groups.find(item => item.key === groupKey);
+  return group?.fields.find(field => field.key === fieldKey && field.key !== 'organisation_name') || null;
+}
+
+function profileValue(org, audience, groupKey, fieldKey){
+  if(audience === 'youth') return org.youth_profile?.[fieldKey];
+  return org.professional_profile?.[groupKey]?.[fieldKey];
+}
+
+function setProfileValue(org, audience, groupKey, fieldKey, language, answerText){
+  if(audience === 'youth') {
+    org.youth_profile = org.youth_profile || {};
+    org.youth_profile[fieldKey] = org.youth_profile[fieldKey] || {};
+    org.youth_profile[fieldKey][language] = answerText;
+    return;
+  }
+  org.professional_profile = org.professional_profile || {};
+  org.professional_profile[groupKey] = org.professional_profile[groupKey] || {};
+  org.professional_profile[groupKey][fieldKey] = org.professional_profile[groupKey][fieldKey] || {};
+  org.professional_profile[groupKey][fieldKey][language] = answerText;
+}
+
+function ensureRichTextEditor(){
+  if(window.KadenaRichTextEditor) return Promise.resolve(window.KadenaRichTextEditor);
+  if(DATA.richTextEditorPromise) return DATA.richTextEditorPromise;
+  DATA.richTextEditorPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = `${assetBase()}assets/richtext-editor.js`;
+    script.onload = () => resolve(window.KadenaRichTextEditor);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+  return DATA.richTextEditorPromise;
+}
+
+function closeInlineProfileEditor(){
+  const modal = document.querySelector('[data-inline-profile-modal]');
+  if(!modal) return;
+  document.body.classList.remove('has-inline-profile-modal');
+  const returnFocus = modal._returnFocus;
+  modal.remove();
+  if(returnFocus?.isConnected) returnFocus.focus();
+}
+
+async function openInlineProfileEditor(button, org, audience, groupKey, fieldKey){
+  const context = DATA.adminContext;
+  const languages = editableProfileLanguages();
+  const fieldConfig = profileFieldConfig(audience, groupKey, fieldKey);
+  if(!context?.authenticated || !languages.length || !fieldConfig) return;
+
+  closeInlineProfileEditor();
+  const initialLanguage = languages.includes(currentLanguage()) ? currentLanguage() : languages[0];
+  const adminHref = adminOrganizationUrl(org.slug, 'profile', audience);
+  const modal = document.createElement('div');
+  modal.className = 'inline-profile-modal-backdrop';
+  modal.dataset.inlineProfileModal = '';
+  modal.setAttribute('role', 'presentation');
+  modal.innerHTML = `<section class="inline-profile-modal" role="dialog" aria-modal="true" aria-labelledby="inline-profile-title">
+    <div class="inline-profile-modal__header">
+      <div>
+        <p class="inline-profile-kicker">Profieltekst bewerken</p>
+        <h2 id="inline-profile-title">${escapeHtml(profileLabel(fieldConfig))}</h2>
+      </div>
+      <button class="inline-profile-close" type="button" aria-label="Sluiten" data-inline-profile-close>×</button>
+    </div>
+    <form data-inline-profile-form>
+      <label class="inline-profile-language">
+        Taal
+        <select data-inline-profile-language>
+          ${languages.map(language => `<option value="${escapeHtml(language)}"${language === initialLanguage ? ' selected' : ''}>${escapeHtml(LANGUAGES[language])}</option>`).join('')}
+        </select>
+      </label>
+      <label>
+        Tekst
+        <textarea rows="11" maxlength="100000" data-inline-profile-text></textarea>
+      </label>
+      <p class="inline-profile-status" role="status" aria-live="polite" data-inline-profile-status></p>
+      <div class="inline-profile-actions">
+        <button class="button inline-profile-cancel" type="button" data-inline-profile-close>Annuleren</button>
+        <a class="button" href="${escapeHtml(adminHref)}">Open uitgebreid in admin</a>
+        <button type="submit" data-inline-profile-save>Opslaan</button>
+      </div>
+    </form>
+  </section>`;
+  modal._returnFocus = button;
+  document.body.appendChild(modal);
+  document.body.classList.add('has-inline-profile-modal');
+
+  const textarea = modal.querySelector('[data-inline-profile-text]');
+  const languageSelect = modal.querySelector('[data-inline-profile-language]');
+  const form = modal.querySelector('[data-inline-profile-form]');
+  const status = modal.querySelector('[data-inline-profile-status]');
+  const saveButton = modal.querySelector('[data-inline-profile-save]');
+  const loadLanguageValue = () => {
+    textarea.value = rawProfileAnswer(profileValue(org, audience, groupKey, fieldKey), languageSelect.value);
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  loadLanguageValue();
+  languageSelect.addEventListener('change', loadLanguageValue);
+  modal.querySelectorAll('[data-inline-profile-close]').forEach(close => close.addEventListener('click', closeInlineProfileEditor));
+  modal.addEventListener('click', event => {
+    if(event.target === modal) closeInlineProfileEditor();
+  });
+  modal.addEventListener('keydown', event => {
+    if(event.key === 'Escape') closeInlineProfileEditor();
+  });
+
+  try {
+    const editor = await ensureRichTextEditor();
+    editor?.enhanceTextarea(textarea, {
+      renderPreview: value => renderRichText(value) || '<p class="inline-profile-empty">Nog geen tekst om te tonen.</p>'
+    });
+  } catch(error) {
+    console.warn('De rich-texttoolbar kon niet worden geladen.', error);
+  }
+  textarea.focus();
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    status.className = 'inline-profile-status';
+    status.textContent = '';
+    saveButton.disabled = true;
+    saveButton.textContent = 'Opslaan…';
+    try {
+      const response = await fetch(`${assetBase()}admin/api/update_profile_field.php`, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': context.csrf_token || ''
+        },
+        body: JSON.stringify({
+          organization_slug: org.slug,
+          audience,
+          group: groupKey,
+          field: fieldKey,
+          language: languageSelect.value,
+          answer_text: textarea.value
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+      if(response.status === 401 || result.error === 'session_expired') {
+        status.classList.add('is-error');
+        status.textContent = 'Je beheersessie is verlopen. Log opnieuw in.';
+        return;
+      }
+      if(!response.ok || !result.ok) throw new Error(result.error || `HTTP ${response.status}`);
+
+      setProfileValue(org, audience, groupKey, fieldKey, languageSelect.value, String(result.answer_text ?? textarea.value));
+      const savedLanguage = languageSelect.value;
+      status.classList.add('is-success');
+      status.textContent = result.changed === false ? 'Er waren geen wijzigingen.' : 'Wijziging opgeslagen.';
+      window.setTimeout(() => {
+        closeInlineProfileEditor();
+        if(savedLanguage !== currentLanguage()) {
+          const url = new URL(location.href);
+          if(url.searchParams.has('lang')) {
+            url.searchParams.set('lang', savedLanguage);
+            history.replaceState(null, '', url);
+          }
+          setLanguage(savedLanguage);
+        } else {
+          renderOrganizationDetail(audience);
+        }
+      }, 450);
+    } catch(error) {
+      console.warn('Inline profieltekst opslaan is mislukt.', error);
+      status.classList.add('is-error');
+      status.textContent = 'Opslaan is niet gelukt. Open dit veld in de admin of probeer opnieuw.';
+    } finally {
+      saveButton.disabled = false;
+      saveButton.textContent = 'Opslaan';
+    }
+  });
 }
 
 function renderPublicAdminMode(audience){
@@ -1742,6 +2008,22 @@ function renderPublicAdminMode(audience){
     const contactSection = holder.querySelector('.professional-contact-card, .detail-side .detail-section');
     addSectionAdminLink(contactSection, 'Basisgegevens/contact bewerken', adminOrganizationUrl(org.slug, 'basic'));
   }
+
+  holder.querySelectorAll('[data-inline-profile-edit]').forEach(button => {
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const fieldBlock = button.closest('[data-profile-field]');
+      if(!fieldBlock) return;
+      openInlineProfileEditor(
+        button,
+        org,
+        fieldBlock.dataset.profileAudience || audience,
+        fieldBlock.dataset.profileGroup || '',
+        fieldBlock.dataset.profileKey || ''
+      );
+    });
+  });
 }
 
 function renderOrganizationDetail(audience){
@@ -1789,7 +2071,7 @@ function renderOrganizationDetail(audience){
         <div class="detail-header__copy">
           ${primaryThemeLabel ? `<span class="detail-theme-badge">${escapeHtml(primaryThemeLabel)}</span>` : ''}
           <h1>${escapeHtml(title)}</h1>
-          ${headerSummary ? `<p>${escapeHtml(headerSummary)}</p>` : ''}
+          ${headerSummary ? `<div class="rich-text detail-header-summary">${renderRichText(headerSummary)}</div>` : ''}
         </div>
         ${primaryThemeIcon}
         ${contactActions ? `<div class="detail-header__actions">${contactActions}</div>` : ''}
@@ -1797,8 +2079,8 @@ function renderOrganizationDetail(audience){
       <section class="detail-grid youth-detail-grid">
         <div class="detail-main youth-detail-main">
           ${detailAccordionSections(org, 'youth') || [
-            primaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('youthDescription'))}</h2><p>${escapeHtml(primaryText)}</p></section>` : '',
-            secondaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('contactHow'))}</h2><p>${escapeHtml(secondaryText)}</p></section>` : ''
+            primaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('youthDescription'))}</h2><div class="rich-text">${renderRichText(primaryText)}</div></section>` : '',
+            secondaryText ? `<section class="detail-section"><h2>${escapeHtml(ui('contactHow'))}</h2><div class="rich-text">${renderRichText(secondaryText)}</div></section>` : ''
           ].filter(Boolean).join('')}
         </div>
         <aside class="detail-side youth-detail-side">
@@ -1828,9 +2110,9 @@ function renderOrganizationDetail(audience){
   const contactActions = contactActionLinks(org.contact);
   const accordionSections = detailAccordionSections(org, 'professional');
   const contentSections = accordionSections || [
-    hasProfessionalContent(primaryText) ? `<section class="detail-section"><h2>${escapeHtml(ui('professionalDescription'))}</h2><p>${escapeHtml(primaryText)}</p></section>` : '',
-    hasProfessionalContent(secondaryText) ? `<section class="detail-section"><h2>${escapeHtml(secondaryTitle)}</h2><p>${escapeHtml(secondaryText)}</p></section>` : '',
-    hasProfessionalContent(notes) ? `<section class="detail-section"><h2>${escapeHtml(ui('notes'))}</h2><p>${escapeHtml(notes)}</p></section>` : ''
+    hasProfessionalContent(primaryText) ? `<section class="detail-section"><h2>${escapeHtml(ui('professionalDescription'))}</h2><div class="rich-text">${renderRichText(primaryText)}</div></section>` : '',
+    hasProfessionalContent(secondaryText) ? `<section class="detail-section"><h2>${escapeHtml(secondaryTitle)}</h2><div class="rich-text">${renderRichText(secondaryText)}</div></section>` : '',
+    hasProfessionalContent(notes) ? `<section class="detail-section"><h2>${escapeHtml(ui('notes'))}</h2><div class="rich-text">${renderRichText(notes)}</div></section>` : ''
   ].filter(Boolean).join('');
   const address = translatedContactAddress(org.contact);
   const audienceText = org.audiences.map(audienceLabel).filter(Boolean).join(', ');
@@ -1855,7 +2137,7 @@ function renderOrganizationDetail(audience){
       <div class="detail-header__copy">
         ${primaryThemeLabel ? `<span class="detail-theme-badge professional-theme-badge">${escapeHtml(primaryThemeLabel)}</span>` : ''}
         <h1>${escapeHtml(title)}</h1>
-        ${headerDescription ? `<p>${escapeHtml(headerDescription)}</p>` : ''}
+        ${headerDescription ? `<div class="rich-text detail-header-summary">${renderRichText(headerDescription)}</div>` : ''}
       </div>
       ${contactActions ? `<div class="detail-header__actions professional-header-actions">${contactActions}</div>` : ''}
     </div>

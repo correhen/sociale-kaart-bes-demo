@@ -37,7 +37,7 @@ function audit_profile_field_label(string $field): string
         'who_we_are' => 'Wie zijn wij?',
         'who_for' => 'Voor wie zijn wij?',
         'what_help' => 'Waarmee kunnen wij helpen?',
-        'how_to_access' => 'Hoe kom je terecht?',
+        'how_to_access' => 'Hoe kom je bij deze organisatie terecht?',
         'how_we_help' => 'Hoe helpen wij?',
         'duration' => 'Hoelang duurt de hulp?',
         'partners' => 'Samenwerkingspartners',

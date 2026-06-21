@@ -57,6 +57,7 @@ function admin_footer(): void
 {
     ?>
   </main>
+  <script src="../assets/richtext-editor.js"></script>
 </body>
 </html>
 <?php

@@ -11,7 +11,7 @@ const YOUTH_PROFILE_FIELDS = [
     'who_we_are' => 'Wie zijn wij?',
     'who_for' => 'Voor wie zijn wij?',
     'what_help' => 'Waarmee kunnen wij helpen?',
-    'how_to_access' => 'Hoe kom je terecht?',
+    'how_to_access' => 'Hoe kom je bij deze organisatie terecht?',
     'how_we_help' => 'Hoe helpen wij?',
     'duration' => 'Hoelang duurt de hulp?',
     'partners' => 'Met wie werken wij samen?',
@@ -304,14 +304,14 @@ try {
                         :field_key,
                         :language_code,
                         :answer_text,
-                        'plain_text',
+                        'markdown',
                         :translation_status,
                         1,
                         :sort_order
                     )
                     ON DUPLICATE KEY UPDATE
                         answer_text = VALUES(answer_text),
-                        answer_format = 'plain_text',
+                        answer_format = 'markdown',
                         translation_status = VALUES(translation_status),
                         sort_order = VALUES(sort_order)"
                 );
@@ -457,6 +457,7 @@ admin_header(
                   <textarea
                     name="<?= h($inputBase) ?>[answer_text]"
                     rows="7"
+                    <?= $canEditLanguage ? 'data-richtext-editor' : '' ?>
                     <?= $canEditLanguage ? '' : 'disabled' ?>
                   ><?= h((string)$cell['answer_text']) ?></textarea>
                 </label>

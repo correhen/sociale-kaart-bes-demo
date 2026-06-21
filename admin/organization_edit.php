@@ -370,7 +370,7 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
   </label>
   <label>
     Korte omschrijving / summary (NL)
-    <textarea name="professional_summary" rows="5"><?= h($values['professional_summary']) ?></textarea>
+    <textarea name="professional_summary" rows="5" data-richtext-editor><?= h($values['professional_summary']) ?></textarea>
   </label>
   <div class="form-grid">
     <label>
@@ -384,7 +384,7 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
   </div>
   <label>
     Toegang / verwijzing (NL)
-    <textarea name="professional_referral_or_access" rows="5"><?= h($values['professional_referral_or_access']) ?></textarea>
+    <textarea name="professional_referral_or_access" rows="5" data-richtext-editor><?= h($values['professional_referral_or_access']) ?></textarea>
   </label>
   <label>
     Slug (alleen-lezen)
