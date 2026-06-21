@@ -1602,10 +1602,11 @@ function profileAnswerHtml(value){
 function profileQuestionBlock(fieldConfig, value, groupKey){
   const body = profileAnswerHtml(value);
   if(!body && !canInlineEditProfiles()) return '';
+  const editLabel = `Bewerk profielblok: ${profileLabel(fieldConfig)}`;
   return `<div class="detail-profile-field" data-profile-field data-profile-audience="professional" data-profile-group="${escapeHtml(groupKey)}" data-profile-key="${escapeHtml(fieldConfig.key)}">
     <div class="detail-profile-field__heading">
       <h3>${escapeHtml(profileLabel(fieldConfig))}</h3>
-      ${canInlineEditProfiles() ? '<button class="inline-profile-edit" type="button" data-inline-profile-edit>Bewerk</button>' : ''}
+      ${canInlineEditProfiles() ? `<button class="admin-icon-button inline-profile-edit" type="button" data-inline-profile-edit title="${escapeHtml(editLabel)}" aria-label="${escapeHtml(editLabel)}"><span aria-hidden="true">✎</span></button>` : ''}
     </div>
     <div class="detail-profile-field__body">${body || '<p class="inline-profile-empty">Nog niet ingevuld in deze taal.</p>'}</div>
   </div>`;
@@ -1662,13 +1663,14 @@ function youthProfileAccordionSections(org){
     const id = `detail-profile-youth-${field.key}`;
     const open = openCount < 2;
     openCount += 1;
-    return `<section class="detail-section detail-accordion${open ? ' is-open' : ''}" data-profile-field data-profile-audience="youth" data-profile-group="" data-profile-key="${escapeHtml(field.key)}">
+    const editLabel = `Bewerk profielblok: ${profileLabel(field)}`;
+    return `<section class="detail-section detail-accordion${open ? ' is-open' : ''}${canInlineEditProfiles() ? ' has-inline-edit' : ''}" data-profile-field data-profile-audience="youth" data-profile-group="" data-profile-key="${escapeHtml(field.key)}">
       <h2>
         <button class="detail-accordion__trigger" type="button" aria-expanded="${open ? 'true' : 'false'}" aria-controls="${id}">
           <span>${escapeHtml(profileLabel(field))}</span>
           <span class="detail-accordion__icon" aria-hidden="true"></span>
         </button>
-        ${canInlineEditProfiles() ? '<button class="inline-profile-edit inline-profile-edit--accordion" type="button" data-inline-profile-edit>Bewerk</button>' : ''}
+        ${canInlineEditProfiles() ? `<button class="admin-icon-button inline-profile-edit inline-profile-edit--accordion" type="button" data-inline-profile-edit title="${escapeHtml(editLabel)}" aria-label="${escapeHtml(editLabel)}"><span aria-hidden="true">✎</span></button>` : ''}
       </h2>
       <div class="detail-accordion__panel" id="${id}"${open ? '' : ' hidden'}>${body || '<p class="inline-profile-empty">Nog niet ingevuld in deze taal.</p>'}</div>
     </section>`;
@@ -1769,16 +1771,21 @@ function adminOrganizationUrl(slug, target, audience = ''){
 }
 
 function publicAdminLink(label, href, className = ''){
-  return `<a class="admin-edit-link${className ? ` ${className}` : ''}" href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
+  return `<a class="admin-control admin-edit-link${className ? ` ${className}` : ''}" href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
 }
 
-function addSectionAdminLink(section, label, href){
+function addSectionAdminIcon(section, label, href){
   if(!section || section.querySelector('.admin-section-edit')) return;
+  const heading = section.querySelector(':scope > h2');
+  if(!heading) return;
+  section.classList.add('admin-control-host');
   const link = document.createElement('a');
-  link.className = 'admin-edit-link admin-section-edit';
+  link.className = 'admin-control admin-icon-button admin-section-edit';
   link.href = href;
-  link.textContent = label;
-  section.prepend(link);
+  link.title = label;
+  link.setAttribute('aria-label', label);
+  link.innerHTML = '<span aria-hidden="true">✎</span>';
+  heading.insertAdjacentElement('afterend', link);
 }
 
 function profileFieldConfig(audience, groupKey, fieldKey){
@@ -1982,11 +1989,14 @@ function renderPublicAdminMode(audience){
   if(permissions.can_edit_basic) {
     actions.push(publicAdminLink('Basisgegevens bewerken', adminOrganizationUrl(org.slug, 'basic')));
   }
-  if(permissions.can_edit_youth_profile) {
-    actions.push(publicAdminLink('Jongerenprofiel bewerken', adminOrganizationUrl(org.slug, 'profile', 'youth')));
-  }
-  if(permissions.can_edit_professional_profile) {
-    actions.push(publicAdminLink('Professionalprofiel bewerken', adminOrganizationUrl(org.slug, 'profile', 'professional')));
+  const canEditCurrentProfile = audience === 'professional'
+    ? permissions.can_edit_professional_profile
+    : permissions.can_edit_youth_profile;
+  if(canEditCurrentProfile) {
+    actions.push(publicAdminLink(
+      audience === 'professional' ? 'Professionalprofiel bewerken' : 'Jongerenprofiel bewerken',
+      adminOrganizationUrl(org.slug, 'profile', audience)
+    ));
   }
 
   if(actions.length) {
@@ -1996,17 +2006,11 @@ function renderPublicAdminMode(audience){
     </aside>`);
   }
 
-  const profileHref = adminOrganizationUrl(org.slug, 'profile', audience);
-  const canEditProfile = audience === 'professional'
-    ? permissions.can_edit_professional_profile
-    : permissions.can_edit_youth_profile;
-  if(canEditProfile) {
-    const profileSection = holder.querySelector('.detail-main .detail-expanded-info, .detail-main .detail-section');
-    addSectionAdminLink(profileSection, `${audience === 'professional' ? 'Professionalprofiel' : 'Jongerenprofiel'} bewerken`, profileHref);
-  }
   if(permissions.can_edit_basic) {
-    const contactSection = holder.querySelector('.professional-contact-card, .detail-side .detail-section');
-    addSectionAdminLink(contactSection, 'Basisgegevens/contact bewerken', adminOrganizationUrl(org.slug, 'basic'));
+    const contactSection = audience === 'professional'
+      ? holder.querySelector('.professional-contact-card')
+      : holder.querySelector('.youth-detail-side > .detail-section:first-child');
+    addSectionAdminIcon(contactSection, 'Basisgegevens/contact bewerken', adminOrganizationUrl(org.slug, 'basic'));
   }
 
   holder.querySelectorAll('[data-inline-profile-edit]').forEach(button => {
