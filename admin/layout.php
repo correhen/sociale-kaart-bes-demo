@@ -42,6 +42,7 @@ function admin_header(string $title, string $active = ''): void
           <span><?= h($user['name'] ?? '') ?></span>
           <small><?= h(admin_role_label($user)) ?></small>
         </div>
+        <a class="button button-small" href="change_password.php">Wachtwoord wijzigen</a>
         <a class="button button-small" href="logout.php">Uitloggen</a>
       </div>
     <?php endif; ?>

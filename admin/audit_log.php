@@ -26,6 +26,8 @@ function audit_action_label(string $action): string
         'organization.update_profile' => 'Profiel gewijzigd',
         'user.create' => 'Gebruiker aangemaakt',
         'user.update' => 'Gebruiker gewijzigd',
+        'user.change_own_password' => 'Eigen wachtwoord gewijzigd',
+        'user.admin_reset_password' => 'Wachtwoord door admin gereset',
     ];
 
     return $labels[$action] ?? $action;

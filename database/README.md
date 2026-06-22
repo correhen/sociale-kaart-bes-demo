@@ -39,7 +39,7 @@ De vaste talen staan in `languages`:
 - `en`: Engels;
 - `es`: Spaans.
 
-Publieke rendering moet altijd eerst de gekozen taal proberen. Als een veld ontbreekt of de vertaling niet gepubliceerd is, valt de publieke site terug op Nederlands. De admin mag voorlopig Nederlands-only zijn, maar moet wel alle vertaalvelden en statussen kunnen beheren.
+Publieke rendering probeert altijd eerst de gekozen taal. Voor Bonaire is Nederlands de fallback. In de eilandcontexten Saba en Statia valt de frontend terug op Engels wanneer het Nederlandse veld leeg is, omdat de aangeleverde broncontent voor deze eilanden Engelstalig is.
 
 Alle tabellen gebruiken `utf8mb4` met `utf8mb4_unicode_ci`, zodat Papiamentu, Spaanse tekens en andere Unicode-inhoud behouden blijven.
 
@@ -120,6 +120,36 @@ python tools/import_seed_to_sql.py --output database/seed_import.sql
 ```
 
 Het gegenereerde bestand gebruikt UTF-8 en behoudt bestaande inhoud exact, inclusief bestaande mojibake in de brondata.
+
+## Saba En Statia Importeren
+
+De aparte, idempotente contentimport staat in:
+
+- `data/youthcare_compass_saba_statia_v0_1.json`;
+- `database/saba_statia_import.sql`.
+
+De import bevat uitsluitend de vier Statia- en vijf Saba-organisaties en wijzigt geen bestaande Bonaire-organisaties. Voer hem pas uit nadat `schema.sql` en de algemene `seed_import.sql` aanwezig zijn:
+
+```bash
+python tools/import_seed_to_sql.py \
+  --seed data/youthcare_compass_saba_statia_v0_1.json \
+  --output database/saba_statia_import.sql
+```
+
+Importeer daarna `database/saba_statia_import.sql` in dezelfde database. Het bestand gebruikt `INSERT ... ON DUPLICATE KEY UPDATE` en kan veilig opnieuw worden uitgevoerd. Alle negen organisaties krijgen `source_status = submitted`, publicatiestatus `published` en `last_checked_at = 2026-06-22`.
+
+Controle:
+
+```sql
+SELECT i.code, COUNT(*) AS organizations
+FROM organizations o
+JOIN organization_islands oi ON oi.organization_id = o.id
+JOIN islands i ON i.id = oi.island_id
+WHERE i.code IN ('statia', 'saba')
+GROUP BY i.code;
+```
+
+Verwacht: `statia = 4`, `saba = 5`.
 
 ## Importeren In Plesk/phpMyAdmin
 

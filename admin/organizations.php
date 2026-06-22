@@ -33,7 +33,7 @@ try {
     $params = [];
 
     if ($filters['q'] !== '') {
-        $where[] = "(o.slug LIKE :q OR ot_nl.name LIKE :q OR ot_nl.type_label LIKE :q)";
+        $where[] = "(o.slug LIKE :q OR ot_nl.name LIKE :q OR ot_en.name LIKE :q OR ot_nl.type_label LIKE :q OR ot_en.type_label LIKE :q)";
         $params['q'] = '%' . $filters['q'] . '%';
     }
     if ($filters['status'] !== '') {
@@ -72,8 +72,8 @@ try {
             o.source_status,
             o.updated_at,
             o.last_checked_at,
-            COALESCE(NULLIF(ot_nl.name, ''), o.slug) AS name,
-            ot_nl.type_label,
+            COALESCE(NULLIF(ot_nl.name, ''), NULLIF(ot_en.name, ''), o.slug) AS name,
+            COALESCE(NULLIF(ot_nl.type_label, ''), NULLIF(ot_en.type_label, '')) AS type_label,
             (
                 SELECT GROUP_CONCAT(i.name ORDER BY oi.is_primary DESC, i.sort_order ASC SEPARATOR ', ')
                 FROM organization_islands oi
@@ -92,7 +92,10 @@ try {
         FROM organizations o
         LEFT JOIN organization_translations ot_nl
             ON ot_nl.organization_id = o.id
-            AND ot_nl.language_code = 'nl'";
+            AND ot_nl.language_code = 'nl'
+        LEFT JOIN organization_translations ot_en
+            ON ot_en.organization_id = o.id
+            AND ot_en.language_code = 'en'";
 
     if ($where) {
         $sql .= ' WHERE ' . implode(' AND ', $where);

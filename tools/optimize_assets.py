@@ -22,6 +22,8 @@ BRAND_ASSETS = {
     "kadena-hubenil-beeld": [512, 256],
     "kadena-hubenil-tekst": [900, 450],
     "logo-kadena-hubenil": [900, 450],
+    "youthcare-compass-saba": [900, 450],
+    "youthcare-compass-statia": [900, 450],
 }
 
 
@@ -64,7 +66,7 @@ def optimize_brand_assets() -> None:
 def main() -> None:
     optimize_theme_icons()
     optimize_brand_assets()
-    print("optimized Kadena Hubenil assets")
+    print("optimized brand and theme assets")
 
 
 if __name__ == "__main__":

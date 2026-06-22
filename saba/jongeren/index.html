@@ -1,0 +1,26 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jongeren - YouthCare Compass Saba</title>
+  <link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body class="audience-youth island-context" data-page="audience-home" data-audience="youth" data-island="saba">
+  <header class="site-header kh-header">
+    <a class="brand island-brand" href="../"><img src="../../assets/brand/web/youthcare-compass-saba-450.webp" alt="YouthCare Compass Saba" /></a>
+    <nav><a class="active" href="./" data-audience-link="youth">Jongeren</a><a href="../professionals/" data-audience-link="professional">Professionals</a><a href="organisaties/" data-i18n="organizationsNav">Organisaties</a></nav>
+    <div data-language-slot></div>
+  </header>
+  <main>
+    <section class="page-intro island-page-intro"><div><p class="eyebrow">YouthCare Compass Saba</p><h1>Help, information &amp; opportunities on Saba</h1><p>Find organisations that can support you.</p></div></section>
+    <section class="section">
+      <form id="audienceSearch" class="hero-search kh-search" role="search"><label class="sr-only" for="q">Search</label><input id="q" name="q" type="search" placeholder="What do you need help with?" aria-controls="audienceSearchResults" /><button type="submit">Search</button><div id="audienceSearchResults" class="search-suggestions" role="listbox" hidden></div></form>
+    </section>
+    <section class="section"><div class="section-head"><h2 data-i18n="themesTitle">Thema's</h2></div><div class="kh-theme-grid" id="themeTiles"></div></section>
+    <section class="section"><div class="section-head"><h2 id="featuredOrganizationsTitle" data-i18n="popularOrganizations">Organisations</h2></div><div class="cards wide" id="featuredOrganizations"></div></section>
+  </main>
+  <footer class="site-footer"><p>&copy; 2026 YouthCare Compass Saba</p></footer>
+  <script>window.SEED_BASE='../../';window.ISLAND_CONTEXT='saba';</script><script src="../../assets/app.js"></script><script>initAudienceHome('youth');</script>
+</body>
+</html>

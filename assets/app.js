@@ -1,6 +1,6 @@
 const DATA = {};
 const LANGUAGES = { nl: 'Nederlands', pap: 'Papiamentu', en: 'English', es: 'Espanol' };
-const AUDIENCES = { youth: 'Jongere', professional: 'Professional', parents: 'Ouder/verzorger' };
+const AUDIENCES = { youth: 'Jongeren', professional: 'Professionals', parents: 'Ouder/verzorger' };
 const FALLBACK = 'Wordt nog aangevuld';
 const CONTACT_TO_EMAIL = 'info@kadenahubenil.com';
 const LANGUAGE_FLAGS = {
@@ -24,7 +24,7 @@ const THEME_LABELS = {
     help_support: 'Hulp en ondersteuning',
     school_future: 'School en toekomst',
     health_wellbeing: 'Gezondheid en welzijn',
-    safety_rights: 'Veiligheid en je rechten',
+    safety_rights: 'Veiligheid en rechten',
     family_system: 'Familie en omgang',
     free_time_development: 'Vrije tijd en ontwikkeling',
     housing_stay: 'Wonen en verblijf',
@@ -166,8 +166,8 @@ const UI_TEXT = {
   es: { fallback: 'Por completar', addressMissing: 'La dirección se añadirá', lastCheckedMissing: 'Aún no completado', noResults: 'No se encontraron resultados. Ajusta tu busqueda o filtro.', view: 'Ver', backToOrganizations: 'Volver a organizaciones', infoNotice: 'Esta informacion se esta completando y verificando.', professionalDescription: 'Descripcion profesional', youthDescription: 'Para que puedes acudir?', referral: 'Acceso / derivacion', contactHow: 'Como contactar?', notes: 'Notas / estado de verificacion', contact: 'Contacto', address: 'Direccion', audience: 'Grupo', age: 'Edad', lastChecked: 'Ultima revision', themes: 'Temas', serviceLabels: 'Partes / etiquetas', youth: 'Joven', professional: 'Profesional', parents: 'Padre/madre/cuidador', callLabel: 'Llamar', mailLabel: 'Correo', websiteLabel: 'Sitio web', whatsappLabel: 'WhatsApp', statusChecked: '' }
 };
 Object.assign(UI_TEXT.nl, {
-  navYouth: 'Jongere',
-  navProfessional: 'Professional',
+  navYouth: 'Jongeren',
+  navProfessional: 'Professionals',
   organizationsNav: 'Organisaties',
   feedbackNav: 'Feedback',
   languageLabel: 'Taal',
@@ -245,8 +245,8 @@ Object.assign(UI_TEXT.nl, {
   requiredMark: '*'
 });
 Object.assign(UI_TEXT.pap, {
-  navYouth: 'Hóben',
-  navProfessional: 'Profesional',
+  navYouth: 'Hóbennan',
+  navProfessional: 'Profesionalnan',
   organizationsNav: 'Organisashonnan',
   feedbackNav: 'Feedback',
   languageLabel: 'Idioma',
@@ -324,8 +324,8 @@ Object.assign(UI_TEXT.pap, {
   requiredMark: '*'
 });
 Object.assign(UI_TEXT.en, {
-  navYouth: 'Young person',
-  navProfessional: 'Professional',
+  navYouth: 'Young people',
+  navProfessional: 'Professionals',
   organizationsNav: 'Organisations',
   feedbackNav: 'Feedback',
   languageLabel: 'Language',
@@ -403,8 +403,8 @@ Object.assign(UI_TEXT.en, {
   requiredMark: '*'
 });
 Object.assign(UI_TEXT.es, {
-  navYouth: 'Joven',
-  navProfessional: 'Profesional',
+  navYouth: 'Jóvenes',
+  navProfessional: 'Profesionales',
   organizationsNav: 'Organizaciones',
   feedbackNav: 'Comentarios',
   languageLabel: 'Idioma',
@@ -494,6 +494,17 @@ function assetBase(){
   return window.SEED_BASE || '';
 }
 
+function currentIsland(){
+  const configured = String(window.ISLAND_CONTEXT || document.body?.dataset?.island || '').toLowerCase();
+  if(['bonaire', 'statia', 'saba'].includes(configured)) return configured;
+  const firstSegment = location.pathname.split('/').filter(Boolean)[0]?.toLowerCase();
+  return ['statia', 'saba'].includes(firstSegment) ? firstSegment : 'bonaire';
+}
+
+function islandName(island = currentIsland()){
+  return island === 'statia' ? 'St. Eustatius' : island === 'saba' ? 'Saba' : 'Bonaire';
+}
+
 function dataUrl(path){
   return `${assetBase()}data/${path}`;
 }
@@ -526,7 +537,8 @@ async function fetchJson(path, fallback){
 }
 
 async function fetchPublicSeedData(){
-  const apiUrl = `${assetBase()}api/seeddata.php`;
+  const island = currentIsland();
+  const apiUrl = `${assetBase()}api/seeddata.php?island=${encodeURIComponent(island)}`;
   try {
     const response = await fetch(apiUrl, {
       cache: 'no-store',
@@ -540,11 +552,22 @@ async function fetchPublicSeedData(){
     return seed;
   } catch(error) {
     console.warn('Publieke database-API niet beschikbaar; statische seeddata wordt gebruikt.', error);
-    return fetchJson('kadena_hubentut_seeddata_bonaire_v0_1.json', {
+    const bonaireSeed = await fetchJson('kadena_hubentut_seeddata_bonaire_v0_1.json', {
       themes: [],
       organizations: [],
       metadata: {}
     });
+    if(island === 'bonaire') return bonaireSeed;
+    const islandSeed = await fetchJson('youthcare_compass_saba_statia_v0_1.json', {
+      themes: [],
+      organizations: [],
+      metadata: {}
+    });
+    return {
+      metadata: { ...(bonaireSeed.metadata || {}), ...(islandSeed.metadata || {}), requested_island: island },
+      themes: bonaireSeed.themes || [],
+      organizations: (islandSeed.organizations || []).filter(org => org.island === island)
+    };
   }
 }
 
@@ -663,8 +686,10 @@ function getTranslatedValue(value, lang = currentLanguage(), fallbackLang = 'nl'
   if(typeof value === 'object') {
     if(value[lang] && typeof value[lang] !== 'object') return String(value[lang]);
     if(value[fallbackLang] && typeof value[fallbackLang] !== 'object') return String(value[fallbackLang]);
+    if(currentIsland() !== 'bonaire' && value.en && typeof value.en !== 'object') return String(value.en);
     if(value[lang]?.text) return String(value[lang].text);
     if(value[fallbackLang]?.text) return String(value[fallbackLang].text);
+    if(currentIsland() !== 'bonaire' && value.en?.text) return String(value.en.text);
     if(value.text) return String(value.text);
     if(value.name) return getTranslatedValue(value.name, lang, fallbackLang);
     if(value.value) return getTranslatedValue(value.value, lang, fallbackLang);
@@ -675,6 +700,10 @@ function getTranslatedValue(value, lang = currentLanguage(), fallbackLang = 'nl'
 function getTranslatedField(item, field, lang = currentLanguage(), fallbackLang = 'nl'){
   const translated = getTranslatedValue(item?.translations?.[lang]?.[field], lang, fallbackLang);
   if(translated) return translated;
+  if(currentIsland() !== 'bonaire') {
+    const english = getTranslatedValue(item?.translations?.en?.[field], 'en', 'en');
+    if(english) return english;
+  }
   const fallback = getTranslatedValue(item?.translations?.[fallbackLang]?.[field], fallbackLang, fallbackLang);
   if(fallback) return fallback;
   return getTranslatedValue(item?.[field], lang, fallbackLang);
@@ -919,7 +948,17 @@ function applyStaticTranslations(){
 
 function syncShellText(){
   const audience = document.body.dataset.audience || '';
-  document.querySelectorAll('.brand').forEach(brand => { brand.textContent = 'Kadena Hubenil'; });
+  const island = currentIsland();
+  document.querySelectorAll('.brand').forEach(brand => {
+    if(island === 'bonaire') {
+      brand.textContent = 'Kadena Hubenil';
+      return;
+    }
+    const label = `YouthCare Compass ${island === 'statia' ? 'Statia' : 'Saba'}`;
+    const logo = `assets/brand/web/youthcare-compass-${island}-450.webp`;
+    brand.classList.add('island-brand');
+    brand.innerHTML = `<img src="${escapeHtml(assetUrl(logo))}" alt="${escapeHtml(label)}" />`;
+  });
   ensureProfessionalHeaderActions(audience);
   document.querySelectorAll('header nav [data-audience-link="youth"]').forEach(link => { link.textContent = ui('navYouth'); });
   document.querySelectorAll('header nav [data-audience-link="professional"]').forEach(link => { link.textContent = ui('navProfessional'); });
@@ -942,7 +981,10 @@ function syncShellText(){
     select.setAttribute('aria-label', ui('languageLabel'));
   });
   document.querySelectorAll('.site-footer').forEach(footer => {
-    footer.innerHTML = `<p>${escapeHtml(ui('footerFinal'))}</p>`;
+    const footerText = island === 'bonaire'
+      ? ui('footerFinal')
+      : `© 2026 YouthCare Compass ${island === 'statia' ? 'Statia' : 'Saba'}`;
+    footer.innerHTML = `<p>${escapeHtml(footerText)}</p>`;
   });
 }
 
@@ -1093,7 +1135,8 @@ function renderFeaturedOrganizations(audience){
       .slice(0, 4);
     if(title) title.textContent = rows.length ? ui('recentOrganizations') : ui('popularOrganizations');
   }
-  if(!rows.length) rows = filter_organizations({ audience }).slice(0, 4);
+  rows = rows.filter(org => org.island === currentIsland());
+  if(!rows.length) rows = filter_organizations({ audience, island: currentIsland() }).slice(0, 4);
   holder.innerHTML = rows.map(org => organizationCard(org, audience)).join('') || empty();
 }
 
@@ -1139,7 +1182,7 @@ function bindAudienceSearch(audience){
       closePanel();
       return;
     }
-    const organizations = filter_organizations({ audience, island: 'bonaire', q }).slice(0, 5).map(org => ({
+    const organizations = filter_organizations({ audience, island: currentIsland(), q }).slice(0, 5).map(org => ({
       type: ui('organizationType'),
       label: getOrganizationText(org, audience === 'professional' ? 'name' : 'youth_title') || getOrganizationText(org, 'name'),
       description: getOrganizationText(org, audience === 'professional' ? 'professional_summary' : 'youth_short'),
@@ -1271,7 +1314,7 @@ function renderOrganizationList(audience){
     q: document.getElementById('q')?.value || '',
     theme: document.getElementById('theme')?.value || '',
     audience,
-    island: 'bonaire'
+    island: currentIsland()
   };
   const rows = filter_organizations(filters);
   holder.innerHTML = rows.map(org => organizationCard(org, audience)).join('') || `<div class="empty">${escapeHtml(ui('organizationEmpty'))}</div>`;
@@ -1327,7 +1370,7 @@ function bindOrganizationListSuggestions(audience){
       return;
     }
     const qNorm = normalizeText(q);
-    const organizations = filter_organizations({ audience, island: 'bonaire', q }).slice(0, 5).map(org => ({
+    const organizations = filter_organizations({ audience, island: currentIsland(), q }).slice(0, 5).map(org => ({
       kind: 'organization',
       type: ui('organizationType'),
       label: getOrganizationText(org, audience === 'professional' ? 'name' : 'youth_title') || getOrganizationText(org, 'name'),
@@ -1428,6 +1471,12 @@ function organizationCard(org, audience){
 }
 
 function organizationHref(org, audience){
+  if(currentIsland() !== 'bonaire') {
+    const detail = document.body.dataset.page === 'audience-home'
+      ? 'organisaties/detail.html'
+      : 'detail.html';
+    return `${detail}?slug=${encodeURIComponent(org.slug)}`;
+  }
   const slug = `${encodeURIComponent(org.slug)}/`;
   if(document.body.dataset.page === 'audience-home') return `organisaties/${slug}`;
   return slug;
@@ -2175,7 +2224,7 @@ function initFeedbackForm(kind){
     const select = document.getElementById('organization');
     if(select && select.options.length <= 1) {
       select.options[0].textContent = ui('noSpecificOrganization');
-      filter_organizations({ includeArchived: false, island: 'bonaire' }).forEach(org => select.add(new Option(org.name, org.slug)));
+      filter_organizations({ includeArchived: false, island: currentIsland() }).forEach(org => select.add(new Option(org.name, org.slug)));
     }
     renderFormChoiceGroups(kind);
     const audience = document.getElementById('audience');
@@ -2259,7 +2308,7 @@ async function initServices(){
   await loadSeedData();
   initShell();
   const holder = document.getElementById('results');
-  if(holder) holder.innerHTML = filter_organizations({ audience: 'youth', island: 'bonaire' }).slice(0, 8).map(org => organizationCard(org, 'youth')).join('') || empty();
+  if(holder) holder.innerHTML = filter_organizations({ audience: 'youth', island: currentIsland() }).slice(0, 8).map(org => organizationCard(org, 'youth')).join('') || empty();
 }
 
 async function initEvents(){

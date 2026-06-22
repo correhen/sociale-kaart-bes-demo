@@ -151,11 +151,14 @@ try {
     }
 
     $organization = fetch_one(
-        "SELECT o.*, COALESCE(NULLIF(t.name, ''), o.slug) AS name
+        "SELECT o.*, COALESCE(NULLIF(t.name, ''), NULLIF(t_en.name, ''), o.slug) AS name
         FROM organizations o
         LEFT JOIN organization_translations t
             ON t.organization_id = o.id
             AND t.language_code = 'nl'
+        LEFT JOIN organization_translations t_en
+            ON t_en.organization_id = o.id
+            AND t_en.language_code = 'en'
         WHERE o.id = :id
         LIMIT 1",
         ['id' => $id]

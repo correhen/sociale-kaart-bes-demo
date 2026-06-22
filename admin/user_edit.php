@@ -20,6 +20,8 @@ if (!admin_can_manage_users()) {
 
 $id = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
 $isCreate = $id <= 0;
+$sessionUser = current_admin_user();
+$isCurrentUser = !$isCreate && (int)($sessionUser['id'] ?? 0) === $id;
 $user = null;
 $error = '';
 $errors = [];
@@ -124,10 +126,11 @@ try {
 
         $values = user_posted_values();
         $errors = array_merge($errors, user_validate($values, $isCreate));
-        $current = current_admin_user();
-        $isCurrentUser = !$isCreate && (int)($current['id'] ?? 0) === $id;
         if ($isCurrentUser && ($values['role'] !== 'admin' || $values['user_status'] !== 'active')) {
             $errors[] = 'Je kunt je eigen adminrol of actieve toegang niet uitschakelen.';
+        }
+        if ($isCurrentUser && $values['password'] !== '') {
+            $errors[] = 'Wijzig je eigen wachtwoord via de pagina Wachtwoord wijzigen.';
         }
 
         if (!$errors) {
@@ -212,17 +215,22 @@ try {
                 'user_status' => $values['user_status'],
             ];
             [$changedBefore, $changedAfter] = user_audit_changes($beforeAudit, $afterAudit);
-            if ($isCreate || $changedAfter || $values['password'] !== '') {
-                if ($values['password'] !== '') {
-                    $changedBefore['password'] = null;
-                    $changedAfter['password'] = 'gewijzigd';
-                }
+            if ($isCreate || $changedAfter) {
                 write_audit_log(
                     $isCreate ? 'user.create' : 'user.update',
                     'user',
                     $id,
                     $changedBefore,
                     $changedAfter
+                );
+            }
+            if (!$isCreate && $values['password'] !== '') {
+                write_audit_log(
+                    'user.admin_reset_password',
+                    'user',
+                    $id,
+                    [],
+                    ['password' => 'gewijzigd']
                 );
             }
 
@@ -316,14 +324,21 @@ admin_header($isCreate ? 'Gebruiker aanmaken' : 'Gebruiker bewerken', 'users');
     </label>
   </div>
 
-  <section class="form-section password-section">
-    <div class="section-heading"><div><p class="eyebrow">Beveiliging</p><h2><?= $isCreate ? 'Wachtwoord instellen' : 'Wachtwoord wijzigen' ?></h2></div></div>
-    <label>
-      <?= $isCreate ? 'Nieuw wachtwoord' : 'Nieuw wachtwoord (optioneel)' ?>
-      <input name="password" type="password" minlength="12" autocomplete="new-password" <?= $isCreate ? 'required' : '' ?>>
-      <small>Minimaal 12 tekens. <?= $isCreate ? '' : 'Leeg laten betekent dat het huidige wachtwoord niet wijzigt. ' ?>Het wachtwoord wordt nooit zichtbaar opgeslagen.</small>
-    </label>
-  </section>
+  <?php if ($isCreate || !$isCurrentUser): ?>
+    <section class="form-section password-section">
+      <div class="section-heading"><div><p class="eyebrow">Beveiliging</p><h2><?= $isCreate ? 'Wachtwoord instellen' : 'Wachtwoord resetten' ?></h2></div></div>
+      <label>
+        <?= $isCreate ? 'Nieuw wachtwoord' : 'Nieuw wachtwoord instellen' ?>
+        <input name="password" type="password" minlength="12" autocomplete="new-password" <?= $isCreate ? 'required' : '' ?>>
+        <small><?= $isCreate ? 'Minimaal 12 tekens.' : 'Laat leeg om het bestaande wachtwoord te behouden. Minimaal 12 tekens bij een reset.' ?> Het wachtwoord wordt nooit zichtbaar opgeslagen.</small>
+      </label>
+    </section>
+  <?php else: ?>
+    <section class="form-section password-section">
+      <div class="section-heading"><div><p class="eyebrow">Beveiliging</p><h2>Eigen wachtwoord</h2></div></div>
+      <p>Wijzig je eigen wachtwoord via <a href="change_password.php">Wachtwoord wijzigen</a>. Daar wordt eerst je huidige wachtwoord gecontroleerd.</p>
+    </section>
+  <?php endif; ?>
 
   <?php if (!$isCreate && $user): ?>
     <dl class="detail-list">

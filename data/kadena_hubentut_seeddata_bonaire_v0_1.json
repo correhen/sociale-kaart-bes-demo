@@ -161,7 +161,7 @@
       "color": "#964BA8",
       "labels": {
         "youth": {
-          "nl": "Veiligheid en je rechten",
+          "nl": "Veiligheid en rechten",
           "pap": "Seguridat i hustisia"
         },
         "professional": {
@@ -171,7 +171,7 @@
       },
       "translations": {
         "nl": {
-          "name": "Veiligheid en je rechten",
+          "name": "Veiligheid en rechten",
           "short": "Veiligheid & justitie"
         },
         "pap": {

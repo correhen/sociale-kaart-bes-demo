@@ -284,6 +284,37 @@ def seed_themes(seed: dict[str, Any], lines: list[str]) -> None:
             )
 
 
+def seed_theme_translation_overrides(seed: dict[str, Any], lines: list[str]) -> None:
+    for override in seed.get("theme_translation_overrides", []):
+        external_key = str(override.get("theme_id") or "")
+        if not external_key:
+            continue
+        for language, data in (override.get("translations") or {}).items():
+            if language not in LANGUAGES or not isinstance(data, dict):
+                continue
+            name = str(data.get("name") or "")
+            short = str(data.get("short") or "")
+            status = map_translation_status(data.get("translation_status"), (name, short), language)
+            lines.append(
+                upsert(
+                    "theme_translations",
+                    ("theme_id", "language_code", "name", "short", "translation_status"),
+                    (
+                        theme_id_subquery(external_key),
+                        sql_string(language),
+                        sql_string(name),
+                        sql_string(short),
+                        sql_string(status),
+                    ),
+                    (
+                        "name = VALUES(name)",
+                        "short = VALUES(short)",
+                        "translation_status = VALUES(translation_status)",
+                    ),
+                )
+            )
+
+
 def organization_translation_fields(org: dict[str, Any], language: str) -> tuple[list[str], str]:
     data = org.get("translations", {}).get(language, {}) or {}
     values = [
@@ -324,6 +355,8 @@ def seed_organization_base(org: dict[str, Any], lines: list[str]) -> None:
                 "review_flags_json",
                 "source_format_json",
                 "legacy_sections_json",
+                "last_checked_at",
+                "published_at",
             ),
             (
                 sql_string(external_key),
@@ -336,6 +369,8 @@ def seed_organization_base(org: dict[str, Any], lines: list[str]) -> None:
                 sql_json(org.get("review_flags")),
                 sql_json(org.get("source_format")),
                 sql_json(legacy_sections),
+                sql_string(org.get("last_checked_at")) if org.get("last_checked_at") else "NULL",
+                "CURRENT_TIMESTAMP" if publication_status == "published" else "NULL",
             ),
             (
                 "slug = VALUES(slug)",
@@ -347,6 +382,8 @@ def seed_organization_base(org: dict[str, Any], lines: list[str]) -> None:
                 "review_flags_json = VALUES(review_flags_json)",
                 "source_format_json = VALUES(source_format_json)",
                 "legacy_sections_json = VALUES(legacy_sections_json)",
+                "last_checked_at = VALUES(last_checked_at)",
+                "published_at = COALESCE(organizations.published_at, VALUES(published_at))",
             ),
         )
     )
@@ -576,9 +613,9 @@ def profile_answer_insert(
     )
 
 
-def build_sql(seed: dict[str, Any]) -> tuple[str, dict[str, int]]:
+def build_sql(seed: dict[str, Any], source_name: str = "seed JSON") -> tuple[str, dict[str, int]]:
     lines: list[str] = [
-        "-- Generated from data/kadena_hubentut_seeddata_bonaire_v0_1.json",
+        f"-- Generated from {source_name}",
         "-- Text is copied as-is. No translations or rewrites are generated.",
         "SET NAMES utf8mb4;",
         "SET FOREIGN_KEY_CHECKS = 1;",
@@ -586,6 +623,7 @@ def build_sql(seed: dict[str, Any]) -> tuple[str, dict[str, int]]:
     ]
     seed_reference_tables(lines)
     seed_themes(seed, lines)
+    seed_theme_translation_overrides(seed, lines)
 
     profile_answer_count = 0
     for org in seed.get("organizations", []):
@@ -633,7 +671,7 @@ def main() -> int:
     args = parser.parse_args()
 
     seed = read_json(args.seed)
-    sql, stats = build_sql(seed)
+    sql, stats = build_sql(seed, str(args.seed))
 
     encoded = sql.encode("utf-8")
     encoded.decode("utf-8")
