@@ -13,9 +13,38 @@
     <div data-language-slot></div>
   </header>
   <main>
-    <section class="page-intro island-page-intro"><div><p class="eyebrow">YouthCare Compass Statia</p><h1>Help, information &amp; opportunities on Statia</h1><p>Find organisations that can support you.</p></div></section>
-    <section class="section">
-      <form id="audienceSearch" class="hero-search kh-search" role="search"><label class="sr-only" for="q">Search</label><input id="q" name="q" type="search" placeholder="What do you need help with?" aria-controls="audienceSearchResults" /><button type="submit">Search</button><div id="audienceSearchResults" class="search-suggestions" role="listbox" hidden></div></form>
+    <section class="youth-hero-shell island-youth-hero" aria-labelledby="youthHeroTitle">
+      <img class="youth-accent youth-accent--yellow" src="../../assets/img/accents/kadena-swoosh-yellow.svg" width="360" height="108" alt="" aria-hidden="true" />
+      <img class="youth-accent youth-accent--aqua" src="../../assets/img/accents/kadena-swoosh-aqua.svg" width="320" height="112" alt="" aria-hidden="true" />
+      <img class="youth-accent youth-accent--burst" src="../../assets/img/accents/kadena-burst.svg" width="160" height="160" alt="" aria-hidden="true" />
+      <div class="youth-hero-card">
+        <div class="youth-hero-copy">
+          <span class="island-hero-brand">YouthCare Compass Statia</span>
+          <h1 id="youthHeroTitle">Help, information &amp; opportunities on Statia</h1>
+          <p>Everything you need, in one place.</p>
+          <form id="audienceSearch" class="hero-search kh-search youth-live-search" role="search">
+            <label class="sr-only" for="q">Search</label>
+            <input id="q" name="q" type="search" placeholder="What do you need help with?" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="audienceSearchResults" />
+            <button type="submit">Search</button>
+            <div id="audienceSearchResults" class="search-suggestions" role="listbox" hidden></div>
+          </form>
+          <div class="popular-themes" aria-label="Popular topics">
+            <span>Popular:</span>
+            <a href="organisaties/?theme=hulp-ondersteuning" data-theme-chip="help_support">Help and support</a>
+            <a href="organisaties/?theme=school-toekomst" data-theme-chip="school_future">School and future</a>
+            <a href="organisaties/?theme=gezondheid-welzijn" data-theme-chip="health_wellbeing">Health and wellbeing</a>
+            <a href="organisaties/?theme=directe-hulp" data-theme-chip="direct_help">Direct help</a>
+          </div>
+          <div class="hero-actions"><a class="button primary" href="organisaties/">All organisations</a></div>
+        </div>
+        <div class="youth-hero-media" aria-hidden="true">
+          <picture>
+            <source media="(max-width: 680px)" srcset="../../assets/img/web/jongeren-hero-600.webp" />
+            <source media="(max-width: 980px)" srcset="../../assets/img/web/jongeren-hero-900.webp" />
+            <img src="../../assets/img/web/jongeren-hero-1400.webp" width="1400" height="1400" loading="eager" fetchpriority="high" alt="" />
+          </picture>
+        </div>
+      </div>
     </section>
     <section class="section"><div class="section-head"><h2 data-i18n="themesTitle">Topics</h2></div><div class="kh-theme-grid" id="themeTiles"></div></section>
     <section class="section"><div class="section-head"><h2 id="featuredOrganizationsTitle" data-i18n="popularOrganizations">Organisations</h2></div><div class="cards wide" id="featuredOrganizations"></div></section>
