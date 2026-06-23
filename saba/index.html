@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -10,21 +10,29 @@
   <header class="site-header kh-header">
     <a class="brand island-brand" href="./"><img src="../assets/brand/web/youthcare-compass-saba-450.webp" alt="YouthCare Compass Saba" /></a>
     <nav aria-label="Main navigation">
-      <a href="jongeren/" data-audience-link="youth">Jongeren</a>
+      <a href="jongeren/" data-audience-link="youth">Youth</a>
       <a href="professionals/" data-audience-link="professional">Professionals</a>
-      <a href="jongeren/organisaties/" data-i18n="organizationsNav">Organisaties</a>
+      <a href="jongeren/organisaties/" data-i18n="organizationsNav">Organisations</a>
     </nav>
     <div data-language-slot></div>
   </header>
   <main>
-    <section class="island-landing">
-      <img class="island-landing__logo" src="../assets/brand/web/youthcare-compass-saba-900.webp" alt="YouthCare Compass Saba" />
-      <p class="eyebrow">Saba</p>
-      <h1>Find youth support on Saba</h1>
-      <p>Choose the information that fits you.</p>
-      <div class="island-choice-grid">
-        <a class="island-choice-card" href="jongeren/" data-audience-link="youth"><strong>Jongeren</strong><span>Help, information and opportunities for young people.</span></a>
-        <a class="island-choice-card" href="professionals/" data-audience-link="professional"><strong>Professionals</strong><span>Organisations, contacts and referral information.</span></a>
+    <section class="choice-hero island-choice-hero" aria-labelledby="islandHomeTitle">
+      <img class="home-accent home-accent--yellow" src="../assets/img/accents/kadena-swoosh-yellow.svg" width="360" height="108" alt="" aria-hidden="true" />
+      <img class="home-accent home-accent--aqua" src="../assets/img/accents/kadena-swoosh-aqua.svg" width="320" height="112" alt="" aria-hidden="true" />
+      <div class="island-home-heading">
+        <img src="../assets/brand/web/youthcare-compass-saba-450.webp" alt="YouthCare Compass Saba" />
+        <div><h1 id="islandHomeTitle">Find youth support on Saba</h1><p>Choose the information that fits your situation.</p></div>
+      </div>
+      <div class="choice-cards">
+        <a class="choice-entry landing-card landing-card--youth island-entry" href="jongeren/" data-audience-link="youth">
+          <div class="landing-card__content"><span>FOR YOUNG PEOPLE</span><strong>Youth</strong><small>Help, information and opportunities for young people.</small><b class="landing-card__cta">Continue <span aria-hidden="true">&rarr;</span></b></div>
+          <div class="landing-card__media"><img class="landing-card__image" src="../assets/img/web/landing-jongeren-900.webp" width="900" height="1125" alt="" /></div>
+        </a>
+        <a class="choice-entry landing-card landing-card--professional island-entry" href="professionals/" data-audience-link="professional">
+          <div class="landing-card__content"><span>WORKING WITH YOUNG PEOPLE?</span><strong>Professionals</strong><small>Organisations, contacts and referral information.</small><b class="landing-card__cta">Continue <span aria-hidden="true">&rarr;</span></b></div>
+          <div class="landing-card__media"><img class="landing-card__image" src="../assets/img/web/landing-professionals-700.webp" width="700" height="875" alt="" /></div>
+        </a>
       </div>
     </section>
   </main>

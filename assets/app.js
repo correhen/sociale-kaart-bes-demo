@@ -71,11 +71,11 @@ const PROFILE_I18N = {
     },
     fields: [
       { key: 'who_we_are', labels: { nl: 'Wie zijn wij?', pap: 'Ken nos ta?', en: 'Who are we?', es: '¿Quiénes somos?' } },
-      { key: 'who_for', labels: { nl: 'Voor wie zijn wij?', pap: 'Pa ken nos ta?', en: 'Who are we here for?', es: '¿Para quiénes estamos?' } },
+      { key: 'who_for', labels: { nl: 'Voor wie zijn wij?', pap: 'Pa ken nos ta?', en: 'Who are we for?', es: '¿Para quiénes estamos?' } },
       { key: 'what_help', labels: { nl: 'Waarmee kunnen wij helpen?', pap: 'Ku kiko nos por yuda?', en: 'What can we help with?', es: '¿En qué podemos ayudar?' } },
-      { key: 'how_to_access', labels: { nl: 'Hoe kom je bij ons terecht?', pap: 'Kon bo por yega na nos?', en: 'How can you reach us?', es: '¿Cómo puedes llegar a nosotros?' } },
+      { key: 'how_to_access', labels: { nl: 'Hoe kom je bij ons terecht?', pap: 'Kon bo por yega na nos?', en: 'How do you get help?', es: '¿Cómo puedes llegar a nosotros?' } },
       { key: 'how_we_help', labels: { nl: 'Hoe helpen wij?', pap: 'Kon nos ta yuda bo?', en: 'How do we help?', es: '¿Cómo te ayudamos?' } },
-      { key: 'duration', labels: { nl: 'Hoelang duurt de hulp?', pap: 'Kuantu tempu e yudansa ta dura?', en: 'How long does the support last?', es: '¿Cuánto dura la ayuda?' } },
+      { key: 'duration', labels: { nl: 'Hoelang duurt de hulp?', pap: 'Kuantu tempu e yudansa ta dura?', en: 'How long does support take?', es: '¿Cuánto dura la ayuda?' } },
       { key: 'partners', labels: { nl: 'Met wie werken wij samen?', pap: 'Ku ken nos ta traha huntu?', en: 'Who do we work with?', es: '¿Con quiénes trabajamos?' } },
       { key: 'contact', labels: { nl: 'Contact', pap: 'Kontakto', en: 'Contact', es: 'Contacto' } }
     ]
@@ -162,7 +162,7 @@ const SEARCH_SYNONYMS = {
 const UI_TEXT = {
   nl: { fallback: 'Wordt nog aangevuld', addressMissing: 'Adres wordt nog aangevuld', lastCheckedMissing: 'Nog niet ingevuld', noResults: 'Geen resultaten gevonden. Pas je zoekterm of filter aan.', view: 'Bekijk', backToOrganizations: 'Terug naar organisaties', infoNotice: 'Deze informatie wordt nog aangevuld en gecontroleerd.', professionalDescription: 'Professionele omschrijving', youthDescription: 'Waar kun je voor terecht?', referral: 'Aanmelding / verwijzing', contactHow: 'Hoe neem je contact op?', notes: 'Opmerkingen / controle-status', contact: 'Contact', address: 'Adres', audience: 'Doelgroep', age: 'Leeftijd', lastChecked: 'Laatst gecontroleerd', themes: "Thema's", serviceLabels: 'Onderdelen / labels', youth: 'Jongere', professional: 'Professional', parents: 'Ouder/verzorger', callLabel: 'Bel', mailLabel: 'Mail', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: '' },
   pap: { fallback: 'Ainda pa yena', addressMissing: 'Adres ta wordu yena despues', lastCheckedMissing: 'Ainda no yena', noResults: 'No a haya resultado. Kambia bo buskeda of filtro.', view: 'Wak', backToOrganizations: 'Bek na organisashonnan', infoNotice: 'E informashon aki ta wordu yena i kontrola.', professionalDescription: 'Deskripshon profesional', youthDescription: 'Pa kiko bo por bai aki?', referral: 'Registro / referensia', contactHow: 'Kon bo por tuma kontakto?', notes: 'Nota / status di kontrol', contact: 'Kontakto', address: 'Adres', audience: 'Grupo', age: 'Edat', lastChecked: 'Ultimo kontrol', themes: 'Temanan', serviceLabels: 'Partinan / labelnan', youth: 'Hoben', professional: 'Profesional', parents: 'Mayor/kuidado', callLabel: 'Yama', mailLabel: 'Mail', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: '' },
-  en: { fallback: 'To be completed', addressMissing: 'Address will be added', lastCheckedMissing: 'Not filled in yet', noResults: 'No results found. Adjust your search or filter.', view: 'View', backToOrganizations: 'Back to organizations', infoNotice: 'This information is being completed and checked.', professionalDescription: 'Professional description', youthDescription: 'What can you go here for?', referral: 'Access / referral', contactHow: 'How do you get in touch?', notes: 'Notes / review status', contact: 'Contact', address: 'Address', audience: 'Audience', age: 'Age', lastChecked: 'Last checked', themes: 'Themes', serviceLabels: 'Parts / labels', youth: 'Young person', professional: 'Professional', parents: 'Parent/carer', callLabel: 'Call', mailLabel: 'Email', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: '' },
+  en: { fallback: 'To be completed', addressMissing: 'Address will be added', lastCheckedMissing: 'Not filled in yet', noResults: 'No results found. Adjust your search or filter.', view: 'View', backToOrganizations: 'Back to organisations', infoNotice: 'This information is being completed and checked.', professionalDescription: 'Professional description', youthDescription: 'What can you go here for?', referral: 'Access / referral', contactHow: 'How do you get in touch?', notes: 'Notes / review status', contact: 'Contact', address: 'Address', audience: 'Audience', age: 'Age', lastChecked: 'Last checked', themes: 'Topics', serviceLabels: 'Parts / labels', youth: 'Young person', professional: 'Professional', parents: 'Parent/carer', callLabel: 'Call', mailLabel: 'Email', websiteLabel: 'Website', whatsappLabel: 'WhatsApp', statusChecked: '' },
   es: { fallback: 'Por completar', addressMissing: 'La dirección se añadirá', lastCheckedMissing: 'Aún no completado', noResults: 'No se encontraron resultados. Ajusta tu busqueda o filtro.', view: 'Ver', backToOrganizations: 'Volver a organizaciones', infoNotice: 'Esta informacion se esta completando y verificando.', professionalDescription: 'Descripcion profesional', youthDescription: 'Para que puedes acudir?', referral: 'Acceso / derivacion', contactHow: 'Como contactar?', notes: 'Notas / estado de verificacion', contact: 'Contacto', address: 'Direccion', audience: 'Grupo', age: 'Edad', lastChecked: 'Ultima revision', themes: 'Temas', serviceLabels: 'Partes / etiquetas', youth: 'Joven', professional: 'Profesional', parents: 'Padre/madre/cuidador', callLabel: 'Llamar', mailLabel: 'Correo', websiteLabel: 'Sitio web', whatsappLabel: 'WhatsApp', statusChecked: '' }
 };
 Object.assign(UI_TEXT.nl, {
@@ -222,6 +222,7 @@ Object.assign(UI_TEXT.nl, {
   themesTitle: "Thema's",
   recentOrganizations: 'Laatst bekeken organisaties',
   popularOrganizations: 'Populaire organisaties',
+  printDetail: 'Print of bewaar als PDF',
   signupTitle: 'Nieuwe organisatie of aanbod doorgeven',
   signupIntro: 'Ken je een organisatie of aanbod dat jongeren op Bonaire kan helpen? Geef het hier door.',
   orgNameLabel: 'Organisatienaam',
@@ -301,6 +302,7 @@ Object.assign(UI_TEXT.pap, {
   themesTitle: 'Temanan',
   recentOrganizations: 'Organisashonnan wak ultimo',
   popularOrganizations: 'Organisashonnan popular',
+  printDetail: 'Print òf warda komo PDF',
   signupTitle: 'Duna un organisashon òf oferta nobo',
   signupIntro: 'Bo sa di un organisashon òf oferta ku por yuda hóbennan na Boneiru? Duna e informashon aki.',
   orgNameLabel: 'Nòmber di organisashon',
@@ -324,7 +326,7 @@ Object.assign(UI_TEXT.pap, {
   requiredMark: '*'
 });
 Object.assign(UI_TEXT.en, {
-  navYouth: 'Young people',
+  navYouth: 'Youth',
   navProfessional: 'Professionals',
   organizationsNav: 'Organisations',
   feedbackNav: 'Feedback',
@@ -342,10 +344,10 @@ Object.assign(UI_TEXT.en, {
   homeProCta: 'For professionals',
   professionalHeroTitle: 'For professionals',
   professionalHeroSubtitle: 'Find organisations, contact details and referral information for young people and families on Bonaire.',
-  professionalSearchPlaceholder: 'Search organisation, theme or referral route',
+  professionalSearchPlaceholder: 'Search organisation, topic or referral route',
   professionalOrganizationsTitle: 'Organisation overview',
   professionalOrganizationsSubtitle: 'Search organisations, themes and referral information.',
-  professionalListSearchPlaceholder: 'Search by name, audience, theme or referral route',
+  professionalListSearchPlaceholder: 'Search by name, audience, topic or referral route',
   organizationsOverview: 'Organisation overview',
   registerOrganization: 'Register organisation',
   giveFeedback: 'Give feedback',
@@ -363,23 +365,24 @@ Object.assign(UI_TEXT.en, {
   popularLabel: 'Popular:',
   allOrganizations: 'All organizations',
   organizationSearchPlaceholder: 'What do you need help with?',
-  allThemes: 'All themes',
+  allThemes: 'All topics',
   reset: 'Reset',
   youthOrganizationsTitle: 'Organisations here for you',
   youthOrganizationsSubtitle: 'Search by topic, name or situation. Find the right place faster.',
   organizationType: 'Organisation',
-  themeType: 'Theme',
-  organizationEmpty: 'No results found. Try another word or theme.',
+  themeType: 'Topic',
+  organizationEmpty: 'No results found. Try another word or topic.',
   callLabel: 'Call',
   emergencyLabel: 'Emergency',
   mailLabel: 'Email',
   websiteLabel: 'Website',
   statusChecked: '',
   goodToKnow: 'Good to know',
-  forWhom: 'Also useful for',
-  themesTitle: 'Themes',
-  recentOrganizations: 'Recently viewed organizations',
-  popularOrganizations: 'Popular organizations',
+  forWhom: 'Also relevant for',
+  themesTitle: 'Topics',
+  recentOrganizations: 'Recently viewed organisations',
+  popularOrganizations: 'Featured organisations',
+  printDetail: 'Print or save as PDF',
   signupTitle: 'Submit a new organisation or service',
   signupIntro: 'Know an organisation or service that can help young people on Bonaire? Share it here.',
   orgNameLabel: 'Organisation name',
@@ -459,6 +462,7 @@ Object.assign(UI_TEXT.es, {
   themesTitle: 'Temas',
   recentOrganizations: 'Organizaciones vistas recientemente',
   popularOrganizations: 'Organizaciones populares',
+  printDetail: 'Imprimir o guardar como PDF',
   signupTitle: 'Enviar una nueva organización o servicio',
   signupIntro: '¿Conoces una organización o servicio que pueda ayudar a jóvenes en Bonaire? Compártelo aquí.',
   orgNameLabel: 'Nombre de la organización',
@@ -633,13 +637,17 @@ function get_organization_by_slug(slug){
 
 function currentLanguage(){
   const urlLang = new URLSearchParams(location.search).get('lang');
-  const stored = safeGet(STORAGE.language);
-  return LANGUAGES[urlLang] ? urlLang : (LANGUAGES[stored] ? stored : 'nl');
+  if(LANGUAGES[urlLang]) return urlLang;
+  const island = currentIsland();
+  const storageKey = island === 'bonaire' ? STORAGE.language : `${STORAGE.language}_${island}`;
+  const stored = safeGet(storageKey);
+  return LANGUAGES[stored] ? stored : (island === 'bonaire' ? 'nl' : 'en');
 }
 
 function setLanguage(lang){
   if(!LANGUAGES[lang]) return;
-  safeSet(STORAGE.language, lang);
+  const island = currentIsland();
+  safeSet(island === 'bonaire' ? STORAGE.language : `${STORAGE.language}_${island}`, lang);
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-language-select]').forEach(select => { select.value = lang; });
   updateLanguageFlag();
@@ -1101,10 +1109,19 @@ function renderAudienceHome(audience){
   bindAudienceSearch(audience);
 }
 
+function availableThemes(audience){
+  if(currentIsland() === 'bonaire') return get_themes();
+  const usedThemes = new Set(
+    filter_organizations({ audience, island: currentIsland() })
+      .flatMap(org => org.themes)
+  );
+  return get_themes().filter(theme => usedThemes.has(theme.id) || usedThemes.has(theme.slug));
+}
+
 function renderThemeTiles(audience){
   const holder = document.getElementById('themeTiles');
   if(!holder) return;
-  holder.innerHTML = get_themes().map(theme => {
+  holder.innerHTML = availableThemes(audience).map(theme => {
     const name = getAudienceThemeText(theme, audience);
     const short = get_translated_field(theme, 'short');
     const href = `${audience === 'professional' ? 'organisaties/' : 'organisaties/'}?theme=${encodeURIComponent(theme.slug)}`;
@@ -1190,7 +1207,7 @@ function bindAudienceSearch(audience){
       href: organizationHref(org, audience)
     }));
     const qNorm = normalizeText(q);
-    const themes = get_themes()
+    const themes = availableThemes(audience)
       .filter(theme => normalizeText(`${getAudienceThemeText(theme, audience)} ${themeShort(theme.id)} ${theme.slug}`).includes(qNorm))
       .slice(0, 3)
       .map(theme => ({
@@ -1272,7 +1289,7 @@ function populateKadenaFilters(force = false){
     const selectedValue = theme.value;
     theme.innerHTML = '';
     theme.add(new Option(ui('allThemes'), ''));
-    get_themes().forEach(item => theme.add(new Option(getAudienceThemeText(item, audience) || fallbackText(), item.slug)));
+    availableThemes(audience).forEach(item => theme.add(new Option(getAudienceThemeText(item, audience) || fallbackText(), item.slug)));
     theme.value = selectedValue;
   }
 }
@@ -1378,7 +1395,7 @@ function bindOrganizationListSuggestions(audience){
       chip: org.themes[0] ? audienceThemeName(org.themes[0], audience) : '',
       href: organizationHref(org, audience)
     }));
-    const themes = get_themes()
+    const themes = availableThemes(audience)
       .filter(theme => normalizeText(`${getAudienceThemeText(theme, audience)} ${themeShort(theme.id)} ${theme.slug} ${(SEARCH_SYNONYMS.themes[theme.id] || []).join(' ')}`).includes(qNorm))
       .slice(0, 4)
       .map(theme => ({
@@ -1697,7 +1714,7 @@ function legacyDetailAccordionSections(org, audience){
   return `<section class="detail-expanded-info" aria-label="${escapeHtml(title)}">
     <div class="detail-expanded-info__header">
       <h2>${escapeHtml(title)}</h2>
-      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>Print of bewaar als PDF</span></button>
+      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>${escapeHtml(ui('printDetail'))}</span></button>
     </div>
     <div class="detail-accordion-list">${sections.join('')}</div>
   </section>`;
@@ -1729,7 +1746,7 @@ function youthProfileAccordionSections(org){
   return `<section class="detail-expanded-info" aria-label="${escapeHtml(title)}">
     <div class="detail-expanded-info__header">
       <h2>${escapeHtml(title)}</h2>
-      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>Print of bewaar als PDF</span></button>
+      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>${escapeHtml(ui('printDetail'))}</span></button>
     </div>
     <div class="detail-accordion-list">${sections.join('')}</div>
   </section>`;
@@ -1767,7 +1784,7 @@ function professionalProfileAccordionSections(org){
   return `<section class="detail-expanded-info" aria-label="${escapeHtml(title)}">
     <div class="detail-expanded-info__header">
       <h2>${escapeHtml(title)}</h2>
-      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>Print of bewaar als PDF</span></button>
+      <button class="print-action" type="button" data-print-detail>${iconSvg('print')}<span>${escapeHtml(ui('printDetail'))}</span></button>
     </div>
     <div class="detail-accordion-list">${sections.join('')}</div>
   </section>`;

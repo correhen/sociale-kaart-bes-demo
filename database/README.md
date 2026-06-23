@@ -138,6 +138,13 @@ python tools/import_seed_to_sql.py \
 
 Importeer daarna `database/saba_statia_import.sql` in dezelfde database. Het bestand gebruikt `INSERT ... ON DUPLICATE KEY UPDATE` en kan veilig opnieuw worden uitgevoerd. Alle negen organisaties krijgen `source_status = submitted`, publicatiestatus `published` en `last_checked_at = 2026-06-22`.
 
+Importeer vervolgens `database/saba_statia_direct_help_patch.sql`. Deze kleine idempotente patch voegt uitsluitend eiland-specifieke records toe voor:
+
+- Guana Chat 918 op Statia en Saba;
+- KPCN / Police emergency 911 op Statia en Saba.
+
+De patch wijzigt of verwijdert geen Bonaire-records en overschrijft geen andere Saba/Statia-organisaties.
+
 Controle:
 
 ```sql
