@@ -198,7 +198,7 @@ Object.assign(UI_TEXT.nl, {
   highlightLocalText: 'Organisaties op Bonaire die je helpen.',
   highlightCalmTitle: 'Rustig zoeken',
   highlightCalmText: 'Kijk eerst wat bij jouw situatie past.',
-  youthHeroTitle: 'Hulp, informatie & kansen op Bonaire',
+  youthHeroTitle: 'Hulp en informatie op Bonaire',
   youthHeroSubtitle: 'Alles wat je nodig hebt, op één plek.',
   searchPlaceholder: 'Waar zoek je hulp bij?',
   searchButton: 'Zoek',
@@ -358,7 +358,7 @@ Object.assign(UI_TEXT.en, {
   highlightLocalText: 'Organizations on Bonaire that can help.',
   highlightCalmTitle: 'Search calmly',
   highlightCalmText: 'First see what fits your situation.',
-  youthHeroTitle: 'Help, information & opportunities on Bonaire',
+  youthHeroTitle: 'Help and information on Bonaire',
   youthHeroSubtitle: 'Everything you need, in one place.',
   searchPlaceholder: 'What do you need help with?',
   searchButton: 'Search',
@@ -828,6 +828,16 @@ function themeVisual(idOrSlug){
   return THEME_VISUALS[id] || { color: theme?.color || '#03A8AF', icon: '' };
 }
 
+function sortThemesForDisplay(themes){
+  return themes.slice().sort((a, b) => {
+    const aId = a?.id || a?.slug || '';
+    const bId = b?.id || b?.slug || '';
+    if(aId === 'direct_help' && bId !== 'direct_help') return -1;
+    if(bId === 'direct_help' && aId !== 'direct_help') return 1;
+    return (a.order || 0) - (b.order || 0);
+  });
+}
+
 function themeIconMarkup(themeId, className, label = ''){
   const visual = themeVisual(themeId);
   if(!visual.icon || !visual.icon.includes('assets/theme-icons/web/') || !visual.icon.endsWith('.webp')) return '';
@@ -1110,12 +1120,12 @@ function renderAudienceHome(audience){
 }
 
 function availableThemes(audience){
-  if(currentIsland() === 'bonaire') return get_themes();
+  if(currentIsland() === 'bonaire') return sortThemesForDisplay(get_themes());
   const usedThemes = new Set(
     filter_organizations({ audience, island: currentIsland() })
       .flatMap(org => org.themes)
   );
-  return get_themes().filter(theme => usedThemes.has(theme.id) || usedThemes.has(theme.slug));
+  return sortThemesForDisplay(get_themes().filter(theme => usedThemes.has(theme.id) || usedThemes.has(theme.slug)));
 }
 
 function renderThemeTiles(audience){
@@ -1123,11 +1133,10 @@ function renderThemeTiles(audience){
   if(!holder) return;
   holder.innerHTML = availableThemes(audience).map(theme => {
     const name = getAudienceThemeText(theme, audience);
-    const short = get_translated_field(theme, 'short');
     const href = `${audience === 'professional' ? 'organisaties/' : 'organisaties/'}?theme=${encodeURIComponent(theme.slug)}`;
     const visual = themeVisual(theme.id);
     const icon = visual.icon ? `<img class="theme-icon" src="${escapeHtml(assetUrl(visual.icon))}" width="76" height="76" loading="lazy" alt="" aria-hidden="true" />` : '<span class="theme-mark" aria-hidden="true"></span>';
-    return `<a class="kh-theme-tile theme-${escapeHtml(theme.id || '')}" href="${href}" style="--tile-color:${escapeHtml(visual.color)}">${icon}<strong>${escapeHtml(name || fallbackText())}</strong>${short ? `<span>${escapeHtml(short)}</span>` : ''}</a>`;
+    return `<a class="kh-theme-tile theme-${escapeHtml(theme.id || '')}" href="${href}" style="--tile-color:${escapeHtml(visual.color)}">${icon}<strong>${escapeHtml(name || fallbackText())}</strong></a>`;
   }).join('');
 }
 

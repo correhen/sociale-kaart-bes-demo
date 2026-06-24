@@ -209,7 +209,7 @@
       "visibility": { "default": true },
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["health_wellbeing"],
-      "secondary_theme_ids": [],
+      "secondary_theme_ids": ["help_support"],
       "search_keywords_nl": ["MHC", "Mental Health Caribbean", "mental health", "Statia"],
       "contact": {
         "phone": "+599 318 0099 / +599 319 5677",
@@ -499,7 +499,7 @@
       "visibility": { "default": true },
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["health_wellbeing"],
-      "secondary_theme_ids": [],
+      "secondary_theme_ids": ["help_support"],
       "search_keywords_nl": ["MHC", "Mental Health Caribbean", "mental health", "Saba"],
       "contact": {
         "phone": "+599 416 0196",

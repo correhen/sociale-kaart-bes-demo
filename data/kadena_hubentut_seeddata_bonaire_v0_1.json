@@ -1145,7 +1145,7 @@
     },
     {
       "id": "org_eoz",
-      "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+      "name": "Expertise Onderwijs en Zorg (EOZ)",
       "slug": "expertisecenter-onderwijs-zorg-bonaire",
       "island": "bonaire",
       "status": "active",
@@ -1163,7 +1163,7 @@
       "secondary_theme_ids": [],
       "search_keywords_nl": [
         "EOZ",
-        "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+        "Expertise Onderwijs en Zorg (EOZ)",
         "KES",
         "SEM klas",
         "expertisecenter onderwijs zorg bonaire"
@@ -1178,7 +1178,7 @@
       },
       "translations": {
         "nl": {
-          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "name": "Expertise Onderwijs en Zorg (EOZ)",
           "youth_title": "EOZ",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "youth_where_can_you_go": "Als school moeilijk gaat of je extra ondersteuning nodig hebt, kan Expertisecenter Onderwijs Zorg Bonaire (EOZ) samen met school meedenken.",
@@ -1190,21 +1190,21 @@
           "age_range": "Leerlingen in kinderopvang, basisonderwijs, voortgezet onderwijs, mbo en Forma"
         },
         "pap": {
-          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "name": "Expertise Onderwijs en Zorg (EOZ)",
           "youth_title": "EOZ",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "professional_summary": "EOZ ondersteunt leerlingen en studenten die door leer-, sociaal-emotionele of gedragsproblemen dreigen vast te lopen in het onderwijs.",
           "translation_status": "needs_papiamentu_review"
         },
         "en": {
-          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "name": "Expertise Onderwijs en Zorg (EOZ)",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "professional_summary": "EOZ ondersteunt leerlingen en studenten die door leer-, sociaal-emotionele of gedragsproblemen dreigen vast te lopen in het onderwijs.",
           "translation_status": "ai_draft",
           "youth_title": "EOZ"
         },
         "es": {
-          "name": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+          "name": "Expertise Onderwijs en Zorg (EOZ)",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "professional_summary": "EOZ ondersteunt leerlingen en studenten die door leer-, sociaal-emotionele of gedragsproblemen dreigen vast te lopen in het onderwijs.",
           "translation_status": "ai_draft",
@@ -1435,7 +1435,7 @@
       "professional_profile": {
         "general": {
           "organisation_name": {
-            "nl": "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+            "nl": "Expertise Onderwijs en Zorg (EOZ)",
             "pap": "",
             "en": "",
             "es": ""
@@ -2144,7 +2144,9 @@
       "primary_theme_ids": [
         "health_wellbeing"
       ],
-      "secondary_theme_ids": [],
+      "secondary_theme_ids": [
+        "help_support"
+      ],
       "search_keywords_nl": [
         "Hi-5",
         "Kind & Jeugd",
@@ -4850,8 +4852,7 @@
         "professional"
       ],
       "primary_theme_ids": [
-        "housing_stay",
-        "help_support"
+        "housing_stay"
       ],
       "secondary_theme_ids": [],
       "search_keywords_nl": [
@@ -6035,8 +6036,7 @@
         "professional"
       ],
       "primary_theme_ids": [
-        "housing_stay",
-        "help_support"
+        "housing_stay"
       ],
       "secondary_theme_ids": [],
       "access_label": {
