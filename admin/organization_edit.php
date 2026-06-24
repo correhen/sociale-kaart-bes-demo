@@ -13,6 +13,7 @@ $error = '';
 $errors = [];
 $organization = null;
 $contact = null;
+$islands = [];
 $values = [
     'name' => '',
     'professional_summary' => '',
@@ -169,6 +170,14 @@ try {
     }
 
     $contact = fetch_one('SELECT * FROM organization_contacts WHERE organization_id = :id', ['id' => $id]);
+    $islands = fetch_all(
+        "SELECT i.code, i.name, oi.is_primary
+        FROM organization_islands oi
+        INNER JOIN islands i ON i.id = oi.island_id
+        WHERE oi.organization_id = :id
+        ORDER BY oi.is_primary DESC, i.sort_order ASC",
+        ['id' => $id]
+    );
     $translation = fetch_one(
         "SELECT *
         FROM organization_translations
@@ -322,6 +331,8 @@ try {
 }
 
 admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Organisatie bewerken', 'organizations');
+$publicYouthUrl = $organization ? admin_public_organization_url($organization, 'youth', $islands) : null;
+$publicProfessionalUrl = $organization ? admin_public_organization_url($organization, 'professional', $islands) : null;
 ?>
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
@@ -347,6 +358,15 @@ admin_header($organization ? 'Bewerken: ' . (string)$organization['name'] : 'Org
     <dt>Slug</dt>
     <dd><code><?= h($organization['slug']) ?></code></dd>
   </dl>
+  <div class="form-actions">
+    <a class="button" href="organization.php?id=<?= h((string)$id) ?>">Terug naar organisatie</a>
+    <?php if ($publicYouthUrl): ?>
+      <a class="button" href="<?= h($publicYouthUrl) ?>">Bekijk jongerenpagina</a>
+    <?php endif; ?>
+    <?php if ($publicProfessionalUrl): ?>
+      <a class="button" href="<?= h($publicProfessionalUrl) ?>">Bekijk professionalpagina</a>
+    <?php endif; ?>
+  </div>
 </section>
 
 <?php if ($errors): ?>

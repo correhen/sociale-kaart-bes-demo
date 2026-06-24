@@ -110,3 +110,37 @@ function readable_datetime(?string $value): string
 
     return h($parsed->format('d-m-Y H:i'));
 }
+
+function admin_public_organization_url(array $organization, string $audience, array $islands): ?string
+{
+    if (
+        !in_array($audience, ['youth', 'professional'], true)
+        || (string)($organization['status'] ?? '') !== 'published'
+        || (int)($organization['visibility_public'] ?? 0) !== 1
+    ) {
+        return null;
+    }
+
+    $slug = trim((string)($organization['slug'] ?? ''));
+    if ($slug === '' || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
+        return null;
+    }
+
+    $islandCode = null;
+    foreach ($islands as $island) {
+        $code = (string)($island['code'] ?? '');
+        if ((int)($island['is_primary'] ?? 0) === 1 && in_array($code, ['bonaire', 'saba', 'statia'], true)) {
+            $islandCode = $code;
+            break;
+        }
+        if ($islandCode === null && in_array($code, ['bonaire', 'saba', 'statia'], true)) {
+            $islandCode = $code;
+        }
+    }
+    $islandCode ??= 'bonaire';
+
+    $audiencePath = $audience === 'professional' ? 'professionals' : 'jongeren';
+    $prefix = $islandCode === 'bonaire' ? '' : $islandCode . '/';
+
+    return '../' . $prefix . $audiencePath . '/organisaties/' . rawurlencode($slug) . '/';
+}

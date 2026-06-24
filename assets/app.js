@@ -1855,6 +1855,21 @@ function addSectionAdminIcon(section, label, href){
 }
 
 function profileFieldConfig(audience, groupKey, fieldKey){
+  if(groupKey === '__translation') {
+    if(audience === 'youth' && fieldKey === 'youth_short') {
+      return {
+        key: 'youth_short',
+        labels: { nl: 'Korte tekst jongerenpagina', pap: 'Teksto kòrtiku página di hóbennan', en: 'Short youth page intro', es: 'Texto breve de la página juvenil' }
+      };
+    }
+    if(audience === 'professional' && fieldKey === 'professional_summary') {
+      return {
+        key: 'professional_summary',
+        labels: { nl: 'Korte tekst professionalpagina', pap: 'Teksto kòrtiku página di profesionalnan', en: 'Short professional page intro', es: 'Texto breve de la página profesional' }
+      };
+    }
+    return null;
+  }
   if(audience === 'youth') {
     return PROFILE_I18N.youth.fields.find(field => field.key === fieldKey) || null;
   }
@@ -1863,11 +1878,23 @@ function profileFieldConfig(audience, groupKey, fieldKey){
 }
 
 function profileValue(org, audience, groupKey, fieldKey){
+  if(groupKey === '__translation') {
+    return Object.fromEntries(Object.entries(org.translations || {}).map(([language, translation]) => [
+      language,
+      translation?.[fieldKey] ?? ''
+    ]));
+  }
   if(audience === 'youth') return org.youth_profile?.[fieldKey];
   return org.professional_profile?.[groupKey]?.[fieldKey];
 }
 
 function setProfileValue(org, audience, groupKey, fieldKey, language, answerText){
+  if(groupKey === '__translation') {
+    org.translations = org.translations || {};
+    org.translations[language] = org.translations[language] || {};
+    org.translations[language][fieldKey] = answerText;
+    return;
+  }
   if(audience === 'youth') {
     org.youth_profile = org.youth_profile || {};
     org.youth_profile[fieldKey] = org.youth_profile[fieldKey] || {};
@@ -1916,9 +1943,9 @@ async function openInlineProfileEditor(button, org, audience, groupKey, fieldKey
   modal.dataset.inlineProfileModal = '';
   modal.setAttribute('role', 'presentation');
   modal.innerHTML = `<section class="inline-profile-modal" role="dialog" aria-modal="true" aria-labelledby="inline-profile-title">
-    <div class="inline-profile-modal__header">
+      <div class="inline-profile-modal__header">
       <div>
-        <p class="inline-profile-kicker">Profieltekst bewerken</p>
+        <p class="inline-profile-kicker">${groupKey === '__translation' ? 'Korte intro bewerken' : 'Profieltekst bewerken'}</p>
         <h2 id="inline-profile-title">${escapeHtml(profileLabel(fieldConfig))}</h2>
       </div>
       <button class="inline-profile-close" type="button" aria-label="Sluiten" data-inline-profile-close>×</button>
@@ -2055,14 +2082,11 @@ function renderPublicAdminMode(audience){
   if(permissions.can_edit_basic) {
     actions.push(publicAdminLink('Basisgegevens bewerken', adminOrganizationUrl(org.slug, 'basic')));
   }
-  const canEditCurrentProfile = audience === 'professional'
-    ? permissions.can_edit_professional_profile
-    : permissions.can_edit_youth_profile;
-  if(canEditCurrentProfile) {
-    actions.push(publicAdminLink(
-      audience === 'professional' ? 'Professionalprofiel bewerken' : 'Jongerenprofiel bewerken',
-      adminOrganizationUrl(org.slug, 'profile', audience)
-    ));
+  if(permissions.can_edit_youth_profile) {
+    actions.push(publicAdminLink('Jongerenprofiel bewerken', adminOrganizationUrl(org.slug, 'profile', 'youth')));
+  }
+  if(permissions.can_edit_professional_profile) {
+    actions.push(publicAdminLink('Professionalprofiel bewerken', adminOrganizationUrl(org.slug, 'profile', 'professional')));
   }
 
   if(actions.length) {
@@ -2079,6 +2103,22 @@ function renderPublicAdminMode(audience){
     addSectionAdminIcon(contactSection, 'Basisgegevens/contact bewerken', adminOrganizationUrl(org.slug, 'basic'));
   }
 
+  holder.querySelectorAll('[data-inline-summary-edit]').forEach(button => {
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const fieldBlock = button.closest('[data-profile-field]');
+      if(!fieldBlock) return;
+      openInlineProfileEditor(
+        button,
+        org,
+        fieldBlock.dataset.profileAudience || audience,
+        fieldBlock.dataset.profileGroup || '',
+        fieldBlock.dataset.profileKey || ''
+      );
+    });
+  });
+
   holder.querySelectorAll('[data-inline-profile-edit]').forEach(button => {
     button.addEventListener('click', event => {
       event.preventDefault();
@@ -2094,6 +2134,16 @@ function renderPublicAdminMode(audience){
       );
     });
   });
+}
+
+function detailHeaderSummaryMarkup(org, audience, text){
+  const field = audience === 'professional' ? 'professional_summary' : 'youth_short';
+  if(!text && !canInlineEditProfiles()) return '';
+  const label = audience === 'professional' ? 'Korte tekst professionalpagina' : 'Korte tekst jongerenpagina';
+  return `<div class="detail-header-summary-wrap" data-profile-field data-profile-audience="${escapeHtml(audience)}" data-profile-group="__translation" data-profile-key="${escapeHtml(field)}">
+    ${text ? `<div class="rich-text detail-header-summary">${renderRichText(text)}</div>` : '<div class="rich-text detail-header-summary inline-profile-empty">Nog niet ingevuld in deze taal.</div>'}
+    ${canInlineEditProfiles() ? `<button class="admin-control admin-icon-button inline-summary-edit" type="button" data-inline-summary-edit title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"><span aria-hidden="true">✎</span></button>` : ''}
+  </div>`;
 }
 
 function renderOrganizationDetail(audience){
@@ -2116,7 +2166,7 @@ function renderOrganizationDetail(audience){
 
   if(!isPro) {
     const summary = getOrganizationText(org, 'youth_short') || primaryText || getOrganizationText(org, 'type');
-    const headerSummary = normalizeText(summary) === normalizeText(primaryText) ? '' : summary;
+    const headerSummary = summary;
     const primaryTheme = org.themes[0];
     const primaryColor = themeVisual(primaryTheme).color;
     const primaryThemeLabel = primaryTheme ? audienceThemeName(primaryTheme, audience) : '';
@@ -2141,7 +2191,7 @@ function renderOrganizationDetail(audience){
         <div class="detail-header__copy">
           ${primaryThemeLabel ? `<span class="detail-theme-badge">${escapeHtml(primaryThemeLabel)}</span>` : ''}
           <h1>${escapeHtml(title)}</h1>
-          ${headerSummary ? `<div class="rich-text detail-header-summary">${renderRichText(headerSummary)}</div>` : ''}
+          ${detailHeaderSummaryMarkup(org, 'youth', headerSummary)}
         </div>
         ${primaryThemeIcon}
         ${contactActions ? `<div class="detail-header__actions">${contactActions}</div>` : ''}
@@ -2207,7 +2257,8 @@ function renderOrganizationDetail(audience){
       <div class="detail-header__copy">
         ${primaryThemeLabel ? `<span class="detail-theme-badge professional-theme-badge">${escapeHtml(primaryThemeLabel)}</span>` : ''}
         <h1>${escapeHtml(title)}</h1>
-        ${headerDescription ? `<div class="rich-text detail-header-summary">${renderRichText(headerDescription)}</div>` : ''}
+        ${detailHeaderSummaryMarkup(org, 'professional', primaryText)}
+        ${!primaryText && typeLabel ? `<div class="rich-text detail-header-summary">${renderRichText(typeLabel)}</div>` : ''}
       </div>
       ${contactActions ? `<div class="detail-header__actions professional-header-actions">${contactActions}</div>` : ''}
     </div>

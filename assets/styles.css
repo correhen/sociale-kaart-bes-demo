@@ -2042,6 +2042,21 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   position:relative;
   z-index:1;
 }
+.detail-header-summary-wrap{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  max-width:720px;
+}
+.detail-header-summary-wrap .detail-header-summary{
+  flex:1 1 auto;
+  min-width:0;
+}
+.inline-summary-edit{
+  flex:0 0 auto;
+  margin-top:2px;
+}
 .detail-theme-badge,
 .detail-status{
   display:inline-flex;
@@ -3263,14 +3278,44 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   border-top: 4px solid #20b9b5;
 }
 
+.island-context main {
+  max-width: 1180px;
+}
+
+.island-context .youth-hero-shell,
+.island-context .kh-home,
+.island-context main > .section,
+.island-context .kh-list-intro,
+.island-context .kh-filter-panel,
+.island-context .cards.wide {
+  width: min(100%, 1120px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.island-context main > .section {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 @media (max-width: 760px) {
   .island-brand {
     min-width: 0;
+    width: auto !important;
   }
 
   .island-brand img {
     width: 160px;
     height: 46px;
+  }
+
+  .island-context .site-header {
+    gap: 10px;
+  }
+
+  .island-context .kh-header nav {
+    justify-content: flex-start;
+    width: 100%;
   }
 
   .island-choice-grid {
@@ -3294,6 +3339,11 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 
   .island-youth-hero .youth-hero-card {
     min-height: 680px;
+  }
+
+  .island-youth-hero .youth-live-search,
+  .island-professional-home .kh-search {
+    width: 100%;
   }
 
   .island-professional-home {

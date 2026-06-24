@@ -24,6 +24,7 @@ function audit_action_label(string $action): string
     $labels = [
         'organization.update_basic' => 'Basisgegevens gewijzigd',
         'organization.update_profile' => 'Profiel gewijzigd',
+        'organization.update_translation_intro' => 'Korte introtekst gewijzigd',
         'user.create' => 'Gebruiker aangemaakt',
         'user.update' => 'Gebruiker gewijzigd',
         'user.change_own_password' => 'Eigen wachtwoord gewijzigd',
@@ -117,6 +118,17 @@ function audit_field_label(string $field, string $action = ''): string
             . ($language !== '' ? ' (' . $language . ')' : '');
     }
 
+    if ($action === 'organization.update_translation_intro' && $parts) {
+        $fieldKey = implode('.', $parts);
+        $labels = [
+            'youth_short' => 'Korte tekst jongerenpagina',
+            'professional_summary' => 'Korte tekst professionalpagina',
+        ];
+
+        return ($labels[$fieldKey] ?? ucfirst(str_replace('_', ' ', $fieldKey)))
+            . ($language !== '' ? ' (' . $language . ')' : '');
+    }
+
     return ucfirst(str_replace('_', ' ', $field))
         . ($language !== '' ? ' (' . $language . ')' : '');
 }
@@ -141,6 +153,22 @@ function audit_profile_cell($value): array
 function audit_changes(array $before, array $after, string $action): array
 {
     $changes = [];
+    if ($action === 'organization.update_translation_intro' || isset($before['translations']) || isset($after['translations'])) {
+        $beforeTranslations = is_array($before['translations'] ?? null) ? $before['translations'] : [];
+        $afterTranslations = is_array($after['translations'] ?? null) ? $after['translations'] : [];
+        $keys = array_values(array_unique(array_merge(array_keys($beforeTranslations), array_keys($afterTranslations))));
+        foreach ($keys as $key) {
+            $old = $beforeTranslations[$key] ?? null;
+            $new = $afterTranslations[$key] ?? null;
+            if (!audit_values_differ($old, $new)) {
+                continue;
+            }
+            $changes[$key] = ['before' => $old, 'after' => $new];
+        }
+
+        return $changes;
+    }
+
     if ($action === 'organization.update_profile' || isset($before['answers']) || isset($after['answers'])) {
         $beforeAnswers = is_array($before['answers'] ?? null) ? $before['answers'] : [];
         $afterAnswers = is_array($after['answers'] ?? null) ? $after['answers'] : [];

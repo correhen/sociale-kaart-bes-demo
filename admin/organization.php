@@ -165,6 +165,8 @@ try {
 }
 
 admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'organizations');
+$publicYouthUrl = $organization ? admin_public_organization_url($organization, 'youth', $islands) : null;
+$publicProfessionalUrl = $organization ? admin_public_organization_url($organization, 'professional', $islands) : null;
 ?>
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
@@ -193,6 +195,12 @@ admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'org
     <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional">
       <?= admin_can_edit_profiles() ? 'Professionalprofiel bewerken' : 'Professionalprofiel bekijken' ?>
     </a>
+    <?php if ($publicYouthUrl): ?>
+      <a class="button" href="<?= h($publicYouthUrl) ?>">Bekijk jongerenpagina</a>
+    <?php endif; ?>
+    <?php if ($publicProfessionalUrl): ?>
+      <a class="button" href="<?= h($publicProfessionalUrl) ?>">Bekijk professionalpagina</a>
+    <?php endif; ?>
   </div>
 </section>
 

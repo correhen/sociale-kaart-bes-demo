@@ -7,6 +7,18 @@ require_admin_login();
 
 const PROFILE_LANGUAGES = ['nl', 'pap', 'en', 'es'];
 const PROFILE_TRANSLATION_STATUSES = ['missing', 'draft', 'reviewed', 'published'];
+const PROFILE_INTRO_FIELDS = [
+    'youth' => [
+        'field' => 'youth_short',
+        'label' => 'Korte tekst jongerenpagina',
+        'help' => 'Deze tekst verschijnt kort onder de organisatietitel op de publieke pagina en op organisatiekaarten.',
+    ],
+    'professional' => [
+        'field' => 'professional_summary',
+        'label' => 'Korte tekst professionalpagina',
+        'help' => 'Deze tekst verschijnt kort onder de organisatietitel op de publieke pagina en op organisatiekaarten.',
+    ],
+];
 const YOUTH_PROFILE_FIELDS = [
     'who_we_are' => 'Wie zijn wij?',
     'who_for' => 'Voor wie zijn wij?',
@@ -61,7 +73,9 @@ const PROFESSIONAL_PROFILE_GROUPS = [
 $id = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
 $audience = trim((string)($_GET['audience'] ?? $_POST['audience'] ?? ''));
 $organization = null;
+$islands = [];
 $values = [];
+$introValues = [];
 $errors = [];
 $error = '';
 $saved = (string)($_GET['saved'] ?? '') === '1';
@@ -242,6 +256,78 @@ function profile_audit_values(array $changes, string $side): array
     return $answers;
 }
 
+function profile_intro_empty_values(): array
+{
+    return array_fill_keys(PROFILE_LANGUAGES, '');
+}
+
+function profile_intro_load_values(int $organizationId, string $audience): array
+{
+    $field = PROFILE_INTRO_FIELDS[$audience]['field'];
+    $values = profile_intro_empty_values();
+    $rows = fetch_all(
+        "SELECT language_code, {$field} AS intro_text
+        FROM organization_translations
+        WHERE organization_id = :organization_id
+        ORDER BY language_code ASC",
+        ['organization_id' => $organizationId]
+    );
+
+    foreach ($rows as $row) {
+        $language = (string)$row['language_code'];
+        if (in_array($language, PROFILE_LANGUAGES, true)) {
+            $values[$language] = (string)($row['intro_text'] ?? '');
+        }
+    }
+
+    return $values;
+}
+
+function profile_intro_posted_values(array $current): array
+{
+    $posted = is_array($_POST['intro'] ?? null) ? $_POST['intro'] : [];
+    $values = $current;
+
+    foreach (PROFILE_LANGUAGES as $language) {
+        if (!admin_can_edit_profile_language($language) || !array_key_exists($language, $posted)) {
+            continue;
+        }
+        $values[$language] = is_scalar($posted[$language]) ? (string)$posted[$language] : $current[$language];
+    }
+
+    return $values;
+}
+
+function profile_intro_changes(array $before, array $after): array
+{
+    $changes = [];
+    foreach (PROFILE_LANGUAGES as $language) {
+        if (!admin_can_edit_profile_language($language)) {
+            continue;
+        }
+        if (!audit_values_differ($before[$language] ?? '', $after[$language] ?? '')) {
+            continue;
+        }
+        $changes[] = [
+            'language_code' => $language,
+            'before' => (string)($before[$language] ?? ''),
+            'after' => (string)($after[$language] ?? ''),
+        ];
+    }
+
+    return $changes;
+}
+
+function profile_intro_audit_values(array $changes, string $field, string $side): array
+{
+    $values = [];
+    foreach ($changes as $change) {
+        $values[$field . '.' . $change['language_code']] = $change[$side];
+    }
+
+    return $values;
+}
+
 try {
     if ($id <= 0) {
         throw new RuntimeException('Geen geldige organisatie-id opgegeven.');
@@ -251,7 +337,7 @@ try {
     }
 
     $organization = fetch_one(
-        "SELECT o.id, o.slug, COALESCE(NULLIF(t.name, ''), NULLIF(t_en.name, ''), o.slug) AS name
+        "SELECT o.id, o.slug, o.status, o.visibility_public, COALESCE(NULLIF(t.name, ''), NULLIF(t_en.name, ''), o.slug) AS name
         FROM organizations o
         LEFT JOIN organization_translations t
             ON t.organization_id = o.id
@@ -266,9 +352,18 @@ try {
     if (!$organization) {
         throw new RuntimeException('Organisatie niet gevonden.');
     }
+    $islands = fetch_all(
+        "SELECT i.code, i.name, oi.is_primary
+        FROM organization_islands oi
+        INNER JOIN islands i ON i.id = oi.island_id
+        WHERE oi.organization_id = :id
+        ORDER BY oi.is_primary DESC, i.sort_order ASC",
+        ['id' => $id]
+    );
 
     $definition = profile_definition($audience);
     $values = profile_load_values($id, $audience, $definition);
+    $introValues = profile_intro_load_values($id, $audience);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!admin_can_edit_profiles()) {
@@ -279,72 +374,117 @@ try {
         }
 
         $before = $values;
+        $introBefore = $introValues;
         $values = profile_posted_values($before, $definition);
+        $introValues = profile_intro_posted_values($introBefore);
         $errors = array_merge($errors, profile_validate($values, $definition));
 
         if (!$errors) {
             $changes = profile_changes($before, $values, $definition);
-            if ($changes) {
+            $introChanges = profile_intro_changes($introBefore, $introValues);
+            if ($changes || $introChanges) {
                 $pdo = admin_db();
                 $pdo->beginTransaction();
-                $upsert = $pdo->prepare(
-                    "INSERT INTO organization_profile_answers (
-                        organization_id,
-                        audience_code,
-                        group_key,
-                        field_key,
-                        language_code,
-                        answer_text,
-                        answer_format,
-                        translation_status,
-                        source_locked,
-                        sort_order
-                    )
-                    VALUES (
-                        :organization_id,
-                        :audience_code,
-                        :group_key,
-                        :field_key,
-                        :language_code,
-                        :answer_text,
-                        'markdown',
-                        :translation_status,
-                        1,
-                        :sort_order
-                    )
-                    ON DUPLICATE KEY UPDATE
-                        answer_text = VALUES(answer_text),
-                        answer_format = 'markdown',
-                        translation_status = VALUES(translation_status),
-                        sort_order = VALUES(sort_order)"
-                );
+                if ($changes) {
+                    $upsert = $pdo->prepare(
+                        "INSERT INTO organization_profile_answers (
+                            organization_id,
+                            audience_code,
+                            group_key,
+                            field_key,
+                            language_code,
+                            answer_text,
+                            answer_format,
+                            translation_status,
+                            source_locked,
+                            sort_order
+                        )
+                        VALUES (
+                            :organization_id,
+                            :audience_code,
+                            :group_key,
+                            :field_key,
+                            :language_code,
+                            :answer_text,
+                            'markdown',
+                            :translation_status,
+                            1,
+                            :sort_order
+                        )
+                        ON DUPLICATE KEY UPDATE
+                            answer_text = VALUES(answer_text),
+                            answer_format = 'markdown',
+                            translation_status = VALUES(translation_status),
+                            sort_order = VALUES(sort_order)"
+                    );
 
-                foreach ($changes as $change) {
-                    $upsert->execute([
-                        'organization_id' => $id,
-                        'audience_code' => $audience,
-                        'group_key' => $change['group_key'],
-                        'field_key' => $change['field_key'],
-                        'language_code' => $change['language_code'],
-                        'answer_text' => $change['after']['answer_text'],
-                        'translation_status' => $change['after']['translation_status'],
-                        'sort_order' => $change['sort_order'],
-                    ]);
+                    foreach ($changes as $change) {
+                        $upsert->execute([
+                            'organization_id' => $id,
+                            'audience_code' => $audience,
+                            'group_key' => $change['group_key'],
+                            'field_key' => $change['field_key'],
+                            'language_code' => $change['language_code'],
+                            'answer_text' => $change['after']['answer_text'],
+                            'translation_status' => $change['after']['translation_status'],
+                            'sort_order' => $change['sort_order'],
+                        ]);
+                    }
+
+                    write_audit_log(
+                        'organization.update_profile',
+                        'organization',
+                        $id,
+                        [
+                            'audience' => $audience,
+                            'answers' => profile_audit_values($changes, 'before'),
+                        ],
+                        [
+                            'audience' => $audience,
+                            'answers' => profile_audit_values($changes, 'after'),
+                        ]
+                    );
                 }
 
-                write_audit_log(
-                    'organization.update_profile',
-                    'organization',
-                    $id,
-                    [
-                        'audience' => $audience,
-                        'answers' => profile_audit_values($changes, 'before'),
-                    ],
-                    [
-                        'audience' => $audience,
-                        'answers' => profile_audit_values($changes, 'after'),
-                    ]
-                );
+                if ($introChanges) {
+                    $introField = PROFILE_INTRO_FIELDS[$audience]['field'];
+                    $introSql = "INSERT INTO organization_translations (
+                            organization_id,
+                            language_code,
+                            {$introField},
+                            translation_status
+                        )
+                        VALUES (
+                            :organization_id,
+                            :language_code,
+                            :intro_text,
+                            'draft'
+                        )
+                        ON DUPLICATE KEY UPDATE
+                            {$introField} = VALUES({$introField})";
+                    $upsertIntro = $pdo->prepare($introSql);
+                    foreach ($introChanges as $change) {
+                        $upsertIntro->execute([
+                            'organization_id' => $id,
+                            'language_code' => $change['language_code'],
+                            'intro_text' => $change['after'],
+                        ]);
+                    }
+
+                    write_audit_log(
+                        'organization.update_translation_intro',
+                        'organization',
+                        $id,
+                        [
+                            'audience' => $audience,
+                            'translations' => profile_intro_audit_values($introChanges, $introField, 'before'),
+                        ],
+                        [
+                            'audience' => $audience,
+                            'translations' => profile_intro_audit_values($introChanges, $introField, 'after'),
+                        ]
+                    );
+                }
                 $pdo->commit();
             }
 
@@ -374,10 +514,12 @@ try {
 }
 
 $profileLabel = $audience === 'professional' ? 'Professionalprofiel' : 'Jongerenprofiel';
+$introDefinition = PROFILE_INTRO_FIELDS[$audience] ?? PROFILE_INTRO_FIELDS['youth'];
 admin_header(
     $organization ? $profileLabel . ': ' . (string)$organization['name'] : $profileLabel,
     'organizations'
 );
+$publicUrl = $organization ? admin_public_organization_url($organization, $audience, $islands) : null;
 ?>
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
@@ -411,6 +553,9 @@ admin_header(
     <a class="button" href="organization_profile_edit.php?id=<?= h((string)$id) ?>&amp;audience=<?= $audience === 'youth' ? 'professional' : 'youth' ?>">
       Naar <?= $audience === 'youth' ? 'professionalprofiel' : 'jongerenprofiel' ?>
     </a>
+    <?php if ($publicUrl): ?>
+      <a class="button" href="<?= h($publicUrl) ?>">Bekijk <?= $audience === 'youth' ? 'jongerenpagina' : 'professionalpagina' ?></a>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -429,6 +574,31 @@ admin_header(
   <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
   <input type="hidden" name="id" value="<?= h((string)$id) ?>">
   <input type="hidden" name="audience" value="<?= h($audience) ?>">
+
+  <section class="profile-group profile-intro-group">
+    <div class="section-heading"><div><p class="eyebrow">Intro</p><h2><?= h($introDefinition['label']) ?></h2></div></div>
+    <p class="form-help"><?= h($introDefinition['help']) ?></p>
+    <div class="profile-language-grid">
+      <?php foreach (PROFILE_LANGUAGES as $language): ?>
+        <?php $canEditLanguage = admin_can_edit_profile_language($language); ?>
+        <section class="profile-language<?= $language === 'nl' ? ' is-source' : '' ?><?= trim((string)($introValues[$language] ?? '')) === '' ? ' is-empty' : '' ?><?= !$canEditLanguage ? ' is-readonly' : '' ?>">
+          <div class="language-heading">
+            <h4><?= h(strtoupper($language)) ?><?= $language === 'nl' ? ' - bron' : '' ?></h4>
+          </div>
+          <?php if (!$canEditLanguage): ?><small class="readonly-note">Alleen-lezen voor jouw rol</small><?php endif; ?>
+          <label>
+            Tekst
+            <textarea
+              name="intro[<?= h($language) ?>]"
+              rows="4"
+              <?= $canEditLanguage ? 'data-richtext-editor' : '' ?>
+              <?= $canEditLanguage ? '' : 'disabled' ?>
+            ><?= h((string)($introValues[$language] ?? '')) ?></textarea>
+          </label>
+        </section>
+      <?php endforeach; ?>
+    </div>
+  </section>
 
   <?php foreach ($definition as $groupKey => $group): ?>
     <section class="profile-group">

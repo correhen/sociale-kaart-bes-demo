@@ -7,6 +7,10 @@ ini_set('display_errors', '0');
 require __DIR__ . '/../auth.php';
 
 const INLINE_PROFILE_LANGUAGES = ['nl', 'pap', 'en', 'es'];
+const INLINE_TRANSLATION_FIELDS = [
+    'youth' => ['youth_short'],
+    'professional' => ['professional_summary'],
+];
 const INLINE_YOUTH_FIELDS = [
     'who_we_are',
     'who_for',
@@ -64,12 +68,24 @@ function inline_json(array $payload, int $status = 200): void
 
 function inline_profile_definition(string $audience, string $group, string $field): ?array
 {
+    if (
+        $group === '__translation'
+        && isset(INLINE_TRANSLATION_FIELDS[$audience])
+        && in_array($field, INLINE_TRANSLATION_FIELDS[$audience], true)
+    ) {
+        return [
+            'kind' => 'translation',
+            'sort_order' => 0,
+        ];
+    }
+
     if ($audience === 'youth') {
         if ($group !== '' || !in_array($field, INLINE_YOUTH_FIELDS, true)) {
             return null;
         }
 
         return [
+            'kind' => 'profile',
             'sort_order' => array_search($field, INLINE_YOUTH_FIELDS, true) + 1,
         ];
     }
@@ -88,7 +104,7 @@ function inline_profile_definition(string $audience, string $group, string $fiel
         foreach ($groupFields as $groupField) {
             $sortOrder++;
             if ($group === $definitionGroup && $field === $groupField) {
-                return ['sort_order' => $sortOrder];
+                return ['kind' => 'profile', 'sort_order' => $sortOrder];
             }
         }
     }
@@ -161,6 +177,80 @@ try {
         inline_json(['ok' => false, 'error' => 'organization_not_found'], 404);
     }
     $organizationId = (int)$organization['id'];
+    if (($definition['kind'] ?? 'profile') === 'translation') {
+        $fieldSql = $field;
+        $existing = fetch_one(
+            "SELECT {$fieldSql} AS answer_text
+            FROM organization_translations
+            WHERE organization_id = :organization_id
+              AND language_code = :language_code
+            LIMIT 1",
+            [
+                'organization_id' => $organizationId,
+                'language_code' => $language,
+            ]
+        );
+        $beforeText = (string)($existing['answer_text'] ?? '');
+        if (!audit_values_differ($beforeText, $answerText)) {
+            inline_json([
+                'ok' => true,
+                'changed' => false,
+                'answer_text' => $beforeText,
+                'updated_at' => gmdate('c'),
+            ]);
+        }
+
+        $pdo = admin_db();
+        $pdo->beginTransaction();
+        $upsert = $pdo->prepare(
+            "INSERT INTO organization_translations (
+                organization_id,
+                language_code,
+                {$fieldSql},
+                translation_status
+            )
+            VALUES (
+                :organization_id,
+                :language_code,
+                :answer_text,
+                'draft'
+            )
+            ON DUPLICATE KEY UPDATE
+                {$fieldSql} = VALUES({$fieldSql})"
+        );
+        $upsert->execute([
+            'organization_id' => $organizationId,
+            'language_code' => $language,
+            'answer_text' => $answerText,
+        ]);
+
+        write_audit_log(
+            'organization.update_translation_intro',
+            'organization',
+            $organizationId,
+            [
+                'audience' => $audience,
+                'translations' => [
+                    $field . '.' . $language => $beforeText,
+                ],
+            ],
+            [
+                'audience' => $audience,
+                'translations' => [
+                    $field . '.' . $language => $answerText,
+                ],
+            ]
+        );
+        $pdo->commit();
+
+        inline_json([
+            'ok' => true,
+            'changed' => true,
+            'answer_text' => $answerText,
+            'updated_at' => gmdate('c'),
+        ]);
+    }
+
     $existing = fetch_one(
         "SELECT answer_text, translation_status
         FROM organization_profile_answers
