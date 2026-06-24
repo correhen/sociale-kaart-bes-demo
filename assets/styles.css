@@ -711,6 +711,69 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 
 /* Kadena Hubenil / Sociale Kaart Bonaire seeddata MVP */
 .kh-header{gap:14px}
+.header-controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-left:auto;
+}
+.island-switch{
+  position:relative;
+  color:var(--muted);
+  font-size:.86rem;
+  font-weight:900;
+}
+.island-switch summary{
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid rgba(0,27,63,.12);
+  border-radius:999px;
+  background:#fff;
+  color:var(--navy);
+  cursor:pointer;
+  list-style:none;
+  padding:8px 12px;
+}
+.island-switch summary::-webkit-details-marker{display:none}
+.island-switch summary:focus-visible{
+  outline:3px solid rgba(0,167,167,.28);
+  outline-offset:2px;
+}
+.island-switch__label{white-space:nowrap}
+.island-switch__chevron{
+  color:var(--muted);
+  font-size:.7rem;
+  line-height:1;
+}
+.island-switch__menu{
+  position:absolute;
+  right:0;
+  top:calc(100% + 8px);
+  z-index:20;
+  min-width:132px;
+  display:grid;
+  gap:4px;
+  border:1px solid rgba(0,27,63,.1);
+  border-radius:14px;
+  background:#fff;
+  box-shadow:var(--shadow);
+  padding:8px;
+}
+.island-switch__menu a{
+  border-radius:10px;
+  color:var(--navy);
+  font-weight:900;
+  padding:9px 10px;
+  text-decoration:none;
+}
+.island-switch__menu a:hover,
+.island-switch__menu a:focus-visible,
+.island-switch__menu a[aria-current="page"]{
+  background:rgba(0,167,167,.1);
+}
 .language-switch{
   display:flex;
   align-items:center;
@@ -2767,8 +2830,10 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   }
 }
 @media(max-width:620px){
-  .language-switch{width:100%;justify-content:space-between}
+  .header-controls{width:100%;justify-content:flex-start}
+  .language-switch{flex:1;min-width:180px;justify-content:space-between}
   .language-switch select{flex:1}
+  .island-switch__menu{left:0;right:auto}
   .choice-hero h1,.kh-home h1{font-size:2.05rem}
   .choice-entry{min-height:180px}
   .kh-theme-grid{grid-template-columns:1fr}

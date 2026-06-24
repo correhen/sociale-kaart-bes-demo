@@ -509,6 +509,31 @@ function islandName(island = currentIsland()){
   return island === 'statia' ? 'St. Eustatius' : island === 'saba' ? 'Saba' : 'Bonaire';
 }
 
+function currentIslandFromPath(){
+  const firstSegment = location.pathname.split('/').filter(Boolean)[0]?.toLowerCase();
+  return ['statia', 'saba'].includes(firstSegment) ? firstSegment : 'bonaire';
+}
+
+function islandSwitchLabel(island){
+  return island === 'statia' ? 'Statia' : island === 'saba' ? 'Saba' : 'Bonaire';
+}
+
+function currentAudienceContext(){
+  const bodyAudience = document.body?.dataset?.audience;
+  if(bodyAudience === 'professional' || bodyAudience === 'youth') return bodyAudience;
+  const segments = location.pathname.split('/').filter(Boolean).map(segment => segment.toLowerCase());
+  if(segments.includes('professionals')) return 'professional';
+  if(segments.includes('jongeren')) return 'youth';
+  return 'youth';
+}
+
+function islandAudienceHref(island, audience = currentAudienceContext()){
+  const pro = audience === 'professional';
+  if(island === 'saba') return pro ? '/saba/professionals/' : '/saba/jongeren/';
+  if(island === 'statia') return pro ? '/statia/professionals/' : '/statia/jongeren/';
+  return pro ? '/professionals/' : '/jongeren/';
+}
+
 function dataUrl(path){
   return `${assetBase()}data/${path}`;
 }
@@ -914,7 +939,7 @@ function initShell(){
     link.addEventListener('click', () => setAudiencePreference(link.dataset.audienceLink));
   });
   document.querySelectorAll('[data-language-slot]').forEach(slot => {
-    slot.innerHTML = languageSwitcher();
+    slot.innerHTML = headerControls();
   });
   document.querySelectorAll('[data-language-select]').forEach(select => {
     select.value = currentLanguage();
@@ -939,6 +964,27 @@ function languageSwitcher(){
       <option value="es">Español</option>
     </select>
   </label>`;
+}
+
+function headerControls(){
+  return `<div class="header-controls">${islandSwitcher()}${languageSwitcher()}</div>`;
+}
+
+function islandSwitcher(){
+  const current = currentIslandFromPath();
+  const audience = currentAudienceContext();
+  return `<details class="island-switch">
+    <summary aria-label="Eiland: ${escapeHtml(islandSwitchLabel(current))}">
+      <span class="island-switch__label">${escapeHtml(islandSwitchLabel(current))}</span>
+      <span class="island-switch__chevron" aria-hidden="true">v</span>
+    </summary>
+    <div class="island-switch__menu">
+      ${['bonaire','saba','statia'].map(island => {
+        const active = island === current;
+        return `<a href="${escapeHtml(islandAudienceHref(island, audience))}"${active ? ' aria-current="page"' : ''}>${escapeHtml(islandSwitchLabel(island))}</a>`;
+      }).join('')}
+    </div>
+  </details>`;
 }
 
 function updateLanguageFlag(){

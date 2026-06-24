@@ -385,7 +385,7 @@
           "youth_how_it_works": "Je kunt zelf contact opnemen. Ook een ouder, school, huisarts of hulpverlener kan je aanmelden.",
           "professional_summary": "Sentro Akseso Boneiru is het centrale toegangspunt voor sociale hulpverlening, preventie en ondersteuning op Bonaire.",
           "professional_referral_or_access": "Vrij toegankelijk voor inwoners van Bonaire. Professionals kunnen cliënten aanmelden of overleggen over passende ondersteuning.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Centraal toegangspunt / sociale hulpverlening",
           "age_range": "Kinderen, jongeren, ouders, gezinnen, volwassenen en professionals"
         },
@@ -832,7 +832,14 @@
         "Zorg en Jeugd Caribisch Nederland (ZJCN) - Afdeling Jeugdzorg",
         "begeleid wonen",
         "pleegzorg",
-        "zorg en jeugd caribisch nederland"
+        "zorg en jeugd caribisch nederland",
+        "opvoedhulp",
+        "opvoedondersteuning",
+        "kindermishandeling",
+        "huiselijk geweld",
+        "jeugdproblematiek",
+        "gezinsondersteuning",
+        "jeugdzorg"
       ],
       "contact": {
         "phone": "+599 715 8899",
@@ -851,7 +858,7 @@
           "youth_how_it_works": "Je kunt via huisarts, school, Guiami of Akseso terechtkomen, of zelf langskomen tijdens inloopuren.",
           "professional_summary": "De afdeling Jeugdzorg van ZJCN zet zich in om de positie van kinderen op Bonaire, Saba en Sint Eustatius te verbeteren.",
           "professional_referral_or_access": "Verwijzing is mogelijk via huisarts, school, Guiami of Akseso. Mensen kunnen ook zelf langskomen tijdens de inloopuren.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Jeugdzorg / gezinsondersteuning",
           "age_range": "Kinderen, jongeren en gezinnen op Bonaire, Saba en Sint Eustatius"
         },
@@ -1145,7 +1152,7 @@
     },
     {
       "id": "org_eoz",
-      "name": "Expertise Onderwijs en Zorg (EOZ)",
+      "name": "Expertisecenter Onderwijs en Zorg (EOZ)",
       "slug": "expertisecenter-onderwijs-zorg-bonaire",
       "island": "bonaire",
       "status": "active",
@@ -1163,10 +1170,12 @@
       "secondary_theme_ids": [],
       "search_keywords_nl": [
         "EOZ",
-        "Expertise Onderwijs en Zorg (EOZ)",
         "KES",
         "SEM klas",
-        "expertisecenter onderwijs zorg bonaire"
+        "expertisecenter onderwijs zorg bonaire",
+        "Expertisecenter Onderwijs en Zorg (EOZ)",
+        "Expertisecenter Onderwijs Zorg Bonaire (EOZ)",
+        "expertisecenter onderwijs en zorg"
       ],
       "contact": {
         "phone": "+599 717 4144",
@@ -1178,33 +1187,33 @@
       },
       "translations": {
         "nl": {
-          "name": "Expertise Onderwijs en Zorg (EOZ)",
+          "name": "Expertisecenter Onderwijs en Zorg (EOZ)",
           "youth_title": "EOZ",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "youth_where_can_you_go": "Als school moeilijk gaat of je extra ondersteuning nodig hebt, kan Expertisecenter Onderwijs Zorg Bonaire (EOZ) samen met school meedenken.",
           "youth_how_it_works": "Aanmelding loopt via school. Ouders moeten toestemming geven.",
           "professional_summary": "EOZ ondersteunt leerlingen en studenten die door leer-, sociaal-emotionele of gedragsproblemen dreigen vast te lopen in het onderwijs.",
           "professional_referral_or_access": "Aanmelding gaat digitaal via school en met toestemming van ouders.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Onderwijszorg",
           "age_range": "Leerlingen in kinderopvang, basisonderwijs, voortgezet onderwijs, mbo en Forma"
         },
         "pap": {
-          "name": "Expertise Onderwijs en Zorg (EOZ)",
+          "name": "Expertisecenter Onderwijs en Zorg (EOZ)",
           "youth_title": "EOZ",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "professional_summary": "EOZ ondersteunt leerlingen en studenten die door leer-, sociaal-emotionele of gedragsproblemen dreigen vast te lopen in het onderwijs.",
           "translation_status": "needs_papiamentu_review"
         },
         "en": {
-          "name": "Expertise Onderwijs en Zorg (EOZ)",
+          "name": "Expertisecenter Onderwijs en Zorg (EOZ)",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "professional_summary": "EOZ ondersteunt leerlingen en studenten die door leer-, sociaal-emotionele of gedragsproblemen dreigen vast te lopen in het onderwijs.",
           "translation_status": "ai_draft",
           "youth_title": "EOZ"
         },
         "es": {
-          "name": "Expertise Onderwijs en Zorg (EOZ)",
+          "name": "Expertisecenter Onderwijs en Zorg (EOZ)",
           "youth_short": "EOZ helpt als leren of meedoen op school moeilijk gaat en er extra ondersteuning nodig is.",
           "professional_summary": "EOZ ondersteunt leerlingen en studenten die door leer-, sociaal-emotionele of gedragsproblemen dreigen vast te lopen in het onderwijs.",
           "translation_status": "ai_draft",
@@ -1435,7 +1444,7 @@
       "professional_profile": {
         "general": {
           "organisation_name": {
-            "nl": "Expertise Onderwijs en Zorg (EOZ)",
+            "nl": "Expertisecenter Onderwijs en Zorg (EOZ)",
             "pap": "",
             "en": "",
             "es": ""
@@ -1577,7 +1586,21 @@
         "LLL",
         "MIFO",
         "SKJ",
-        "fundashon forma"
+        "fundashon forma",
+        "diploma",
+        "startkwalificatie",
+        "entree",
+        "entreeopleiding",
+        "mbo 1",
+        "laaggeletterd",
+        "lezen",
+        "schrijven",
+        "taal",
+        "Long Life Learning",
+        "VSO",
+        "werk",
+        "opleiding",
+        "arbeidsvaardigheden"
       ],
       "contact": {
         "phone": "+599 717-6949",
@@ -1596,7 +1619,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Fundashon Forma ondersteunt volwassenen en jongvolwassenen bij persoonlijke, sociale en beroepsmatige ontwikkeling.",
           "professional_referral_or_access": "Vrij toegankelijk wanneer de deelnemer nog geen diploma of startkwalificatie heeft; andere trajecten en cursussen zijn afhankelijk van situatie en aanbod.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Onderwijs- en ontwikkelingsorganisatie",
           "age_range": "Jongvolwassenen en volwassenen, vooral 18+"
         },
@@ -1888,9 +1911,9 @@
       "name": "Rebound",
       "slug": "rebound",
       "island": "bonaire",
-      "status": "active",
+      "status": "demo_extra_archived",
       "visibility": {
-        "default": true
+        "default": false
       },
       "target_audiences": [
         "youth",
@@ -1922,7 +1945,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Rebound biedt tijdelijke onderwijs- en begeleidingsondersteuning voor jongeren die extra structuur nodig hebben.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Onderwijsondersteuning",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -2154,7 +2177,20 @@
         "Mental Health Caribbean (MHC)",
         "Mental Health Caribbean (MHC) / Kind & Jeugd / Hi-5",
         "Mental Health Caribbean Kind Jeugd",
-        "mental health caribbean"
+        "mental health caribbean",
+        "angst",
+        "somber",
+        "somberheid",
+        "depressie",
+        "boosheid",
+        "trauma",
+        "hechting",
+        "gaming",
+        "verslaving",
+        "alcohol",
+        "drugs",
+        "psycholoog",
+        "kinderpsychiater"
       ],
       "contact": {
         "phone": "+599 717 0125",
@@ -2173,7 +2209,7 @@
           "youth_how_it_works": "Voor hulp bij MHC heb je een verwijzing nodig van de huisarts of kinderarts.",
           "professional_summary": "MHC Kind & Jeugd biedt ambulante diagnostiek, behandeling en begeleiding voor kinderen en jeugdigen met psychische of psychiatrische kwetsbaarheid of problematiek.",
           "professional_referral_or_access": "Voor behandeling is een verwijzing van huisarts of kinderarts nodig. Aanmelding loopt via de Bureaudienst voor intakeplanning.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Geestelijke gezondheidszorg kind en jeugd",
           "age_range": "Kinderen en jongeren van 0 tot 18 jaar en hun gezin"
         },
@@ -2569,7 +2605,29 @@
       "search_keywords_nl": [
         "GGD Bonaire",
         "Salubridat Públiko",
-        "ggd bonaire"
+        "ggd bonaire",
+        "zwanger",
+        "zwangerschap",
+        "zwangerschapsbegeleiding",
+        "kinderwens",
+        "anticonceptie",
+        "soa",
+        "SOA-test",
+        "seksuele gezondheid",
+        "prep",
+        "reizigersspreekuur",
+        "vaccinatie",
+        "vaccinaties",
+        "jeugdgezondheidszorg",
+        "JGZ",
+        "consultatiebureau",
+        "Mi Futuro",
+        "Mi Eskoho",
+        "Mi Futuro Mi Eskoho Konsiente",
+        "Nu Niet Zwanger",
+        "NNZ",
+        "Bon Salu",
+        "Resilensia"
       ],
       "contact": {
         "phone": "",
@@ -2588,7 +2646,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "GGD Bonaire werkt aan publieke gezondheid, preventie en gezondheidsvoorlichting.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Publieke gezondheid",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -2814,7 +2872,17 @@
       "search_keywords_nl": [
         "FKPD",
         "Fundashon Kuido pa Personanan Desabilitá (FKPD)",
-        "fundashon kuido pa personanan desabilita"
+        "fundashon kuido pa personanan desabilita",
+        "beperking",
+        "handicap",
+        "verstandelijke beperking",
+        "lichamelijke beperking",
+        "dagopvang",
+        "naschoolse opvang",
+        "pasadia",
+        "zelfredzaamheid",
+        "begeleiding beperking",
+        "ZODIEZIJN"
       ],
       "contact": {
         "phone": "",
@@ -2833,7 +2901,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Fundashon Kuido pa Personanan Desabilitá (FKPD) biedt ondersteuning voor personen met een beperking.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Ondersteuning bij beperking",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -3061,7 +3129,14 @@
         "KPCN",
         "Korps Politie Caribisch Nederland (KPCN)",
         "korps politie caribisch nederland",
-        "politie"
+        "politie",
+        "911",
+        "noodnummer",
+        "noodsituatie",
+        "direct gevaar",
+        "geweld",
+        "bedreiging",
+        "veiligheid"
       ],
       "contact": {
         "phone": "911",
@@ -3080,7 +3155,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Korps Politie Caribisch Nederland (KPCN) is de politieorganisatie voor veiligheid en noodsituaties.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Politie / veiligheid",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -3118,37 +3193,37 @@
       },
       "youth_profile": {
         "who_we_are": {
-          "nl": "",
+          "nl": "Korps Politie Caribisch Nederland (KPCN) is de politie voor Bonaire, Saba en Sint Eustatius.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "who_for": {
-          "nl": "",
+          "nl": "Voor iedereen die direct gevaar ziet, zich onveilig voelt of dringend politiehulp nodig heeft.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "what_help": {
-          "nl": "",
+          "nl": "Bel 911 bij direct gevaar, geweld, mishandeling, bedreiging of een andere noodsituatie waarbij politie nodig is.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "how_to_access": {
-          "nl": "",
+          "nl": "Bel 911 bij spoed of direct gevaar.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "how_we_help": {
-          "nl": "",
+          "nl": "De politie beoordeelt de situatie en komt in actie wanneer er sprake is van een noodsituatie of direct gevaar.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "duration": {
-          "nl": "",
+          "nl": "Niet van toepassing.",
           "pap": "",
           "en": "",
           "es": ""
@@ -3160,7 +3235,7 @@
           "es": ""
         },
         "contact": {
-          "nl": "",
+          "nl": "Bel 911 bij spoed of direct gevaar.",
           "pap": "",
           "en": "",
           "es": ""
@@ -3175,19 +3250,19 @@
             "es": ""
           },
           "short_description": {
-            "nl": "",
+            "nl": "Korps Politie Caribisch Nederland (KPCN) is de politieorganisatie voor Bonaire, Saba en Sint Eustatius.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "target_group": {
-            "nl": "",
+            "nl": "Inwoners, jongeren, ouders, professionals en organisaties die te maken hebben met veiligheid of acute noodsituaties.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "support_offer": {
-            "nl": "",
+            "nl": "Politiehulp en noodrespons bij direct gevaar, geweld, bedreiging of andere situaties waarin politie dringend nodig is.",
             "pap": "",
             "en": "",
             "es": ""
@@ -3231,19 +3306,19 @@
         },
         "referral": {
           "when_appropriate": {
-            "nl": "",
+            "nl": "Bij spoed, direct gevaar of wanneer dringend politiehulp nodig is.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "criteria": {
-            "nl": "",
+            "nl": "Bel 911 bij spoed of direct gevaar.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "indications_required": {
-            "nl": "",
+            "nl": "Nee.",
             "pap": "",
             "en": "",
             "es": ""
@@ -3251,7 +3326,7 @@
         },
         "practical": {
           "contact_details": {
-            "nl": "",
+            "nl": "Bel 911 bij spoed of direct gevaar.",
             "pap": "",
             "en": "",
             "es": ""
@@ -3306,7 +3381,17 @@
       "secondary_theme_ids": [],
       "search_keywords_nl": [
         "Voogdijraad Caribisch Nederland",
-        "voogdijraad caribisch nederland"
+        "voogdijraad caribisch nederland",
+        "HALT",
+        "kinderalimentatie",
+        "alimentatie",
+        "gezag",
+        "omgang",
+        "raadsonderzoek",
+        "kinderbescherming",
+        "bijzonder curator",
+        "centrale autoriteit",
+        "schoolverzuim"
       ],
       "contact": {
         "phone": "",
@@ -3325,7 +3410,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "De Voogdijraad Caribisch Nederland voert wettelijke taken uit rond kinderbescherming, gezag en jeugdstrafrecht.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Kinderbescherming / wettelijke taken",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -3553,7 +3638,17 @@
         "Reclassering Caribisch Nederland",
         "SRCN",
         "Stichting Reclassering Caribisch Nederland",
-        "reclassering caribisch nederland"
+        "reclassering caribisch nederland",
+        "strafbaar feit",
+        "politie",
+        "rechter",
+        "OM",
+        "Openbaar Ministerie",
+        "leerplicht",
+        "schoolverzuim",
+        "proces-verbaal",
+        "justitie",
+        "JoVo"
       ],
       "contact": {
         "phone": "+599 717 3288",
@@ -3572,7 +3667,7 @@
           "youth_how_it_works": "Je kunt jezelf niet aanmelden. Reclassering werkt in opdracht van de officier van justitie of rechter.",
           "professional_summary": "Stichting Reclassering Caribisch Nederland werkt aan veiligheid door criminaliteit te voorkomen en recidive terug te dringen.",
           "professional_referral_or_access": "Niet vrij toegankelijk. Reclassering werkt in opdracht van OM, rechter-commissaris, rechter of ministerie van JenV.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Reclassering / jeugdstrafrecht",
           "age_range": "Jongeren van 12 tot 21 jaar binnen justitieel kader"
         },
@@ -3969,7 +4064,17 @@
         "Jong Bonaire",
         "Stichting Jeugdwerk Jong Bonaire",
         "jong bonaire",
-        "zomerkampen"
+        "zomerkampen",
+        "naschoolse activiteiten",
+        "naschoolse opvang",
+        "sport",
+        "cultuur",
+        "talentontwikkeling",
+        "zomerkamp",
+        "middelbare school",
+        "voortgezet onderwijs",
+        "12 tot 18",
+        "jongerenwerk"
       ],
       "contact": {
         "phone": "+599 717 4303",
@@ -3988,7 +4093,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Jong Bonaire is een ontwikkelcentrum voor jongeren in het voortgezet onderwijs met sociale, educatieve, sportieve, recreatieve en culturele activiteiten.",
           "professional_referral_or_access": "Jong Bonaire is geen hulpverleningsinstantie maar een openbare voorziening voor jongeren van 12 tot 18 jaar.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Ontwikkelcentrum / jongerenwerk",
           "age_range": "Jongeren van 12 tot 18 jaar"
         },
@@ -4279,7 +4384,19 @@
         "Fundashon Rosa di Sharon / Kas pa Hoben ku Futuro (KHF)",
         "KHF",
         "Kas pa Hoben ku Futuro",
-        "fundashon rosa di sharon"
+        "fundashon rosa di sharon",
+        "Rosa di Sharon",
+        "tienermeisje",
+        "tienermeisjes",
+        "zwangere tiener",
+        "zwangere tieners",
+        "jonge moeder",
+        "jonge moeders",
+        "zwanger",
+        "woonvoorziening",
+        "24-uurs woonbegeleiding",
+        "begeleid wonen",
+        "Kaminda Nieuw Amsterdam"
       ],
       "contact": {
         "phone": "+599 717 6858",
@@ -4298,7 +4415,7 @@
           "youth_how_it_works": "Een plaatsing gebeurt altijd samen met Zorg en Jeugd Caribisch Nederland (ZJCN).",
           "professional_summary": "Fundashon Rosa di Sharon biedt ondersteuning aan gezinnen. KHF is een kleinschalige woonvoorziening voor tienermeisjes.",
           "professional_referral_or_access": "Plaatsing vereist goedkeuring van ZJCN. Fundashon Rosa di Sharon beoordeelt daarna of KHF passend is.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Woonvoorziening voor tienermeisjes",
           "age_range": "Meisjes en jonge vrouwen van ongeveer 14 tot 21 jaar, zwangere tieners en jonge moeders"
         },
@@ -4462,7 +4579,7 @@
           "es": ""
         },
         "partners": {
-          "nl": "",
+          "nl": "KHF werkt samen met ZJCN, MHC, Akseso, EOZ en scholen.",
           "pap": "",
           "en": "",
           "es": ""
@@ -4598,9 +4715,9 @@
       "name": "Tabitha",
       "slug": "tabitha",
       "island": "bonaire",
-      "status": "active",
+      "status": "demo_extra_archived",
       "visibility": {
-        "default": true
+        "default": false
       },
       "target_audiences": [
         "youth",
@@ -4632,7 +4749,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Tabitha is relevant voor woonbegeleiding en opvangvoorzieningen.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Woonbegeleiding / opvang",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -4879,7 +4996,7 @@
           "youth_how_it_works": "Wonen bij Stichting Project loopt via ZJCN. Middagbehandeling kan via ZJCN, MHC, EOZ of Akseso.",
           "professional_summary": "Stichting Project is een specialistische voorziening op Bonaire voor jeugdigen met complexe gedragsproblemen van de BES-eilanden.",
           "professional_referral_or_access": "Residentiele behandeling verloopt via ZJCN. Middagbehandeling kan worden aangemeld door ZJCN, MHC, EOZ of Akseso.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Specialistische jeugdvoorziening",
           "age_range": "Jeugdigen van 8 tot 18 jaar van de BES-eilanden"
         },
@@ -5322,7 +5439,13 @@
         "Guana Chat 918",
         "guana chat 918",
         "hulplijn",
-        "kindertelefoon"
+        "kindertelefoon",
+        "Guana Chat",
+        "guanachat",
+        "anoniem",
+        "gratis bellen",
+        "praten",
+        "directe hulp"
       ],
       "contact": {
         "phone": "918",
@@ -5341,7 +5464,7 @@
           "youth_how_it_works": "Bel gratis en anoniem via 918. Je kunt laagdrempelig praten over wat je bezighoudt.",
           "professional_summary": "Guana Chat 918 is een gratis en anonieme hulplijn voor kinderen en jongeren in Caribisch Nederland. Professionals kunnen jongeren wijzen op 918 wanneer zij behoefte hebben aan een laagdrempelige plek om te praten.",
           "professional_referral_or_access": "Professionals kunnen jongeren wijzen op bellen via 918. Openingstijd 14:00 - 18:00 moet voor lancering worden gecontroleerd.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Kindertelefoon / Child and Youth Help Line",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -5384,37 +5507,37 @@
       },
       "youth_profile": {
         "who_we_are": {
-          "nl": "",
+          "nl": "Guana Chat 918 is een gratis en anonieme hulplijn voor kinderen en jongeren.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "who_for": {
-          "nl": "",
+          "nl": "Voor kinderen en jongeren die ergens mee zitten, zich zorgen maken of iemand nodig hebben om mee te praten.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "what_help": {
-          "nl": "",
+          "nl": "Je kunt bellen als je verdrietig, bang, boos of onzeker bent, als er thuis of op school iets speelt, of als je gewoon met iemand wilt praten.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "how_to_access": {
-          "nl": "",
+          "nl": "Bel gratis en anoniem naar 918.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "how_we_help": {
-          "nl": "",
+          "nl": "Je krijgt iemand aan de lijn die naar je luistert en met je meedenkt.",
           "pap": "",
           "en": "",
           "es": ""
         },
         "duration": {
-          "nl": "",
+          "nl": "Een gesprek duurt zolang als nodig is binnen het contactmoment.",
           "pap": "",
           "en": "",
           "es": ""
@@ -5426,7 +5549,7 @@
           "es": ""
         },
         "contact": {
-          "nl": "",
+          "nl": "Bel 918. Website: https://guanachat918.com/",
           "pap": "",
           "en": "",
           "es": ""
@@ -5441,19 +5564,19 @@
             "es": ""
           },
           "short_description": {
-            "nl": "",
+            "nl": "Guana Chat 918 is een gratis en anonieme hulplijn voor kinderen en jongeren in Caribisch Nederland.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "target_group": {
-            "nl": "",
+            "nl": "Kinderen en jongeren.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "support_offer": {
-            "nl": "",
+            "nl": "Telefonische, gratis en anonieme ondersteuning voor kinderen en jongeren die iemand willen spreken.",
             "pap": "",
             "en": "",
             "es": ""
@@ -5497,19 +5620,19 @@
         },
         "referral": {
           "when_appropriate": {
-            "nl": "",
+            "nl": "Wanneer een kind of jongere behoefte heeft aan een laagdrempelig, anoniem gesprek.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "criteria": {
-            "nl": "",
+            "nl": "Geen formele verwijscriteria.",
             "pap": "",
             "en": "",
             "es": ""
           },
           "indications_required": {
-            "nl": "",
+            "nl": "Nee. Jongeren kunnen zelf bellen.",
             "pap": "",
             "en": "",
             "es": ""
@@ -5517,7 +5640,7 @@
         },
         "practical": {
           "contact_details": {
-            "nl": "",
+            "nl": "Bel 918. Website: https://guanachat918.com/",
             "pap": "",
             "en": "",
             "es": ""
@@ -6459,7 +6582,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde demo-extra.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Demo-extra",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -6703,7 +6826,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde demo-extra.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Demo-extra",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -6947,7 +7070,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde demo-extra.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Demo-extra",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -7191,7 +7314,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde demo-extra.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Demo-extra",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -7436,7 +7559,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde legacy-entry.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Legacy-entry",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -7680,7 +7803,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde legacy-entry.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Legacy-entry",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -7924,7 +8047,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde legacy-entry; gebruik Zorg en Jeugd Caribisch Nederland (ZJCN).",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Legacy-entry",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -8168,7 +8291,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde legacy-entry; gebruik Mental Health Caribbean (MHC).",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Legacy-entry",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -8412,7 +8535,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde legacy-entry; gebruik Fundashon Forma.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Legacy-entry",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -8656,7 +8779,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde legacy-entry; gebruik GGD Bonaire.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Legacy-entry",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },
@@ -8900,7 +9023,7 @@
           "youth_how_it_works": "Neem contact op met de organisatie of vraag een volwassene/professional om mee te kijken.",
           "professional_summary": "Gearchiveerde legacy-entry; gebruik Akseso.",
           "professional_referral_or_access": "Verwijsinformatie wordt nog met de organisatie gecontroleerd. Gebruik de contactgegevens voor actuele toegang.",
-          "professional_notes": "Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.",
+          "professional_notes": "",
           "type": "Legacy-entry",
           "age_range": "Jongeren en gezinnen op Bonaire"
         },

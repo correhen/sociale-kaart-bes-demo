@@ -138,7 +138,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["help_support"],
       "secondary_theme_ids": ["family_system"],
-      "search_keywords_nl": ["ZJCN", "Youth Care", "Jeugdzorg", "Statia"],
+      "search_keywords_nl": ["ZJCN", "Youth Care", "Jeugdzorg", "Statia", "parenting support", "foster care", "supported living", "child abuse", "domestic violence", "family support", "youth problems"],
       "contact": {
         "phone": "+599 318 3379",
         "email": "info@jeugdzorgcn.com",
@@ -210,7 +210,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["health_wellbeing"],
       "secondary_theme_ids": ["help_support"],
-      "search_keywords_nl": ["MHC", "Mental Health Caribbean", "mental health", "Statia"],
+      "search_keywords_nl": ["MHC", "Mental Health Caribbean", "mental health", "Statia", "Hi-5", "anxiety", "sadness", "depression", "anger", "trauma", "attachment", "gaming", "addiction", "alcohol", "drugs", "psychologist", "child psychiatrist"],
       "contact": {
         "phone": "+599 318 0099 / +599 319 5677",
         "email": "secretariaat@mentalhealthcaribbean.com",
@@ -282,7 +282,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["safety_rights"],
       "secondary_theme_ids": ["family_system"],
-      "search_keywords_nl": ["Voogdijraad", "Guardianship Council", "HALT", "Statia"],
+      "search_keywords_nl": ["Voogdijraad", "Guardianship Council", "HALT", "Statia", "child maintenance", "guardianship", "contact arrangements", "child protection", "special curator", "central authority", "truancy"],
       "contact": {
         "email": "voogdijraadbes@rijksdienstcn.com",
         "website": "https://www.rijksdienstcn.com/voogdijraad",
@@ -428,7 +428,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["help_support"],
       "secondary_theme_ids": ["family_system"],
-      "search_keywords_nl": ["ZJCN", "Youth Care", "Jeugdzorg", "Saba"],
+      "search_keywords_nl": ["ZJCN", "Youth Care", "Jeugdzorg", "Saba", "parenting support", "foster care", "supported living", "child abuse", "domestic violence", "family support", "youth problems"],
       "contact": {
         "phone": "+599 416 3552",
         "email": "info@jeugdzorgcn.com",
@@ -500,7 +500,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["health_wellbeing"],
       "secondary_theme_ids": ["help_support"],
-      "search_keywords_nl": ["MHC", "Mental Health Caribbean", "mental health", "Saba"],
+      "search_keywords_nl": ["MHC", "Mental Health Caribbean", "mental health", "Saba", "Hi-5", "anxiety", "sadness", "depression", "anger", "trauma", "attachment", "gaming", "addiction", "alcohol", "drugs", "psychologist", "child psychiatrist"],
       "contact": {
         "phone": "+599 416 0196",
         "email": "secretariaat@mentalhealthcaribbean.com",
@@ -572,7 +572,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["safety_rights"],
       "secondary_theme_ids": ["family_system"],
-      "search_keywords_nl": ["Voogdijraad", "Guardianship Council", "HALT", "Saba"],
+      "search_keywords_nl": ["Voogdijraad", "Guardianship Council", "HALT", "Saba", "child maintenance", "guardianship", "contact arrangements", "child protection", "special curator", "central authority", "truancy"],
       "contact": {
         "email": "voogdijraadbes@rijksdienstcn.com",
         "website": "https://www.rijksdienstcn.com/voogdijraad",
@@ -717,7 +717,7 @@
       "target_audiences": ["youth", "professional"],
       "primary_theme_ids": ["direct_help"],
       "secondary_theme_ids": [],
-      "search_keywords_nl": ["Guana Chat 918", "helpline", "emergency", "Statia"],
+      "search_keywords_nl": ["Guana Chat 918", "helpline", "emergency", "Statia", "918", "guanachat", "child helpline", "anonymous", "free call", "talk", "direct help"],
       "contact": { "phone": "918", "website": "https://guanachat918.com/", "address": { "en": "Available throughout the Caribbean Netherlands" } },
       "translations": {
         "en": {
@@ -735,20 +735,20 @@
         }
       },
       "youth_profile": {
-        "who_we_are": { "en": "Guana Chat 918 is a free and anonymous helpline for children and young people in the Caribbean Netherlands." },
-        "who_for": { "en": "Children and young people who need someone to listen or who are worried about something." },
-        "what_help": { "en": "You can talk about anything that is on your mind, including fear, conflict, abuse, loneliness or stress." },
-        "how_to_access": { "en": "Call 918 directly. No referral is needed." },
-        "how_we_help": { "en": "A trained listener talks with you confidentially and helps you think about what you need next." },
-        "duration": { "en": "You can call whenever the service is open and you need support." },
-        "partners": { "en": "Where necessary, callers can be guided towards suitable local support." },
-        "contact": { "en": "Call 918 or visit guanachat918.com." }
+        "who_we_are": { "en": "Guana Chat 918 is a free and anonymous helpline for children and young people." },
+        "who_for": { "en": "For children and young people who are worried, struggling or need someone to talk to." },
+        "what_help": { "en": "You can call when you feel sad, afraid, angry or unsure, when something is happening at home or at school, or when you simply need to talk to someone." },
+        "how_to_access": { "en": "Call 918 free of charge and anonymously." },
+        "how_we_help": { "en": "You speak with someone who listens and thinks along with you." },
+        "duration": { "en": "A conversation lasts as long as needed within the contact moment." },
+        "partners": { "en": "" },
+        "contact": { "en": "Call 918. Website: https://guanachat918.com/" }
       },
       "professional_profile": {
-        "general": { "organisation_name": { "en": "Guana Chat 918" }, "short_description": { "en": "Free and anonymous helpline for children and young people." }, "target_group": { "en": "Children and young people." }, "support_offer": { "en": "Low-threshold telephone support." }, "services": { "en": "Listening, emotional support and guidance towards further help." }, "methods": { "en": "Confidential, accessible telephone support." }, "execution": { "en": "Young people call 918 directly." }, "problems": { "en": "Any concern or situation a young person wants to discuss." }, "trajectory": { "en": "Direct telephone contact." }, "average_duration": { "en": "One or more calls as needed." } },
-        "referral": { "when_appropriate": { "en": "When a young person needs an accessible and confidential place to talk." }, "criteria": { "en": "No referral required." }, "indications_required": { "en": "No." } },
-        "practical": { "contact_details": { "en": "Call 918. Website: guanachat918.com." }, "opening_hours": { "en": "Check the website for current availability." }, "waiting_times": { "en": "" } },
-        "additional": { "partners": { "en": "Local youth and care services where appropriate." }, "other_information": { "en": "The service is free and anonymous." } }
+        "general": { "organisation_name": { "en": "Guana Chat 918" }, "short_description": { "en": "Guana Chat 918 is a free and anonymous helpline for children and young people in the Caribbean Netherlands." }, "target_group": { "en": "Children and young people." }, "support_offer": { "en": "Free and anonymous phone support for children and young people who need someone to talk to." }, "services": { "en": "Listening, emotional support and guidance towards further help." }, "methods": { "en": "Confidential, accessible telephone support." }, "execution": { "en": "Young people call 918 directly." }, "problems": { "en": "Any concern or situation a young person wants to discuss." }, "trajectory": { "en": "Direct telephone contact." }, "average_duration": { "en": "One or more calls as needed." } },
+        "referral": { "when_appropriate": { "en": "When a child or young person needs a low-threshold, anonymous conversation." }, "criteria": { "en": "No formal referral criteria." }, "indications_required": { "en": "No. Young people can call directly." } },
+        "practical": { "contact_details": { "en": "Call 918. Website: https://guanachat918.com/" }, "opening_hours": { "en": "Check the website for current availability." }, "waiting_times": { "en": "" } },
+        "additional": { "partners": { "en": "" }, "other_information": { "en": "The service is free and anonymous." } }
       }
     },
     {
@@ -762,7 +762,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["direct_help", "safety_rights"],
       "secondary_theme_ids": [],
-      "search_keywords_nl": ["KPCN", "Police", "911", "emergency", "Statia"],
+      "search_keywords_nl": ["KPCN", "Police", "911", "emergency", "Statia", "emergency number", "immediate danger", "violence", "threat", "safety"],
       "contact": { "phone": "911", "address": { "en": "Police services on St. Eustatius" } },
       "translations": {
         "en": {
@@ -780,19 +780,19 @@
         }
       },
       "youth_profile": {
-        "who_we_are": { "en": "KPCN is the police force for the Caribbean Netherlands." },
-        "who_for": { "en": "Anyone who is in immediate danger or urgently needs police assistance." },
-        "what_help": { "en": "Emergencies involving danger, violence, abuse, threats or crime." },
-        "how_to_access": { "en": "Call 911 in an emergency." },
-        "how_we_help": { "en": "The emergency operator assesses the situation and sends police assistance where needed." },
-        "duration": { "en": "Emergency response depends on the situation." },
-        "partners": { "en": "Emergency and care services in the Caribbean Netherlands." },
-        "contact": { "en": "Emergency: call 911." }
+        "who_we_are": { "en": "The Caribbean Netherlands Police Force (KPCN) is the police service for Bonaire, Saba and St. Eustatius." },
+        "who_for": { "en": "For anyone who sees immediate danger, feels unsafe or urgently needs police assistance." },
+        "what_help": { "en": "Call 911 in case of immediate danger, violence, abuse, threats or another emergency requiring police assistance." },
+        "how_to_access": { "en": "Call 911 in an emergency or immediate danger." },
+        "how_we_help": { "en": "The police assess the situation and respond when there is an emergency or immediate danger." },
+        "duration": { "en": "Not applicable." },
+        "partners": { "en": "" },
+        "contact": { "en": "Call 911 in an emergency or immediate danger." }
       },
       "professional_profile": {
-        "general": { "organisation_name": { "en": "Caribbean Netherlands Police Force (KPCN)" }, "short_description": { "en": "Police and emergency response for the Caribbean Netherlands." }, "target_group": { "en": "Everyone." }, "support_offer": { "en": "Emergency police assistance." }, "services": { "en": "Police response, safety intervention and emergency assistance." }, "methods": { "en": "Police emergency response." }, "execution": { "en": "Call 911 and provide the location and nature of the emergency." }, "problems": { "en": "Immediate danger, violence, threats, abuse and crime." }, "trajectory": { "en": "Emergency call, assessment and response." }, "average_duration": { "en": "Depends on the emergency." } },
-        "referral": { "when_appropriate": { "en": "When urgent police help is needed." }, "criteria": { "en": "Call 911 for an emergency." }, "indications_required": { "en": "No." } },
-        "practical": { "contact_details": { "en": "Emergency telephone: 911." }, "opening_hours": { "en": "Emergency number available 24/7." }, "waiting_times": { "en": "" } },
+        "general": { "organisation_name": { "en": "Caribbean Netherlands Police Force (KPCN)" }, "short_description": { "en": "KPCN is the police service for Bonaire, Saba and St. Eustatius." }, "target_group": { "en": "Residents, young people, parents, professionals and organisations dealing with safety or emergency situations." }, "support_offer": { "en": "Police assistance and emergency response in case of immediate danger, violence, threats or other situations requiring urgent police assistance." }, "services": { "en": "Police response, safety intervention and emergency assistance." }, "methods": { "en": "Police emergency response." }, "execution": { "en": "Call 911 and provide the location and nature of the emergency." }, "problems": { "en": "Immediate danger, violence, threats, abuse and crime." }, "trajectory": { "en": "Emergency call, assessment and response." }, "average_duration": { "en": "Depends on the emergency." } },
+        "referral": { "when_appropriate": { "en": "In case of emergency, immediate danger or urgent need for police assistance." }, "criteria": { "en": "Call 911 in an emergency or immediate danger." }, "indications_required": { "en": "No." } },
+        "practical": { "contact_details": { "en": "Call 911 in an emergency or immediate danger." }, "opening_hours": { "en": "Emergency number available 24/7." }, "waiting_times": { "en": "" } },
         "additional": { "partners": { "en": "Emergency, justice and care services." }, "other_information": { "en": "Use 911 only when immediate assistance is needed." } }
       }
     },
@@ -807,7 +807,7 @@
       "target_audiences": ["youth", "professional"],
       "primary_theme_ids": ["direct_help"],
       "secondary_theme_ids": [],
-      "search_keywords_nl": ["Guana Chat 918", "helpline", "emergency", "Saba"],
+      "search_keywords_nl": ["Guana Chat 918", "helpline", "emergency", "Saba", "918", "guanachat", "child helpline", "anonymous", "free call", "talk", "direct help"],
       "contact": { "phone": "918", "website": "https://guanachat918.com/", "address": { "en": "Available throughout the Caribbean Netherlands" } },
       "translations": {
         "en": {
@@ -825,20 +825,20 @@
         }
       },
       "youth_profile": {
-        "who_we_are": { "en": "Guana Chat 918 is a free and anonymous helpline for children and young people in the Caribbean Netherlands." },
-        "who_for": { "en": "Children and young people who need someone to listen or who are worried about something." },
-        "what_help": { "en": "You can talk about anything that is on your mind, including fear, conflict, abuse, loneliness or stress." },
-        "how_to_access": { "en": "Call 918 directly. No referral is needed." },
-        "how_we_help": { "en": "A trained listener talks with you confidentially and helps you think about what you need next." },
-        "duration": { "en": "You can call whenever the service is open and you need support." },
-        "partners": { "en": "Where necessary, callers can be guided towards suitable local support." },
-        "contact": { "en": "Call 918 or visit guanachat918.com." }
+        "who_we_are": { "en": "Guana Chat 918 is a free and anonymous helpline for children and young people." },
+        "who_for": { "en": "For children and young people who are worried, struggling or need someone to talk to." },
+        "what_help": { "en": "You can call when you feel sad, afraid, angry or unsure, when something is happening at home or at school, or when you simply need to talk to someone." },
+        "how_to_access": { "en": "Call 918 free of charge and anonymously." },
+        "how_we_help": { "en": "You speak with someone who listens and thinks along with you." },
+        "duration": { "en": "A conversation lasts as long as needed within the contact moment." },
+        "partners": { "en": "" },
+        "contact": { "en": "Call 918. Website: https://guanachat918.com/" }
       },
       "professional_profile": {
-        "general": { "organisation_name": { "en": "Guana Chat 918" }, "short_description": { "en": "Free and anonymous helpline for children and young people." }, "target_group": { "en": "Children and young people." }, "support_offer": { "en": "Low-threshold telephone support." }, "services": { "en": "Listening, emotional support and guidance towards further help." }, "methods": { "en": "Confidential, accessible telephone support." }, "execution": { "en": "Young people call 918 directly." }, "problems": { "en": "Any concern or situation a young person wants to discuss." }, "trajectory": { "en": "Direct telephone contact." }, "average_duration": { "en": "One or more calls as needed." } },
-        "referral": { "when_appropriate": { "en": "When a young person needs an accessible and confidential place to talk." }, "criteria": { "en": "No referral required." }, "indications_required": { "en": "No." } },
-        "practical": { "contact_details": { "en": "Call 918. Website: guanachat918.com." }, "opening_hours": { "en": "Check the website for current availability." }, "waiting_times": { "en": "" } },
-        "additional": { "partners": { "en": "Local youth and care services where appropriate." }, "other_information": { "en": "The service is free and anonymous." } }
+        "general": { "organisation_name": { "en": "Guana Chat 918" }, "short_description": { "en": "Guana Chat 918 is a free and anonymous helpline for children and young people in the Caribbean Netherlands." }, "target_group": { "en": "Children and young people." }, "support_offer": { "en": "Free and anonymous phone support for children and young people who need someone to talk to." }, "services": { "en": "Listening, emotional support and guidance towards further help." }, "methods": { "en": "Confidential, accessible telephone support." }, "execution": { "en": "Young people call 918 directly." }, "problems": { "en": "Any concern or situation a young person wants to discuss." }, "trajectory": { "en": "Direct telephone contact." }, "average_duration": { "en": "One or more calls as needed." } },
+        "referral": { "when_appropriate": { "en": "When a child or young person needs a low-threshold, anonymous conversation." }, "criteria": { "en": "No formal referral criteria." }, "indications_required": { "en": "No. Young people can call directly." } },
+        "practical": { "contact_details": { "en": "Call 918. Website: https://guanachat918.com/" }, "opening_hours": { "en": "Check the website for current availability." }, "waiting_times": { "en": "" } },
+        "additional": { "partners": { "en": "" }, "other_information": { "en": "The service is free and anonymous." } }
       }
     },
     {
@@ -852,7 +852,7 @@
       "target_audiences": ["youth", "parents", "professional"],
       "primary_theme_ids": ["direct_help", "safety_rights"],
       "secondary_theme_ids": [],
-      "search_keywords_nl": ["KPCN", "Police", "911", "emergency", "Saba"],
+      "search_keywords_nl": ["KPCN", "Police", "911", "emergency", "Saba", "emergency number", "immediate danger", "violence", "threat", "safety"],
       "contact": { "phone": "911", "address": { "en": "Police services on Saba" } },
       "translations": {
         "en": {
@@ -870,19 +870,19 @@
         }
       },
       "youth_profile": {
-        "who_we_are": { "en": "KPCN is the police force for the Caribbean Netherlands." },
-        "who_for": { "en": "Anyone who is in immediate danger or urgently needs police assistance." },
-        "what_help": { "en": "Emergencies involving danger, violence, abuse, threats or crime." },
-        "how_to_access": { "en": "Call 911 in an emergency." },
-        "how_we_help": { "en": "The emergency operator assesses the situation and sends police assistance where needed." },
-        "duration": { "en": "Emergency response depends on the situation." },
-        "partners": { "en": "Emergency and care services in the Caribbean Netherlands." },
-        "contact": { "en": "Emergency: call 911." }
+        "who_we_are": { "en": "The Caribbean Netherlands Police Force (KPCN) is the police service for Bonaire, Saba and St. Eustatius." },
+        "who_for": { "en": "For anyone who sees immediate danger, feels unsafe or urgently needs police assistance." },
+        "what_help": { "en": "Call 911 in case of immediate danger, violence, abuse, threats or another emergency requiring police assistance." },
+        "how_to_access": { "en": "Call 911 in an emergency or immediate danger." },
+        "how_we_help": { "en": "The police assess the situation and respond when there is an emergency or immediate danger." },
+        "duration": { "en": "Not applicable." },
+        "partners": { "en": "" },
+        "contact": { "en": "Call 911 in an emergency or immediate danger." }
       },
       "professional_profile": {
-        "general": { "organisation_name": { "en": "Caribbean Netherlands Police Force (KPCN)" }, "short_description": { "en": "Police and emergency response for the Caribbean Netherlands." }, "target_group": { "en": "Everyone." }, "support_offer": { "en": "Emergency police assistance." }, "services": { "en": "Police response, safety intervention and emergency assistance." }, "methods": { "en": "Police emergency response." }, "execution": { "en": "Call 911 and provide the location and nature of the emergency." }, "problems": { "en": "Immediate danger, violence, threats, abuse and crime." }, "trajectory": { "en": "Emergency call, assessment and response." }, "average_duration": { "en": "Depends on the emergency." } },
-        "referral": { "when_appropriate": { "en": "When urgent police help is needed." }, "criteria": { "en": "Call 911 for an emergency." }, "indications_required": { "en": "No." } },
-        "practical": { "contact_details": { "en": "Emergency telephone: 911." }, "opening_hours": { "en": "Emergency number available 24/7." }, "waiting_times": { "en": "" } },
+        "general": { "organisation_name": { "en": "Caribbean Netherlands Police Force (KPCN)" }, "short_description": { "en": "KPCN is the police service for Bonaire, Saba and St. Eustatius." }, "target_group": { "en": "Residents, young people, parents, professionals and organisations dealing with safety or emergency situations." }, "support_offer": { "en": "Police assistance and emergency response in case of immediate danger, violence, threats or other situations requiring urgent police assistance." }, "services": { "en": "Police response, safety intervention and emergency assistance." }, "methods": { "en": "Police emergency response." }, "execution": { "en": "Call 911 and provide the location and nature of the emergency." }, "problems": { "en": "Immediate danger, violence, threats, abuse and crime." }, "trajectory": { "en": "Emergency call, assessment and response." }, "average_duration": { "en": "Depends on the emergency." } },
+        "referral": { "when_appropriate": { "en": "In case of emergency, immediate danger or urgent need for police assistance." }, "criteria": { "en": "Call 911 in an emergency or immediate danger." }, "indications_required": { "en": "No." } },
+        "practical": { "contact_details": { "en": "Call 911 in an emergency or immediate danger." }, "opening_hours": { "en": "Emergency number available 24/7." }, "waiting_times": { "en": "" } },
         "additional": { "partners": { "en": "Emergency, justice and care services." }, "other_information": { "en": "Use 911 only when immediate assistance is needed." } }
       }
     }
