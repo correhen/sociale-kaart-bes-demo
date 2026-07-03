@@ -303,7 +303,7 @@ $islandLabel = organization_island_label($islands);
     <h3>Thema's</h3>
     <div class="badge-list">
       <?php foreach ($themes as $theme): ?>
-        <span class="badge"><?= h($theme['name']) ?><?= (int)$theme['is_primary'] === 1 ? ' · primair' : '' ?></span>
+        <span class="badge"><?= h($theme['name']) ?><?= (int)$theme['is_primary'] === 1 ? ' - primair' : '' ?></span>
       <?php endforeach; ?>
       <?php if (!$themes): ?><span class="muted">Geen thema's gekoppeld.</span><?php endif; ?>
     </div>

@@ -349,24 +349,53 @@ function profile_editor_state(array $cell, string $language, string $sourceLangu
     $text = trim((string)($cell['answer_text'] ?? ''));
     $status = (string)($cell['translation_status'] ?? 'missing');
     if ($text === '' && $language !== $sourceLanguage && trim($sourceText) !== '') {
-        return ['label' => 'Fallback', 'class' => 'status-fallback'];
+        return ['label' => 'Fallback', 'class' => 'status-fallback', 'filter' => 'fallback'];
     }
     if ($text === '') {
-        return ['label' => 'Leeg', 'class' => 'status-empty'];
+        return ['label' => 'Leeg', 'class' => 'status-empty', 'filter' => 'empty'];
     }
     if ($language === 'pap') {
-        return ['label' => 'Concept review', 'class' => 'status-review'];
+        return ['label' => 'Review nodig', 'class' => 'status-review', 'filter' => 'review'];
     }
     if ($language === $sourceLanguage || in_array($status, ['published', 'reviewed'], true)) {
-        return ['label' => 'Gevuld', 'class' => 'status-filled'];
+        return ['label' => 'Gevuld', 'class' => 'status-filled', 'filter' => 'filled'];
     }
 
-    return ['label' => 'Concept', 'class' => 'status-draft'];
+    return ['label' => 'Concept', 'class' => 'status-draft', 'filter' => 'review'];
 }
 
 function profile_editor_badge(array $state): string
 {
     return '<span class="admin-status-pill ' . h($state['class']) . '">' . h($state['label']) . '</span>';
+}
+
+function profile_editor_summary(array $definition, array $values, array $introValues, string $language, string $sourceLanguage): array
+{
+    $summary = ['total' => 1, 'filled' => 0, 'review' => 0, 'empty' => 0, 'fallback' => 0];
+    $introCell = [
+        'answer_text' => (string)($introValues[$language] ?? ''),
+        'translation_status' => trim((string)($introValues[$language] ?? '')) === '' ? 'missing' : 'draft',
+    ];
+    $introState = profile_editor_state($introCell, $language, $sourceLanguage, (string)($introValues[$sourceLanguage] ?? ''));
+    $summary[$introState['filter']]++;
+    if (trim((string)($introCell['answer_text'] ?? '')) !== '') {
+        $summary['filled']++;
+    }
+
+    foreach ($definition as $groupKey => $group) {
+        foreach ($group['fields'] as $fieldKey => $label) {
+            $summary['total']++;
+            $cell = $values[$groupKey][$fieldKey][$language];
+            $sourceText = (string)($values[$groupKey][$fieldKey][$sourceLanguage]['answer_text'] ?? '');
+            $state = profile_editor_state($cell, $language, $sourceLanguage, $sourceText);
+            $summary[$state['filter']]++;
+            if (trim((string)($cell['answer_text'] ?? '')) !== '') {
+                $summary['filled']++;
+            }
+        }
+    }
+
+    return $summary;
 }
 
 try {
@@ -559,6 +588,11 @@ try {
 $profileLabel = $audience === 'professional' ? 'Professionalprofiel' : 'Jongerenprofiel';
 $introDefinition = PROFILE_INTRO_FIELDS[$audience] ?? PROFILE_INTRO_FIELDS['youth'];
 $sourceLanguage = profile_source_language($islands);
+$selectedSummary = profile_editor_summary($definition, $values, $introValues, $selectedLanguage, $sourceLanguage);
+$languageSummaries = [];
+foreach (PROFILE_LANGUAGES as $language) {
+    $languageSummaries[$language] = profile_editor_summary($definition, $values, $introValues, $language, $sourceLanguage);
+}
 $baseProfileUrl = 'organization_profile_edit.php?id=' . rawurlencode((string)$id) . '&audience=';
 admin_header(
     $organization ? $profileLabel . ': ' . (string)$organization['name'] : $profileLabel,
@@ -597,8 +631,9 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
     <div>
       <a class="back-link" href="organization.php?id=<?= h((string)$id) ?>">Terug naar organisatie</a>
       <p class="eyebrow">Redactie</p>
-      <h2><?= h((string)$organization['name']) ?></h2>
+      <h2><?= h($profileLabel) ?> - <?= h((string)$organization['name']) ?></h2>
       <p><?= h($profileLabel) ?> / gekozen taal: <strong><?= h(strtoupper($selectedLanguage)) ?></strong> / brontaal: <strong><?= h(strtoupper($sourceLanguage)) ?></strong></p>
+      <p class="save-state is-saved" data-save-state>Opgeslagen</p>
     </div>
     <div class="profile-editor-actions">
       <button type="button" class="button" data-expand-all>Alles uitklappen</button>
@@ -614,19 +649,46 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
       <a class="button<?= $audience === 'youth' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'youth&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link>Jongerenprofiel</a>
       <a class="button<?= $audience === 'professional' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'professional&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link>Professionalsprofiel</a>
     </div>
-    <div class="language-button-group" aria-label="Taal kiezen">
+    <div class="admin-language-switch" aria-label="Taal kiezen">
       <?php foreach (PROFILE_LANGUAGES as $language): ?>
+        <?php
+        $languageSummary = $languageSummaries[$language];
+        $languageStateClass = $languageSummary['empty'] === $languageSummary['total']
+            ? 'status-empty'
+            : ($languageSummary['review'] > 0 ? 'status-review' : 'status-filled');
+        ?>
         <a
-          class="language-button<?= $language === $selectedLanguage ? ' is-active' : '' ?>"
+          class="language-button <?= h($languageStateClass) ?><?= $language === $selectedLanguage ? ' is-active' : '' ?>"
           href="organization_profile_edit.php?id=<?= h((string)$id) ?>&amp;audience=<?= h($audience) ?>&amp;language=<?= h($language) ?>"
           data-language-link
-        ><?= h(strtoupper($language)) ?></a>
+        >
+          <strong><?= h(strtoupper($language)) ?></strong>
+          <small><?= h((string)$languageSummary['filled']) ?>/<?= h((string)$languageSummary['total']) ?> gevuld</small>
+        </a>
       <?php endforeach; ?>
     </div>
     <p class="form-help">Er wordt maar een taal tegelijk getoond. Wisselen met onopgeslagen wijzigingen vraagt eerst bevestiging.</p>
     <?php if ($publicUrl): ?>
       <a class="button" href="<?= h($publicUrl) ?>">Bekijk publieke pagina</a>
     <?php endif; ?>
+  </section>
+
+  <section class="admin-progress-card">
+    <div>
+      <p class="eyebrow">Voortgang <?= h(strtoupper($selectedLanguage)) ?></p>
+      <h2><?= h((string)$selectedSummary['total']) ?> vragen totaal</h2>
+      <p>
+        <?= h((string)$selectedSummary['filled']) ?> gevuld /
+        <?= h((string)$selectedSummary['review']) ?> review nodig /
+        <?= h((string)$selectedSummary['empty']) ?> leeg
+      </p>
+    </div>
+    <div class="profile-filter-bar" aria-label="Velden filteren">
+      <button type="button" class="button is-active" data-profile-filter="all">Alles</button>
+      <button type="button" class="button" data-profile-filter="empty">Alleen leeg</button>
+      <button type="button" class="button" data-profile-filter="review">Alleen review</button>
+      <button type="button" class="button" data-profile-filter="filled">Alleen ingevuld</button>
+    </div>
   </section>
 
   <section class="profile-group profile-intro-group">
@@ -639,13 +701,15 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
     $introState = profile_editor_state($introCell, $selectedLanguage, $sourceLanguage, $introSourceText);
     $canEditSelectedLanguage = admin_can_edit_profile_language($selectedLanguage);
     ?>
-    <details class="profile-editor-panel">
+    <details class="profile-editor-panel <?= h($introState['class']) ?>" data-profile-status="<?= h($introState['filter']) ?>">
       <summary>
+        <span class="admin-section-marker" aria-hidden="true">i</span>
         <span>
           <strong><?= h($introDefinition['label']) ?></strong>
           <small><?= h($introDefinition['help']) ?></small>
         </span>
         <?= profile_editor_badge($introState) ?>
+        <span class="admin-chevron" aria-hidden="true"></span>
       </summary>
       <div class="profile-editor-panel-body">
         <?php if (!$canEditSelectedLanguage): ?><p class="readonly-note">Alleen-lezen voor jouw rol.</p><?php endif; ?>
@@ -664,16 +728,23 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
             <?= $canEditSelectedLanguage ? '' : 'disabled' ?>
           ><?= h((string)($introValues[$selectedLanguage] ?? '')) ?></textarea>
         </label>
+        <div class="field-meta">
+          <span>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
+          <span>Reviewstatus: <?= h($introState['label']) ?></span>
+          <span data-field-save-state>Opgeslagen</span>
+        </div>
       </div>
     </details>
   </section>
 
+  <?php $fieldIndex = 0; ?>
   <?php foreach ($definition as $groupKey => $group): ?>
     <section class="profile-group">
       <div class="section-heading"><div><p class="eyebrow"><?= h($profileLabel) ?></p><h2><?= h((string)$group['label']) ?></h2></div></div>
 
       <?php foreach ($group['fields'] as $fieldKey => $fieldLabel): ?>
         <?php
+        $fieldIndex++;
         $cell = $values[$groupKey][$fieldKey][$selectedLanguage];
         $sourceCell = $values[$groupKey][$fieldKey][$sourceLanguage] ?? ['answer_text' => '', 'translation_status' => 'missing'];
         $sourceText = (string)($sourceCell['answer_text'] ?? '');
@@ -681,13 +752,15 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
         $formGroupKey = $groupKey === '' ? '_root' : $groupKey;
         $inputBase = 'answers[' . $formGroupKey . '][' . $fieldKey . '][' . $selectedLanguage . ']';
         ?>
-        <details class="profile-editor-panel">
+        <details class="profile-editor-panel <?= h($state['class']) ?>" data-profile-status="<?= h($state['filter']) ?>">
           <summary>
+            <span class="admin-section-marker" aria-hidden="true"><?= h((string)$fieldIndex) ?></span>
             <span>
               <strong><?= h((string)$fieldLabel) ?></strong>
               <small><code><?= h((string)$fieldKey) ?></code></small>
             </span>
             <?= profile_editor_badge($state) ?>
+            <span class="admin-chevron" aria-hidden="true"></span>
           </summary>
           <div class="profile-editor-panel-body">
             <?php if (!$canEditSelectedLanguage): ?><p class="readonly-note">Alleen-lezen voor jouw rol.</p><?php endif; ?>
@@ -717,6 +790,12 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
                 <?php endforeach; ?>
               </select>
             </label>
+            <div class="field-meta">
+              <span>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
+              <span>Vertaalstatus: <?= h((string)$cell['translation_status']) ?></span>
+              <span>Reviewstatus: <?= h($state['label']) ?></span>
+              <span data-field-save-state>Opgeslagen</span>
+            </div>
           </div>
         </details>
       <?php endforeach; ?>
@@ -736,9 +815,22 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
   const form = document.querySelector('[data-profile-editor-form]');
   if (!form) return;
   let dirty = false;
+  const saveState = document.querySelector('[data-save-state]');
+  const markDirty = () => {
+    dirty = true;
+    if (saveState) {
+      saveState.textContent = 'Wijzigingen nog niet opgeslagen';
+      saveState.classList.remove('is-saved');
+      saveState.classList.add('is-dirty');
+    }
+    form.querySelectorAll('[data-field-save-state]').forEach(item => {
+      item.textContent = 'Niet opgeslagen';
+      item.classList.add('is-dirty');
+    });
+  };
   form.querySelectorAll('textarea, select').forEach(input => {
-    input.addEventListener('input', () => { dirty = true; });
-    input.addEventListener('change', () => { dirty = true; });
+    input.addEventListener('input', markDirty);
+    input.addEventListener('change', markDirty);
   });
   form.addEventListener('submit', () => { dirty = false; });
   document.querySelectorAll('[data-language-link]').forEach(link => {
@@ -754,6 +846,15 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
   });
   document.querySelector('[data-collapse-all]')?.addEventListener('click', () => {
     form.querySelectorAll('details.profile-editor-panel').forEach(panel => { panel.open = false; });
+  });
+  document.querySelectorAll('[data-profile-filter]').forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.profileFilter || 'all';
+      document.querySelectorAll('[data-profile-filter]').forEach(item => item.classList.toggle('is-active', item === button));
+      form.querySelectorAll('[data-profile-status]').forEach(panel => {
+        panel.hidden = filter !== 'all' && panel.dataset.profileStatus !== filter;
+      });
+    });
   });
 })();
 </script>
