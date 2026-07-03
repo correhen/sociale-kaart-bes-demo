@@ -730,6 +730,11 @@ function getTranslatedValue(value, lang = currentLanguage(), fallbackLang = 'nl'
   return '';
 }
 
+function publicDetailLanguage(){
+  // PAP long-form detail copy is still in editorial review; public detail text falls back to NL until approved.
+  return currentLanguage() === 'pap' ? 'nl' : currentLanguage();
+}
+
 function getTranslatedField(item, field, lang = currentLanguage(), fallbackLang = 'nl'){
   const translated = getTranslatedValue(item?.translations?.[lang]?.[field], lang, fallbackLang);
   if(translated) return translated;
@@ -1598,18 +1603,19 @@ function contactActionLinks(contact = {}, options = {}){
 }
 
 function detailSectionBody(section){
+  const language = publicDetailLanguage();
   const paragraphs = Array.isArray(section.paragraphs) ? section.paragraphs : [];
   const items = Array.isArray(section.items) ? section.items : [];
-  const body = getTranslatedValue(section.body);
+  const body = getTranslatedValue(section.body, language, 'nl');
   const html = [];
   if(body && hasMeaningfulValue(body)) html.push(renderRichText(body));
   paragraphs
-    .map(getTranslatedValue)
+    .map(paragraph => getTranslatedValue(paragraph, language, 'nl'))
     .filter(hasMeaningfulValue)
     .forEach(text => html.push(renderRichText(text)));
   if(items.length) {
     const listItems = items
-      .map(getTranslatedValue)
+      .map(item => getTranslatedValue(item, language, 'nl'))
       .filter(hasMeaningfulValue)
       .map(item => `<li>${escapeHtml(item)}</li>`)
       .join('');
@@ -1624,7 +1630,7 @@ function profileLabel(config){
 }
 
 function profileAnswerText(value){
-  const text = getTranslatedValue(value, currentLanguage(), 'nl');
+  const text = getTranslatedValue(value, publicDetailLanguage(), 'nl');
   return hasMeaningfulValue(text) ? text : '';
 }
 
@@ -1748,8 +1754,9 @@ function legacyShouldOpenDetailSection(title, index, audience){
 function legacyDetailAccordionSections(org, audience){
   const key = audience === 'professional' ? 'professional_sections' : 'youth_sections';
   if(!Array.isArray(org[key])) return '';
+  const language = publicDetailLanguage();
   const sections = org[key].map((section, index) => {
-    const title = getTranslatedValue(section.title);
+    const title = getTranslatedValue(section.title, language, 'nl');
     const body = detailSectionBody(section);
     if(!hasMeaningfulValue(title) || !body) return null;
     const id = `detail-section-${audience}-${index}`;

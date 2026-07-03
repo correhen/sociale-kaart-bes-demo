@@ -625,6 +625,9 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
                   <?= status_badge((string)$cell['translation_status']) ?>
                 </div>
                 <?php if (!$canEditLanguage): ?><small class="readonly-note">Alleen-lezen voor jouw rol</small><?php endif; ?>
+                <?php if ($language === 'pap'): ?>
+                  <small class="readonly-note">Papiamentu concepttekst — bedoeld voor review. Lange detailteksten worden pas publiek getoond na redactionele goedkeuring.</small>
+                <?php endif; ?>
                 <label>
                   Antwoord
                   <textarea
