@@ -343,7 +343,7 @@
   "organizations": [
     {
       "id": "org_akseso",
-      "name": "Akseso / Sentro Akseso Boneiru",
+      "name": "Sentro Akseso Boneiru",
       "slug": "akseso",
       "island": "bonaire",
       "status": "active",
@@ -378,8 +378,8 @@
       },
       "translations": {
         "nl": {
-          "name": "Akseso / Sentro Akseso Boneiru",
-          "youth_title": "Akseso",
+          "name": "Sentro Akseso Boneiru",
+          "youth_title": "Sentro Akseso Boneiru",
           "youth_short": "Akseso luistert naar wat er speelt en zoekt samen met jou of je gezin naar passende hulp.",
           "youth_where_can_you_go": "Je kunt bij Akseso terecht met vragen over thuis, opvoeden, geld, verdriet, ruzie, veiligheid, gezondheid of andere zorgen.",
           "youth_how_it_works": "Je kunt zelf contact opnemen. Ook een ouder, school, huisarts of hulpverlener kan je aanmelden.",
@@ -390,25 +390,25 @@
           "age_range": "Kinderen, jongeren, ouders, gezinnen, volwassenen en professionals"
         },
         "pap": {
-          "name": "Akseso / Sentro Akseso Boneiru",
-          "youth_title": "Akseso",
+          "name": "Sentro Akseso Boneiru",
+          "youth_title": "Sentro Akseso Boneiru",
           "youth_short": "Akseso luistert naar wat er speelt en zoekt samen met jou of je gezin naar passende hulp.",
           "professional_summary": "Sentro Akseso Boneiru is het centrale toegangspunt voor sociale hulpverlening, preventie en ondersteuning op Bonaire.",
           "translation_status": "needs_papiamentu_review"
         },
         "en": {
-          "name": "Akseso / Sentro Akseso Boneiru",
+          "name": "Sentro Akseso Boneiru",
           "youth_short": "Akseso luistert naar wat er speelt en zoekt samen met jou of je gezin naar passende hulp.",
           "professional_summary": "Sentro Akseso Boneiru is het centrale toegangspunt voor sociale hulpverlening, preventie en ondersteuning op Bonaire.",
           "translation_status": "ai_draft",
-          "youth_title": "Akseso"
+          "youth_title": "Sentro Akseso Boneiru"
         },
         "es": {
-          "name": "Akseso / Sentro Akseso Boneiru",
+          "name": "Sentro Akseso Boneiru",
           "youth_short": "Akseso luistert naar wat er speelt en zoekt samen met jou of je gezin naar passende hulp.",
           "professional_summary": "Sentro Akseso Boneiru is het centrale toegangspunt voor sociale hulpverlening, preventie en ondersteuning op Bonaire.",
           "translation_status": "ai_draft",
-          "youth_title": "Akseso"
+          "youth_title": "Sentro Akseso Boneiru"
         }
       },
       "review_flags": {},
@@ -685,7 +685,7 @@
       "professional_profile": {
         "general": {
           "organisation_name": {
-            "nl": "Akseso / Sentro Akseso Boneiru",
+            "nl": "Sentro Akseso Boneiru",
             "pap": "",
             "en": "",
             "es": ""

@@ -1,6 +1,9 @@
 -- Final content polish for live database. Idempotent; no import/reset.
 START TRANSACTION;
 
+DROP TEMPORARY TABLE IF EXISTS tmp_profile_polish;
+DROP TEMPORARY TABLE IF EXISTS tmp_keyword_polish;
+
 UPDATE organization_translations
 SET professional_notes = ''
 WHERE professional_notes = 'Demo-informatie; inhoud en verwijscriteria moeten voor lancering worden bevestigd.';
@@ -25,7 +28,14 @@ WHERE o.external_key = 'org_eoz'
   AND ok.language_code = 'nl'
   AND ok.keyword = 'Expertise Onderwijs en Zorg (EOZ)';
 
-CREATE TEMPORARY TABLE IF NOT EXISTS tmp_profile_polish (external_key VARCHAR(120), audience_code VARCHAR(32), group_key VARCHAR(80), field_key VARCHAR(120), language_code VARCHAR(8), answer_text LONGTEXT);
+CREATE TEMPORARY TABLE tmp_profile_polish (
+  external_key VARCHAR(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  audience_code VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  group_key VARCHAR(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  field_key VARCHAR(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  language_code VARCHAR(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  answer_text LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 TRUNCATE tmp_profile_polish;
 INSERT INTO tmp_profile_polish (external_key, audience_code, group_key, field_key, language_code, answer_text) VALUES
 ('org_rosa_di_sharon','youth','','partners','nl','KHF werkt samen met ZJCN, MHC, Akseso, EOZ en scholen.'),
@@ -129,13 +139,18 @@ INSERT INTO tmp_profile_polish (external_key, audience_code, group_key, field_ke
 INSERT INTO organization_profile_answers (organization_id, audience_code, group_key, field_key, language_code, answer_text, translation_status, source_locked)
 SELECT o.id, p.audience_code, p.group_key, p.field_key, p.language_code, p.answer_text, 'reviewed', 1
 FROM tmp_profile_polish p
-JOIN organizations o ON o.external_key = p.external_key
+JOIN organizations o
+  ON o.external_key COLLATE utf8mb4_unicode_ci = p.external_key COLLATE utf8mb4_unicode_ci
 ON DUPLICATE KEY UPDATE
   answer_text = VALUES(answer_text),
   translation_status = VALUES(translation_status),
   source_locked = VALUES(source_locked);
 
-CREATE TEMPORARY TABLE IF NOT EXISTS tmp_keyword_polish (external_key VARCHAR(120), language_code VARCHAR(8), keyword VARCHAR(190));
+CREATE TEMPORARY TABLE tmp_keyword_polish (
+  external_key VARCHAR(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  language_code VARCHAR(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  keyword VARCHAR(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 TRUNCATE tmp_keyword_polish;
 INSERT INTO tmp_keyword_polish (external_key, language_code, keyword) VALUES
 ('org_eoz','nl','Expertisecenter Onderwijs en Zorg (EOZ)'),
@@ -379,7 +394,8 @@ INSERT INTO tmp_keyword_polish (external_key, language_code, keyword) VALUES
 INSERT INTO organization_keywords (organization_id, language_code, keyword)
 SELECT o.id, k.language_code, k.keyword
 FROM tmp_keyword_polish k
-JOIN organizations o ON o.external_key = k.external_key
+JOIN organizations o
+  ON o.external_key COLLATE utf8mb4_unicode_ci = k.external_key COLLATE utf8mb4_unicode_ci
 ON DUPLICATE KEY UPDATE keyword = VALUES(keyword);
 
 DROP TEMPORARY TABLE IF EXISTS tmp_profile_polish;

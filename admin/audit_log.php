@@ -45,7 +45,7 @@ function audit_profile_field_label(string $field): string
         'duration' => 'Hoelang duurt de hulp?',
         'partners' => 'Samenwerkingspartners',
         'contact' => 'Contact',
-        'organisation_name' => 'Organisatienaam',
+        'organisation_name' => 'Officiele organisatienaam',
         'short_description' => 'Korte omschrijving',
         'target_group' => 'Doelgroep',
         'support_offer' => 'Hulpaanbod',
@@ -121,8 +121,8 @@ function audit_field_label(string $field, string $action = ''): string
     if ($action === 'organization.update_translation_intro' && $parts) {
         $fieldKey = implode('.', $parts);
         $labels = [
-            'youth_short' => 'Korte tekst jongerenpagina',
-            'professional_summary' => 'Korte tekst professionalpagina',
+            'youth_short' => 'Korte titel jongeren / introtekst',
+            'professional_summary' => 'Korte titel professionals / introtekst',
         ];
 
         return ($labels[$fieldKey] ?? ucfirst(str_replace('_', ' ', $fieldKey)))
