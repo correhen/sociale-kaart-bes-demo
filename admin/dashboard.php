@@ -12,19 +12,42 @@ $islandCards = [
     'bonaire' => [
         'name' => 'Bonaire',
         'description' => 'Bekijk en beheer organisaties op Bonaire.',
+        'asset' => 'flags/svg/flag-bonaire.svg',
+        'asset_alt' => 'Vlag van Bonaire',
         'count' => null,
     ],
     'statia' => [
         'name' => 'Sint Eustatius',
         'description' => 'Bekijk en beheer organisaties op Sint Eustatius.',
+        'asset' => 'icons/people/address-location.svg',
+        'asset_alt' => '',
         'count' => null,
     ],
     'saba' => [
         'name' => 'Saba',
         'description' => 'Bekijk en beheer organisaties op Saba.',
+        'asset' => 'icons/people/address-location.svg',
+        'asset_alt' => '',
         'count' => null,
     ],
 ];
+
+function dashboard_asset(string $path, string $class, string $alt = ''): string
+{
+    $ariaHidden = $alt === '' ? ' aria-hidden="true"' : '';
+
+    return '<img class="' . h($class) . '" src="../assets/admin-icons/admin_assetpack_sociale_kaart_bes_v1/' . h($path) . '" alt="' . h($alt) . '"' . $ariaHidden . '>';
+}
+
+function dashboard_status_label(string $status): string
+{
+    return [
+        'published' => 'Gepubliceerd',
+        'draft' => 'Concept',
+        'needs_review' => 'Review nodig',
+        'archived' => 'Archief',
+    ][$status] ?? ucfirst(str_replace('_', ' ', $status));
+}
 
 try {
     $organizations = fetch_all(
@@ -54,7 +77,16 @@ try {
                 FROM organization_audience oa
                 INNER JOIN audiences a ON a.id = oa.audience_id
                 WHERE oa.organization_id = o.id
-            ) AS audiences
+            ) AS audiences,
+            (
+                SELECT GROUP_CONCAT(COALESCE(NULLIF(tt.name, ''), t.slug) ORDER BY oth.is_primary DESC, oth.sort_order ASC SEPARATOR ', ')
+                FROM organization_theme oth
+                INNER JOIN themes t ON t.id = oth.theme_id
+                LEFT JOIN theme_translations tt
+                    ON tt.theme_id = t.id
+                    AND tt.language_code = 'nl'
+                WHERE oth.organization_id = o.id
+            ) AS themes
         FROM organizations o
         LEFT JOIN organization_translations ot_nl
             ON ot_nl.organization_id = o.id
@@ -91,12 +123,14 @@ $searchData = array_map(
         'slug' => (string)$organization['slug'],
         'externalKey' => (string)$organization['external_key'],
         'status' => (string)$organization['status'],
+        'statusLabel' => dashboard_status_label((string)$organization['status']),
         'visibility' => (int)$organization['visibility_public'] === 1 ? 'publiek zichtbaar' : 'niet publiek',
         'islands' => (string)($organization['islands'] ?? ''),
         'islandCodes' => (string)($organization['island_codes'] ?? ''),
         'typeLabel' => (string)($organization['type_label'] ?? ''),
         'ageRange' => (string)($organization['age_range'] ?? ''),
         'audiences' => (string)($organization['audiences'] ?? ''),
+        'themes' => (string)($organization['themes'] ?? ''),
     ],
     $organizations
 );
@@ -113,11 +147,11 @@ admin_header('Dashboard', 'dashboard');
       <div>
         <p class="eyebrow">Snel starten</p>
         <h2 id="dashboard-search-title">Organisatie zoeken</h2>
-        <p>Zoek een organisatie om gegevens, profielen of vertalingen te beheren.</p>
+        <p>Zoek op organisatie, eiland of thema en open direct het juiste beheerprofiel.</p>
       </div>
       <div class="dashboard-create-action">
-        <span class="button button-disabled" aria-disabled="true">+ Nieuwe organisatie toevoegen</span>
-        <small>Nieuwe organisatie toevoegen wordt in de volgende stap ingericht.</small>
+        <span class="dashboard-placeholder-action" aria-disabled="true"><?= dashboard_asset('icons/actions/add.svg', 'admin-icon') ?>Nieuwe organisatie toevoegen</span>
+        <small>Binnenkort beschikbaar: eerst veilig aanmaken als concept.</small>
       </div>
     </div>
 
@@ -140,9 +174,9 @@ admin_header('Dashboard', 'dashboard');
   <section class="island-card-grid" aria-label="Organisaties per eiland">
     <?php foreach ($islandCards as $code => $island): ?>
       <a class="island-card" href="organizations.php?island=<?= h($code) ?>">
-        <span class="eyebrow">Eiland</span>
-        <strong><?= h($island['name']) ?></strong>
-        <span><?= h($island['description']) ?></span>
+        <span class="island-card-visual"><?= dashboard_asset($island['asset'], 'island-card-asset', $island['asset_alt']) ?></span>
+        <span class="island-card-name"><?= h($island['name']) ?></span>
+        <span class="island-card-description"><?= h($island['description']) ?></span>
         <?php if ($island['count'] !== null): ?>
           <span class="island-card-count"><?= h((string)$island['count']) ?> organisaties</span>
         <?php endif; ?>
@@ -191,24 +225,25 @@ admin_header('Dashboard', 'dashboard');
       organization.islandCodes,
       organization.typeLabel,
       organization.ageRange,
-      organization.audiences
+      organization.audiences,
+      organization.themes
     ].join(' ').toLowerCase().includes(query)).slice(0, 12);
 
     if (matches.length === 0) {
-      renderEmpty('Geen organisatie gevonden.');
+      renderEmpty('Geen organisatie gevonden. Controleer de spelling of zoek op eiland of thema.');
       return;
     }
 
     count.textContent = matches.length === 1 ? '1 organisatie gevonden.' : `${matches.length} organisaties gevonden.`;
     results.innerHTML = matches.map((organization) => {
-      const meta = [organization.typeLabel, organization.ageRange, organization.audiences].filter(Boolean).join(' - ');
+      const meta = [organization.typeLabel, organization.ageRange, organization.audiences, organization.themes].filter(Boolean).join(' - ');
       return `
         <article class="dashboard-result-card">
           <div>
             <h3>${escapeHtml(organization.name)}</h3>
             <div class="dashboard-result-badges">
               ${organization.islands ? `<span class="badge">${escapeHtml(organization.islands)}</span>` : ''}
-              <span class="badge">${escapeHtml(organization.status)}</span>
+              <span class="badge badge-${escapeHtml(organization.status)}">${escapeHtml(organization.statusLabel)}</span>
               <span class="badge">${escapeHtml(organization.visibility)}</span>
             </div>
             ${meta ? `<p class="muted">${escapeHtml(meta)}</p>` : ''}
