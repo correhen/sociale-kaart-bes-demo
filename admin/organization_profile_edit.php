@@ -79,6 +79,10 @@ $introValues = [];
 $errors = [];
 $error = '';
 $saved = (string)($_GET['saved'] ?? '') === '1';
+$selectedLanguage = trim((string)($_GET['language'] ?? $_POST['language'] ?? 'nl'));
+if (!in_array($selectedLanguage, PROFILE_LANGUAGES, true)) {
+    $selectedLanguage = 'nl';
+}
 
 function profile_definition(string $audience): array
 {
@@ -328,6 +332,43 @@ function profile_intro_audit_values(array $changes, string $field, string $side)
     return $values;
 }
 
+function profile_source_language(array $islands): string
+{
+    foreach ($islands as $island) {
+        $code = (string)($island['code'] ?? '');
+        if ((int)($island['is_primary'] ?? 0) === 1) {
+            return $code === 'bonaire' ? 'nl' : 'en';
+        }
+    }
+
+    return 'nl';
+}
+
+function profile_editor_state(array $cell, string $language, string $sourceLanguage, string $sourceText = ''): array
+{
+    $text = trim((string)($cell['answer_text'] ?? ''));
+    $status = (string)($cell['translation_status'] ?? 'missing');
+    if ($text === '' && $language !== $sourceLanguage && trim($sourceText) !== '') {
+        return ['label' => 'Fallback', 'class' => 'status-fallback'];
+    }
+    if ($text === '') {
+        return ['label' => 'Leeg', 'class' => 'status-empty'];
+    }
+    if ($language === 'pap') {
+        return ['label' => 'Concept review', 'class' => 'status-review'];
+    }
+    if ($language === $sourceLanguage || in_array($status, ['published', 'reviewed'], true)) {
+        return ['label' => 'Gevuld', 'class' => 'status-filled'];
+    }
+
+    return ['label' => 'Concept', 'class' => 'status-draft'];
+}
+
+function profile_editor_badge(array $state): string
+{
+    return '<span class="admin-status-pill ' . h($state['class']) . '">' . h($state['label']) . '</span>';
+}
+
 try {
     if ($id <= 0) {
         throw new RuntimeException('Geen geldige organisatie-id opgegeven.');
@@ -493,6 +534,8 @@ try {
                 . rawurlencode((string)$id)
                 . '&audience='
                 . rawurlencode($audience)
+                . '&language='
+                . rawurlencode($selectedLanguage)
                 . '&saved=1'
             );
             exit;
@@ -515,6 +558,8 @@ try {
 
 $profileLabel = $audience === 'professional' ? 'Professionalprofiel' : 'Jongerenprofiel';
 $introDefinition = PROFILE_INTRO_FIELDS[$audience] ?? PROFILE_INTRO_FIELDS['youth'];
+$sourceLanguage = profile_source_language($islands);
+$baseProfileUrl = 'organization_profile_edit.php?id=' . rawurlencode((string)$id) . '&audience=';
 admin_header(
     $organization ? $profileLabel . ': ' . (string)$organization['name'] : $profileLabel,
     'organizations'
@@ -528,36 +573,8 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
 <?php endif; ?>
 
 <?php if ($saved): ?>
-  <p class="notice">De profielwijzigingen zijn succesvol opgeslagen.</p>
+  <p class="notice">Opgeslagen.</p>
 <?php endif; ?>
-
-<section class="panel">
-  <p class="notice">Nederlands is de brontekst. Vertalingen kunnen per taal worden bijgewerkt voor NL / PAP / EN / ES.</p>
-  <dl class="detail-list">
-    <dt>Organisatie</dt><dd><?= h((string)$organization['name']) ?></dd>
-    <dt>Slug</dt><dd><code><?= h((string)$organization['slug']) ?></code></dd>
-    <dt>Profiel</dt><dd><?= h($profileLabel) ?></dd>
-    <dt>Rechten</dt>
-    <dd>
-      <?php if (admin_can_edit_organizations()): ?>
-        Alle talen bewerkbaar.
-      <?php elseif (admin_has_role('translator')): ?>
-        PAP, EN en ES bewerkbaar; NL is alleen-lezen.
-      <?php else: ?>
-        Alleen-lezen.
-      <?php endif; ?>
-    </dd>
-  </dl>
-  <div class="form-actions">
-    <a class="button" href="organization.php?id=<?= h((string)$id) ?>">Terug naar organisatie</a>
-    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$id) ?>&amp;audience=<?= $audience === 'youth' ? 'professional' : 'youth' ?>">
-      Naar <?= $audience === 'youth' ? 'professionalprofiel' : 'jongerenprofiel' ?>
-    </a>
-    <?php if ($publicUrl): ?>
-      <a class="button" href="<?= h($publicUrl) ?>">Bekijk <?= $audience === 'youth' ? 'jongerenpagina' : 'professionalpagina' ?></a>
-    <?php endif; ?>
-  </div>
-</section>
 
 <?php if ($errors): ?>
   <section class="panel">
@@ -570,34 +587,85 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
   </section>
 <?php endif; ?>
 
-<form method="post" action="organization_profile_edit.php?id=<?= h((string)$id) ?>&amp;audience=<?= h($audience) ?>" class="panel profile-editor">
+<form method="post" action="organization_profile_edit.php?id=<?= h((string)$id) ?>&amp;audience=<?= h($audience) ?>&amp;language=<?= h($selectedLanguage) ?>" class="profile-editor profile-editor-single-language" data-profile-editor-form>
   <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
   <input type="hidden" name="id" value="<?= h((string)$id) ?>">
   <input type="hidden" name="audience" value="<?= h($audience) ?>">
+  <input type="hidden" name="language" value="<?= h($selectedLanguage) ?>">
 
-  <section class="profile-group profile-intro-group">
-    <div class="section-heading"><div><p class="eyebrow">Intro</p><h2><?= h($introDefinition['label']) ?></h2></div></div>
-    <p class="form-help"><?= h($introDefinition['help']) ?></p>
-    <div class="profile-language-grid">
+  <section class="profile-editor-hero">
+    <div>
+      <a class="back-link" href="organization.php?id=<?= h((string)$id) ?>">Terug naar organisatie</a>
+      <p class="eyebrow">Redactie</p>
+      <h2><?= h((string)$organization['name']) ?></h2>
+      <p><?= h($profileLabel) ?> / gekozen taal: <strong><?= h(strtoupper($selectedLanguage)) ?></strong> / brontaal: <strong><?= h(strtoupper($sourceLanguage)) ?></strong></p>
+    </div>
+    <div class="profile-editor-actions">
+      <button type="button" class="button" data-expand-all>Alles uitklappen</button>
+      <button type="button" class="button" data-collapse-all>Alles inklappen</button>
+      <?php if (admin_can_edit_profiles()): ?>
+        <button type="submit">Opslaan</button>
+      <?php endif; ?>
+    </div>
+  </section>
+
+  <section class="panel profile-editor-toolbar">
+    <div class="profile-switcher" aria-label="Profieltype">
+      <a class="button<?= $audience === 'youth' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'youth&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link>Jongerenprofiel</a>
+      <a class="button<?= $audience === 'professional' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'professional&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link>Professionalsprofiel</a>
+    </div>
+    <div class="language-button-group" aria-label="Taal kiezen">
       <?php foreach (PROFILE_LANGUAGES as $language): ?>
-        <?php $canEditLanguage = admin_can_edit_profile_language($language); ?>
-        <section class="profile-language<?= $language === 'nl' ? ' is-source' : '' ?><?= trim((string)($introValues[$language] ?? '')) === '' ? ' is-empty' : '' ?><?= !$canEditLanguage ? ' is-readonly' : '' ?>">
-          <div class="language-heading">
-            <h4><?= h(strtoupper($language)) ?><?= $language === 'nl' ? ' - bron' : '' ?></h4>
-          </div>
-          <?php if (!$canEditLanguage): ?><small class="readonly-note">Alleen-lezen voor jouw rol</small><?php endif; ?>
-          <label>
-            Tekst
-            <textarea
-              name="intro[<?= h($language) ?>]"
-              rows="4"
-              <?= $canEditLanguage ? 'data-richtext-editor' : '' ?>
-              <?= $canEditLanguage ? '' : 'disabled' ?>
-            ><?= h((string)($introValues[$language] ?? '')) ?></textarea>
-          </label>
-        </section>
+        <a
+          class="language-button<?= $language === $selectedLanguage ? ' is-active' : '' ?>"
+          href="organization_profile_edit.php?id=<?= h((string)$id) ?>&amp;audience=<?= h($audience) ?>&amp;language=<?= h($language) ?>"
+          data-language-link
+        ><?= h(strtoupper($language)) ?></a>
       <?php endforeach; ?>
     </div>
+    <p class="form-help">Er wordt maar een taal tegelijk getoond. Wisselen met onopgeslagen wijzigingen vraagt eerst bevestiging.</p>
+    <?php if ($publicUrl): ?>
+      <a class="button" href="<?= h($publicUrl) ?>">Bekijk publieke pagina</a>
+    <?php endif; ?>
+  </section>
+
+  <section class="profile-group profile-intro-group">
+    <?php
+    $introSourceText = (string)($introValues[$sourceLanguage] ?? '');
+    $introCell = [
+        'answer_text' => (string)($introValues[$selectedLanguage] ?? ''),
+        'translation_status' => trim((string)($introValues[$selectedLanguage] ?? '')) === '' ? 'missing' : 'draft',
+    ];
+    $introState = profile_editor_state($introCell, $selectedLanguage, $sourceLanguage, $introSourceText);
+    $canEditSelectedLanguage = admin_can_edit_profile_language($selectedLanguage);
+    ?>
+    <details class="profile-editor-panel">
+      <summary>
+        <span>
+          <strong><?= h($introDefinition['label']) ?></strong>
+          <small><?= h($introDefinition['help']) ?></small>
+        </span>
+        <?= profile_editor_badge($introState) ?>
+      </summary>
+      <div class="profile-editor-panel-body">
+        <?php if (!$canEditSelectedLanguage): ?><p class="readonly-note">Alleen-lezen voor jouw rol.</p><?php endif; ?>
+        <?php if ($selectedLanguage !== $sourceLanguage && trim($introSourceText) !== ''): ?>
+          <details class="source-preview">
+            <summary>Brontekst <?= h(strtoupper($sourceLanguage)) ?></summary>
+            <div><?= nl2br(h($introSourceText)) ?></div>
+          </details>
+        <?php endif; ?>
+        <label>
+          Tekst <?= h(strtoupper($selectedLanguage)) ?>
+          <textarea
+            name="intro[<?= h($selectedLanguage) ?>]"
+            rows="5"
+            <?= $canEditSelectedLanguage ? 'data-richtext-editor' : '' ?>
+            <?= $canEditSelectedLanguage ? '' : 'disabled' ?>
+          ><?= h((string)($introValues[$selectedLanguage] ?? '')) ?></textarea>
+        </label>
+      </div>
+    </details>
   </section>
 
   <?php foreach ($definition as $groupKey => $group): ?>
@@ -605,60 +673,89 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
       <div class="section-heading"><div><p class="eyebrow"><?= h($profileLabel) ?></p><h2><?= h((string)$group['label']) ?></h2></div></div>
 
       <?php foreach ($group['fields'] as $fieldKey => $fieldLabel): ?>
-        <article class="profile-field">
-          <div class="profile-field-header">
-            <h3><?= h((string)$fieldLabel) ?></h3>
-            <code class="field-key"><?= h((string)$fieldKey) ?></code>
+        <?php
+        $cell = $values[$groupKey][$fieldKey][$selectedLanguage];
+        $sourceCell = $values[$groupKey][$fieldKey][$sourceLanguage] ?? ['answer_text' => '', 'translation_status' => 'missing'];
+        $sourceText = (string)($sourceCell['answer_text'] ?? '');
+        $state = profile_editor_state($cell, $selectedLanguage, $sourceLanguage, $sourceText);
+        $formGroupKey = $groupKey === '' ? '_root' : $groupKey;
+        $inputBase = 'answers[' . $formGroupKey . '][' . $fieldKey . '][' . $selectedLanguage . ']';
+        ?>
+        <details class="profile-editor-panel">
+          <summary>
+            <span>
+              <strong><?= h((string)$fieldLabel) ?></strong>
+              <small><code><?= h((string)$fieldKey) ?></code></small>
+            </span>
+            <?= profile_editor_badge($state) ?>
+          </summary>
+          <div class="profile-editor-panel-body">
+            <?php if (!$canEditSelectedLanguage): ?><p class="readonly-note">Alleen-lezen voor jouw rol.</p><?php endif; ?>
+            <?php if ($selectedLanguage === 'pap'): ?>
+              <p class="notice">Papiamentu concepttekst - bedoeld voor review. Lange detailteksten worden pas publiek getoond na redactionele goedkeuring.</p>
+            <?php endif; ?>
+            <?php if ($selectedLanguage !== $sourceLanguage && trim($sourceText) !== ''): ?>
+              <details class="source-preview">
+                <summary>Brontekst <?= h(strtoupper($sourceLanguage)) ?></summary>
+                <div><?= nl2br(h($sourceText)) ?></div>
+              </details>
+            <?php endif; ?>
+            <label>
+              Antwoord <?= h(strtoupper($selectedLanguage)) ?>
+              <textarea
+                name="<?= h($inputBase) ?>[answer_text]"
+                rows="9"
+                <?= $canEditSelectedLanguage ? 'data-richtext-editor' : '' ?>
+                <?= $canEditSelectedLanguage ? '' : 'disabled' ?>
+              ><?= h((string)$cell['answer_text']) ?></textarea>
+            </label>
+            <label>
+              Vertaalstatus
+              <select name="<?= h($inputBase) ?>[translation_status]" <?= $canEditSelectedLanguage ? '' : 'disabled' ?>>
+                <?php foreach (PROFILE_TRANSLATION_STATUSES as $status): ?>
+                  <option value="<?= h($status) ?>" <?= $cell['translation_status'] === $status ? 'selected' : '' ?>><?= h($status) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </label>
           </div>
-
-          <div class="profile-language-grid">
-            <?php foreach (PROFILE_LANGUAGES as $language): ?>
-              <?php
-              $cell = $values[$groupKey][$fieldKey][$language];
-              $canEditLanguage = admin_can_edit_profile_language($language);
-              $formGroupKey = $groupKey === '' ? '_root' : $groupKey;
-              $inputBase = 'answers[' . $formGroupKey . '][' . $fieldKey . '][' . $language . ']';
-              ?>
-              <section class="profile-language<?= $language === 'nl' ? ' is-source' : '' ?><?= trim((string)$cell['answer_text']) === '' ? ' is-empty' : '' ?><?= !$canEditLanguage ? ' is-readonly' : '' ?>">
-                <div class="language-heading">
-                  <h4><?= h(strtoupper($language)) ?><?= $language === 'nl' ? ' - bron' : '' ?></h4>
-                  <?= status_badge((string)$cell['translation_status']) ?>
-                </div>
-                <?php if (!$canEditLanguage): ?><small class="readonly-note">Alleen-lezen voor jouw rol</small><?php endif; ?>
-                <?php if ($language === 'pap'): ?>
-                  <small class="readonly-note">Papiamentu concepttekst — bedoeld voor review. Lange detailteksten worden pas publiek getoond na redactionele goedkeuring.</small>
-                <?php endif; ?>
-                <label>
-                  Antwoord
-                  <textarea
-                    name="<?= h($inputBase) ?>[answer_text]"
-                    rows="7"
-                    <?= $canEditLanguage ? 'data-richtext-editor' : '' ?>
-                    <?= $canEditLanguage ? '' : 'disabled' ?>
-                  ><?= h((string)$cell['answer_text']) ?></textarea>
-                </label>
-                <label>
-                  Vertaalstatus
-                  <select name="<?= h($inputBase) ?>[translation_status]" <?= $canEditLanguage ? '' : 'disabled' ?>>
-                    <?php foreach (PROFILE_TRANSLATION_STATUSES as $status): ?>
-                      <option value="<?= h($status) ?>" <?= $cell['translation_status'] === $status ? 'selected' : '' ?>><?= h($status) ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </label>
-              </section>
-            <?php endforeach; ?>
-          </div>
-        </article>
+        </details>
       <?php endforeach; ?>
     </section>
   <?php endforeach; ?>
 
   <div class="form-actions sticky-actions">
     <?php if (admin_can_edit_profiles()): ?>
-      <button type="submit">Profiel opslaan</button>
+      <button type="submit">Opslaan</button>
     <?php endif; ?>
     <a class="button" href="organization.php?id=<?= h((string)$id) ?>">Annuleren</a>
   </div>
 </form>
+
+<script>
+(() => {
+  const form = document.querySelector('[data-profile-editor-form]');
+  if (!form) return;
+  let dirty = false;
+  form.querySelectorAll('textarea, select').forEach(input => {
+    input.addEventListener('input', () => { dirty = true; });
+    input.addEventListener('change', () => { dirty = true; });
+  });
+  form.addEventListener('submit', () => { dirty = false; });
+  document.querySelectorAll('[data-language-link]').forEach(link => {
+    link.addEventListener('click', event => {
+      if (!dirty) return;
+      if (!window.confirm('Je hebt onopgeslagen wijzigingen. Weet je zeker dat je wilt wisselen zonder eerst op te slaan?')) {
+        event.preventDefault();
+      }
+    });
+  });
+  document.querySelector('[data-expand-all]')?.addEventListener('click', () => {
+    form.querySelectorAll('details.profile-editor-panel').forEach(panel => { panel.open = true; });
+  });
+  document.querySelector('[data-collapse-all]')?.addEventListener('click', () => {
+    form.querySelectorAll('details.profile-editor-panel').forEach(panel => { panel.open = false; });
+  });
+})();
+</script>
 
 <?php admin_footer(); ?>

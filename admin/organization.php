@@ -15,6 +15,7 @@ $audiences = [];
 $translations = [];
 $youthAnswers = [];
 $professionalAnswers = [];
+$auditEntries = [];
 $languages = ['nl', 'pap', 'en', 'es'];
 $saved = (string)($_GET['saved'] ?? '') === '1';
 
@@ -49,45 +50,105 @@ function profile_matrix(array $rows): array
     return array_values($matrix);
 }
 
-function render_profile_table(array $answers, array $languages): void
+function organization_source_language(array $islands): string
+{
+    foreach ($islands as $island) {
+        $code = (string)($island['code'] ?? '');
+        if ((int)($island['is_primary'] ?? 0) === 1) {
+            return $code === 'bonaire' ? 'nl' : 'en';
+        }
+    }
+
+    return 'nl';
+}
+
+function organization_island_label(array $islands): string
+{
+    if (!$islands) {
+        return '';
+    }
+
+    return implode(', ', array_map(
+        static fn(array $island): string => (string)$island['name'] . ((int)$island['is_primary'] === 1 ? ' (primair)' : ''),
+        $islands
+    ));
+}
+
+function profile_language_state(array $answers, string $language, string $sourceLanguage): array
+{
+    $total = count($answers);
+    $filled = 0;
+    $published = 0;
+    $reviewed = 0;
+    $draft = 0;
+
+    foreach ($answers as $answer) {
+        $cell = $answer['languages'][$language] ?? null;
+        $text = trim((string)($cell['answer_text'] ?? ''));
+        if ($text === '') {
+            continue;
+        }
+        $filled++;
+        $status = (string)($cell['translation_status'] ?? 'missing');
+        if ($status === 'published') {
+            $published++;
+        } elseif ($status === 'reviewed') {
+            $reviewed++;
+        } elseif ($status === 'draft') {
+            $draft++;
+        }
+    }
+
+    if ($filled === 0) {
+        return ['label' => 'Leeg', 'class' => 'status-empty', 'meta' => '0/' . $total . ' velden'];
+    }
+    if ($language === 'pap') {
+        return ['label' => 'Concept review', 'class' => 'status-review', 'meta' => $filled . '/' . $total . ' gevuld'];
+    }
+    if ($language === $sourceLanguage) {
+        return ['label' => 'Gevuld', 'class' => 'status-filled', 'meta' => $filled . '/' . $total . ' gevuld'];
+    }
+    if (($published + $reviewed) >= $filled && $draft === 0) {
+        return ['label' => 'Gereviewd', 'class' => 'status-filled', 'meta' => $filled . '/' . $total . ' gevuld'];
+    }
+
+    return ['label' => 'Concept', 'class' => 'status-draft', 'meta' => $filled . '/' . $total . ' gevuld'];
+}
+
+function render_profile_status_card(string $title, array $answers, array $languages, string $sourceLanguage, string $href): void
 {
     ?>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Groep</th>
-          <th>Veld</th>
-          <?php foreach ($languages as $language): ?>
-            <th><?= h($language) ?></th>
-          <?php endforeach; ?>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if (!$answers): ?>
-          <tr><td colspan="<?= h((string)(count($languages) + 2)) ?>" class="muted">Geen profielvelden gevonden.</td></tr>
-        <?php endif; ?>
-        <?php foreach ($answers as $answer): ?>
-          <tr>
-            <td><?= empty_label($answer['group_key']) ?></td>
-            <td><code><?= h($answer['field_key']) ?></code></td>
-            <?php foreach ($languages as $language): ?>
-              <?php $cell = $answer['languages'][$language] ?? null; ?>
-              <td class="profile-answer">
-                <?php if ($cell): ?>
-                  <?= empty_label($cell['answer_text']) ?>
-                  <br><small class="muted">status: <?= h($cell['translation_status']) ?></small>
-                <?php else: ?>
-                  <span class="muted">ontbreekt</span>
-                <?php endif; ?>
-              </td>
-            <?php endforeach; ?>
-          </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-  </div>
+  <section class="admin-dashboard-card profile-status-card">
+    <div class="admin-card-heading">
+      <div>
+        <p class="eyebrow">Profielstatus</p>
+        <h2><?= h($title) ?></h2>
+      </div>
+      <a class="button" href="<?= h($href) ?>"><?= h($title) ?> bewerken</a>
+    </div>
+    <div class="language-status-grid">
+      <?php foreach ($languages as $language): ?>
+        <?php $state = profile_language_state($answers, $language, $sourceLanguage); ?>
+        <div class="language-status-tile <?= h($state['class']) ?>">
+          <strong><?= h(strtoupper($language)) ?></strong>
+          <span><?= h($state['label']) ?></span>
+          <small><?= h($state['meta']) ?></small>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </section>
 <?php
+}
+
+function audit_action_label_short(string $action): string
+{
+    $labels = [
+        'organization.update_basic' => 'Basisgegevens gewijzigd',
+        'organization.update_profile' => 'Profiel gewijzigd',
+        'organization.update_translation_intro' => 'Korte introtekst gewijzigd',
+    ];
+
+    return $labels[$action] ?? $action;
 }
 
 try {
@@ -154,6 +215,16 @@ try {
     );
     $youthAnswers = profile_matrix(array_values(array_filter($profileRows, static fn(array $row): bool => $row['audience_code'] === 'youth')));
     $professionalAnswers = profile_matrix(array_values(array_filter($profileRows, static fn(array $row): bool => $row['audience_code'] === 'professional')));
+    $auditEntries = fetch_all(
+        "SELECT a.action, a.created_at, u.name AS user_name, u.email AS user_email
+        FROM audit_log a
+        LEFT JOIN users u ON u.id = a.user_id
+        WHERE a.entity_type = 'organization'
+          AND a.entity_id = :id
+        ORDER BY a.created_at DESC, a.id DESC
+        LIMIT 10",
+        ['id' => $id]
+    );
 } catch (Throwable $exception) {
     $knownMessages = [
         'Geen geldige organisatie-id opgegeven.',
@@ -167,6 +238,8 @@ try {
 admin_header($organization ? (string)$organization['name'] : 'Organisatie', 'organizations');
 $publicYouthUrl = $organization ? admin_public_organization_url($organization, 'youth', $islands) : null;
 $publicProfessionalUrl = $organization ? admin_public_organization_url($organization, 'professional', $islands) : null;
+$sourceLanguage = organization_source_language($islands);
+$islandLabel = organization_island_label($islands);
 ?>
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
@@ -174,11 +247,12 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
   <?php admin_footer(); exit; ?>
 <?php endif; ?>
 
-<section class="detail-hero">
+<section class="detail-hero organization-dashboard-hero">
   <div>
-    <a class="back-link" href="organizations.php">← Terug naar overzicht</a>
+    <a class="back-link" href="organizations.php">Terug naar organisaties</a>
     <p class="eyebrow">Organisatie</p>
     <h2><?= h((string)$organization['name']) ?></h2>
+    <p><?= $islandLabel !== '' ? h($islandLabel) : '<span class="muted">Geen eiland gekoppeld</span>' ?></p>
     <div class="status-row">
       <?= status_badge($organization['status']) ?>
       <?= status_badge($organization['source_status']) ?>
@@ -186,20 +260,16 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
     </div>
   </div>
   <div class="detail-actions">
+    <a class="button" href="organizations.php">Terug naar organisaties</a>
     <?php if (admin_can_edit_organizations()): ?>
       <a class="button primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Basisgegevens bewerken</a>
     <?php endif; ?>
-    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=youth">
-      <?= admin_can_edit_profiles() ? 'Jongerenprofiel bewerken' : 'Jongerenprofiel bekijken' ?>
-    </a>
-    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional">
-      <?= admin_can_edit_profiles() ? 'Professionalprofiel bewerken' : 'Professionalprofiel bekijken' ?>
-    </a>
+    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=youth">Jongerenprofiel bewerken</a>
+    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional">Professionalsprofiel bewerken</a>
     <?php if ($publicYouthUrl): ?>
-      <a class="button" href="<?= h($publicYouthUrl) ?>">Bekijk jongerenpagina</a>
-    <?php endif; ?>
-    <?php if ($publicProfessionalUrl): ?>
-      <a class="button" href="<?= h($publicProfessionalUrl) ?>">Bekijk professionalpagina</a>
+      <a class="button" href="<?= h($publicYouthUrl) ?>">Open publieke pagina</a>
+    <?php elseif ($publicProfessionalUrl): ?>
+      <a class="button" href="<?= h($publicProfessionalUrl) ?>">Open publieke pagina</a>
     <?php endif; ?>
   </div>
 </section>
@@ -208,106 +278,80 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
   <p class="notice">Wijzigingen zijn opgeslagen.</p>
 <?php endif; ?>
 
-<div class="section-nav">
-  <a class="button" href="#basis">Basis</a>
-  <a class="button" href="#contact">Contact</a>
-  <a class="button" href="#youth">Jongerenprofiel</a>
-  <a class="button" href="#professional">Professionalprofiel</a>
-  <a class="button" href="#translations">Vertalingen/status</a>
-</div>
+<div class="organization-dashboard">
+  <section class="admin-dashboard-card">
+    <div class="admin-card-heading"><div><p class="eyebrow">Overzicht</p><h2>Algemene gegevens</h2></div></div>
+    <dl class="compact-detail-list">
+      <dt>Naam</dt><dd><?= h($organization['name']) ?></dd>
+      <dt>Slug</dt><dd><code><?= h($organization['slug']) ?></code></dd>
+      <dt>External key</dt><dd><code><?= h((string)$organization['external_key']) ?></code></dd>
+      <dt>Eiland</dt><dd><?= $islandLabel !== '' ? h($islandLabel) : '<span class="muted">ontbreekt</span>' ?></dd>
+      <dt>Status</dt><dd><?= status_badge($organization['status']) ?></dd>
+      <dt>Zichtbaarheid</dt><dd><?= ((int)$organization['visibility_public'] === 1) ? status_badge('publiek') : status_badge('niet publiek') ?></dd>
+    </dl>
+  </section>
 
-<section class="panel detail-section" id="basis">
-  <div class="panel-heading"><div><p class="eyebrow">Overzicht</p><h2>Basisgegevens</h2></div></div>
-  <dl class="detail-list">
-    <dt>ID</dt><dd><?= h((string)$organization['id']) ?></dd>
-    <dt>Naam</dt><dd><?= h($organization['name']) ?></dd>
-    <dt>Slug</dt><dd><code><?= h($organization['slug']) ?></code></dd>
-    <dt>Status</dt><dd><?= status_badge($organization['status']) ?></dd>
-    <dt>Bronstatus</dt><dd><?= status_badge($organization['source_status']) ?></dd>
-    <dt>Zichtbaar publiek</dt><dd><?= ((int)$organization['visibility_public'] === 1) ? 'ja' : 'nee' ?></dd>
-    <dt>Source locked</dt><dd><?= ((int)$organization['source_locked'] === 1) ? 'ja' : 'nee' ?></dd>
-    <dt>Bijgewerkt</dt><dd><?= h((string)$organization['updated_at']) ?></dd>
-    <dt>Laatst gecontroleerd</dt><dd><?= readable_date($organization['last_checked_at']) ?></dd>
-  </dl>
+  <section class="admin-dashboard-card">
+    <div class="admin-card-heading"><div><p class="eyebrow">Relaties</p><h2>Doelgroepen en thema's</h2></div></div>
+    <h3>Doelgroepen</h3>
+    <div class="badge-list">
+      <?php foreach ($audiences as $audience): ?>
+        <span class="badge"><?= h($audience['label_nl']) ?></span>
+      <?php endforeach; ?>
+      <?php if (!$audiences): ?><span class="muted">Geen doelgroepen gekoppeld.</span><?php endif; ?>
+    </div>
+    <h3>Thema's</h3>
+    <div class="badge-list">
+      <?php foreach ($themes as $theme): ?>
+        <span class="badge"><?= h($theme['name']) ?><?= (int)$theme['is_primary'] === 1 ? ' · primair' : '' ?></span>
+      <?php endforeach; ?>
+      <?php if (!$themes): ?><span class="muted">Geen thema's gekoppeld.</span><?php endif; ?>
+    </div>
+  </section>
 
-  <div class="relation-grid">
-  <div><h3>Eilanden</h3>
-  <ul class="compact-list">
-    <?php foreach ($islands as $island): ?>
-      <li><?= h($island['name']) ?> <small class="muted"><?= h($island['code']) ?><?= (int)$island['is_primary'] === 1 ? ', primair' : '' ?></small></li>
-    <?php endforeach; ?>
-  </ul></div>
+  <section class="admin-dashboard-card">
+    <div class="admin-card-heading"><div><p class="eyebrow">Contact</p><h2>Contactgegevens</h2></div></div>
+    <dl class="compact-detail-list">
+      <dt>Telefoon</dt><dd><?= empty_label($contact['phone'] ?? '') ?></dd>
+      <dt>WhatsApp</dt><dd><?= empty_label($contact['whatsapp'] ?? '') ?></dd>
+      <dt>E-mail</dt><dd><?= empty_label($contact['email'] ?? '') ?></dd>
+      <dt>Website</dt><dd><?= empty_label($contact['website'] ?? '') ?></dd>
+      <dt>Adres NL</dt><dd><?= empty_label($contact['address_nl'] ?? '') ?></dd>
+    </dl>
+  </section>
 
-  <div><h3>Thema's</h3>
-  <ul class="compact-list">
-    <?php foreach ($themes as $theme): ?>
-      <li><?= h($theme['name']) ?> <small class="muted"><?= h($theme['slug']) ?><?= (int)$theme['is_primary'] === 1 ? ', primair' : '' ?></small></li>
-    <?php endforeach; ?>
-  </ul></div>
+  <section class="admin-dashboard-card">
+    <div class="admin-card-heading"><div><p class="eyebrow">Controle</p><h2>Bron en controle</h2></div></div>
+    <dl class="compact-detail-list">
+      <dt>Bronstatus</dt><dd><?= status_badge($organization['source_status']) ?></dd>
+      <dt>Laatst gecontroleerd</dt><dd><?= readable_date($organization['last_checked_at']) ?></dd>
+      <dt>Bijgewerkt</dt><dd><?= readable_datetime($organization['updated_at']) ?></dd>
+      <dt>Source locked</dt><dd><?= ((int)$organization['source_locked'] === 1) ? 'ja' : 'nee' ?></dd>
+    </dl>
+  </section>
 
-  <div><h3>Doelgroepen</h3>
-  <ul class="compact-list">
-    <?php foreach ($audiences as $audience): ?>
-      <li><?= h($audience['label_nl']) ?> <small class="muted"><?= h($audience['code']) ?></small></li>
-    <?php endforeach; ?>
-  </ul></div>
-  </div>
-</section>
+  <?php render_profile_status_card('Jongerenprofiel', $youthAnswers, $languages, $sourceLanguage, 'organization_profile_edit.php?id=' . rawurlencode((string)$organization['id']) . '&audience=youth'); ?>
+  <?php render_profile_status_card('Professionalsprofiel', $professionalAnswers, $languages, $sourceLanguage, 'organization_profile_edit.php?id=' . rawurlencode((string)$organization['id']) . '&audience=professional'); ?>
 
-<section class="panel detail-section" id="contact">
-  <h2>Contact</h2>
-  <dl class="detail-list">
-    <dt>Telefoon</dt><dd><?= empty_label($contact['phone'] ?? '') ?></dd>
-    <dt>WhatsApp</dt><dd><?= empty_label($contact['whatsapp'] ?? '') ?></dd>
-    <dt>E-mail</dt><dd><?= empty_label($contact['email'] ?? '') ?></dd>
-    <dt>Website</dt><dd><?= empty_label($contact['website'] ?? '') ?></dd>
-    <dt>Adres NL</dt><dd><?= empty_label($contact['address_nl'] ?? '') ?></dd>
-  </dl>
-</section>
-
-<section class="panel detail-section" id="youth">
-  <h2>Jongerenprofiel</h2>
-  <p class="muted">Lege velden blijven zichtbaar voor beheercontrole.</p>
-  <?php render_profile_table($youthAnswers, $languages); ?>
-</section>
-
-<section class="panel detail-section" id="professional">
-  <h2>Professionalprofiel</h2>
-  <p class="muted">Lege velden blijven zichtbaar voor beheercontrole.</p>
-  <?php render_profile_table($professionalAnswers, $languages); ?>
-</section>
-
-<section class="panel detail-section" id="translations">
-  <h2>Vertalingen/status</h2>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Taal</th>
-          <th>Status</th>
-          <th>Naam</th>
-          <th>Jongerentitel</th>
-          <th>Korte jongerentekst</th>
-          <th>Professionele samenvatting</th>
-          <th>Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($languages as $language): ?>
-          <?php $row = $translations[$language] ?? null; ?>
-          <tr>
-            <td><code><?= h($language) ?></code></td>
-            <td><?= $row ? status_badge($row['translation_status']) : status_badge('missing') ?></td>
-            <td><?= $row ? empty_label($row['name']) : '<span class="muted">ontbreekt</span>' ?></td>
-            <td><?= $row ? empty_label($row['youth_title']) : '<span class="muted">ontbreekt</span>' ?></td>
-            <td><?= $row ? empty_label($row['youth_short']) : '<span class="muted">ontbreekt</span>' ?></td>
-            <td><?= $row ? empty_label($row['professional_summary']) : '<span class="muted">ontbreekt</span>' ?></td>
-            <td><?= $row ? empty_label($row['type_label']) : '<span class="muted">ontbreekt</span>' ?></td>
-          </tr>
+  <section class="admin-dashboard-card audit-summary-card">
+    <div class="admin-card-heading">
+      <div><p class="eyebrow">Audit</p><h2>Laatste wijzigingen</h2></div>
+      <a class="button" href="audit_log.php">Volledige auditlog</a>
+    </div>
+    <?php if (!$auditEntries): ?>
+      <p class="muted">Nog geen wijzigingen gevonden.</p>
+    <?php else: ?>
+      <ol class="audit-summary-list">
+        <?php foreach ($auditEntries as $entry): ?>
+          <li>
+            <time><?= readable_datetime($entry['created_at']) ?></time>
+            <strong><?= h(audit_action_label_short((string)$entry['action'])) ?></strong>
+            <span><?= h((string)($entry['user_name'] ?: $entry['user_email'] ?: 'Onbekende gebruiker')) ?></span>
+          </li>
         <?php endforeach; ?>
-      </tbody>
-    </table>
-  </div>
-</section>
+      </ol>
+    <?php endif; ?>
+  </section>
+</div>
 
 <?php admin_footer(); ?>
