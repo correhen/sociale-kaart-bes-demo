@@ -6,146 +6,225 @@ require __DIR__ . '/layout.php';
 require_admin_login();
 
 $error = '';
-$stats = [
-    'total' => 0,
-    'published' => 0,
-    'draft' => 0,
-    'archived' => 0,
-    'recent' => 0,
-];
+$organizations = [];
 $byIsland = [];
-$bySource = [];
-$missingTranslations = [];
+$islandCards = [
+    'bonaire' => [
+        'name' => 'Bonaire',
+        'description' => 'Bekijk en beheer organisaties op Bonaire.',
+        'count' => null,
+    ],
+    'statia' => [
+        'name' => 'Sint Eustatius',
+        'description' => 'Bekijk en beheer organisaties op Sint Eustatius.',
+        'count' => null,
+    ],
+    'saba' => [
+        'name' => 'Saba',
+        'description' => 'Bekijk en beheer organisaties op Saba.',
+        'count' => null,
+    ],
+];
 
 try {
-    $stats = fetch_one(
+    $organizations = fetch_all(
         "SELECT
-            COUNT(*) AS total,
-            SUM(status = 'published') AS published,
-            SUM(status = 'draft') AS draft,
-            SUM(status = 'archived') AS archived,
-            SUM(updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)) AS recent
-        FROM organizations"
-    ) ?: $stats;
+            o.id,
+            o.slug,
+            o.external_key,
+            o.status,
+            o.visibility_public,
+            COALESCE(NULLIF(ot_nl.name, ''), NULLIF(ot_en.name, ''), o.slug) AS name,
+            COALESCE(NULLIF(ot_nl.type_label, ''), NULLIF(ot_en.type_label, '')) AS type_label,
+            COALESCE(NULLIF(ot_nl.age_range, ''), NULLIF(ot_en.age_range, '')) AS age_range,
+            (
+                SELECT GROUP_CONCAT(i.name ORDER BY oi.is_primary DESC, i.sort_order ASC SEPARATOR ', ')
+                FROM organization_islands oi
+                INNER JOIN islands i ON i.id = oi.island_id
+                WHERE oi.organization_id = o.id
+            ) AS islands,
+            (
+                SELECT GROUP_CONCAT(i.code ORDER BY oi.is_primary DESC, i.sort_order ASC SEPARATOR ' ')
+                FROM organization_islands oi
+                INNER JOIN islands i ON i.id = oi.island_id
+                WHERE oi.organization_id = o.id
+            ) AS island_codes,
+            (
+                SELECT GROUP_CONCAT(a.label_nl ORDER BY a.sort_order ASC SEPARATOR ', ')
+                FROM organization_audience oa
+                INNER JOIN audiences a ON a.id = oa.audience_id
+                WHERE oa.organization_id = o.id
+            ) AS audiences
+        FROM organizations o
+        LEFT JOIN organization_translations ot_nl
+            ON ot_nl.organization_id = o.id
+            AND ot_nl.language_code = 'nl'
+        LEFT JOIN organization_translations ot_en
+            ON ot_en.organization_id = o.id
+            AND ot_en.language_code = 'en'
+        ORDER BY name ASC
+        LIMIT 300"
+    );
 
     $byIsland = fetch_all(
-        "SELECT i.name, i.code, COUNT(oi.organization_id) AS total
+        "SELECT i.code, COUNT(oi.organization_id) AS total
         FROM islands i
         LEFT JOIN organization_islands oi ON oi.island_id = i.id
+        WHERE i.code IN ('bonaire', 'statia', 'saba')
         GROUP BY i.id, i.name, i.code, i.sort_order
         ORDER BY i.sort_order ASC, i.name ASC"
     );
-
-    $bySource = fetch_all(
-        "SELECT source_status, COUNT(*) AS total
-        FROM organizations
-        GROUP BY source_status
-        ORDER BY source_status ASC"
-    );
-
-    $missingTranslations = fetch_all(
-        "SELECT language_code, SUM(total) AS total
-        FROM (
-            SELECT language_code, COUNT(*) AS total
-            FROM organization_translations
-            WHERE language_code <> 'nl'
-                AND translation_status = 'missing'
-            GROUP BY language_code
-            UNION ALL
-            SELECT language_code, COUNT(*) AS total
-            FROM organization_profile_answers
-            WHERE language_code <> 'nl'
-                AND translation_status = 'missing'
-            GROUP BY language_code
-        ) missing
-        GROUP BY language_code
-        ORDER BY language_code ASC"
-    );
+    foreach ($byIsland as $row) {
+        $code = (string)($row['code'] ?? '');
+        if (isset($islandCards[$code])) {
+            $islandCards[$code]['count'] = (int)($row['total'] ?? 0);
+        }
+    }
 } catch (Throwable) {
-    $error = 'Dashboardstatistieken konden niet worden geladen.';
+    $error = 'Dashboardgegevens konden niet worden geladen.';
 }
+
+$searchData = array_map(
+    static fn(array $organization): array => [
+        'id' => (int)$organization['id'],
+        'name' => (string)$organization['name'],
+        'slug' => (string)$organization['slug'],
+        'externalKey' => (string)$organization['external_key'],
+        'status' => (string)$organization['status'],
+        'visibility' => (int)$organization['visibility_public'] === 1 ? 'publiek zichtbaar' : 'niet publiek',
+        'islands' => (string)($organization['islands'] ?? ''),
+        'islandCodes' => (string)($organization['island_codes'] ?? ''),
+        'typeLabel' => (string)($organization['type_label'] ?? ''),
+        'ageRange' => (string)($organization['age_range'] ?? ''),
+        'audiences' => (string)($organization['audiences'] ?? ''),
+    ],
+    $organizations
+);
 
 admin_header('Dashboard', 'dashboard');
 ?>
-<section class="page-intro">
-  <div>
-    <p class="eyebrow">Beheeromgeving</p>
-    <h2>Organisaties, profielen en vertalingen beheren</h2>
-    <p>Bekijk de actuele status en ga direct naar de belangrijkste beheertaken.</p>
-  </div>
-  <div class="quick-actions">
-    <a class="button primary" href="organizations.php">Organisaties beheren</a>
-    <a class="button" href="audit_log.php">Auditlog bekijken</a>
-    <?php if (admin_can_manage_users()): ?>
-      <a class="button" href="users.php">Gebruikers beheren</a>
-    <?php endif; ?>
-  </div>
-</section>
-
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
 <?php endif; ?>
 
-<section class="grid" aria-label="Organisatiestatistieken">
-  <div class="card stat-card"><span>Totaal organisaties</span><strong><?= h((string)($stats['total'] ?? 0)) ?></strong></div>
-  <div class="card stat-card stat-success"><span>Gepubliceerd</span><strong><?= h((string)($stats['published'] ?? 0)) ?></strong></div>
-  <div class="card stat-card stat-warning"><span>Concepten</span><strong><?= h((string)($stats['draft'] ?? 0)) ?></strong></div>
-  <div class="card stat-card stat-neutral"><span>Gearchiveerd</span><strong><?= h((string)($stats['archived'] ?? 0)) ?></strong></div>
-  <div class="card stat-card stat-brand"><span>Gewijzigd laatste 30 dagen</span><strong><?= h((string)($stats['recent'] ?? 0)) ?></strong></div>
-</section>
+<div class="dashboard-home">
+  <section class="dashboard-search-card" aria-labelledby="dashboard-search-title">
+    <div class="dashboard-search-heading">
+      <div>
+        <p class="eyebrow">Snel starten</p>
+        <h2 id="dashboard-search-title">Organisatie zoeken</h2>
+        <p>Zoek een organisatie om gegevens, profielen of vertalingen te beheren.</p>
+      </div>
+      <div class="dashboard-create-action">
+        <span class="button button-disabled" aria-disabled="true">+ Nieuwe organisatie toevoegen</span>
+        <small>Nieuwe organisatie toevoegen wordt in de volgende stap ingericht.</small>
+      </div>
+    </div>
 
-<div class="dashboard-columns">
-<section class="panel">
-  <h2>Organisaties per eiland</h2>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Eiland</th><th>Code</th><th>Aantal</th></tr></thead>
-      <tbody>
-        <?php foreach ($byIsland as $row): ?>
-          <tr>
-            <td><?= h($row['name']) ?></td>
-            <td><code><?= h($row['code']) ?></code></td>
-            <td><?= h((string)$row['total']) ?></td>
-          </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-  </div>
-</section>
+    <label class="dashboard-search-label" for="organization-search">
+      <span class="sr-only">Organisatie zoeken</span>
+      <input
+        id="organization-search"
+        class="dashboard-search-input"
+        type="search"
+        autocomplete="off"
+        placeholder="Zoek op organisatienaam, afkorting of eiland..."
+        data-organization-search
+      >
+    </label>
 
-<section class="panel">
-  <h2>Organisaties per bronstatus</h2>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Bronstatus</th><th>Aantal</th></tr></thead>
-      <tbody>
-        <?php foreach ($bySource as $row): ?>
-          <tr>
-            <td><?= status_badge($row['source_status']) ?></td>
-            <td><?= h((string)$row['total']) ?></td>
-          </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-  </div>
-</section>
+    <p class="dashboard-search-count muted" data-organization-count aria-live="polite">Begin met typen om een organisatie te zoeken.</p>
+    <div class="dashboard-search-results" data-organization-results></div>
+  </section>
+
+  <section class="island-card-grid" aria-label="Organisaties per eiland">
+    <?php foreach ($islandCards as $code => $island): ?>
+      <a class="island-card" href="organizations.php?island=<?= h($code) ?>">
+        <span class="eyebrow">Eiland</span>
+        <strong><?= h($island['name']) ?></strong>
+        <span><?= h($island['description']) ?></span>
+        <?php if ($island['count'] !== null): ?>
+          <span class="island-card-count"><?= h((string)$island['count']) ?> organisaties</span>
+        <?php endif; ?>
+        <span class="button button-small">Organisaties bekijken</span>
+      </a>
+    <?php endforeach; ?>
+  </section>
 </div>
 
-<section class="panel">
-  <h2>Ontbrekende organisatievertalingen</h2>
-  <p class="muted">Gebaseerd op ontbrekende organisatievertalingen en profielantwoordvertalingen.</p>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Taal</th><th>Aantal</th></tr></thead>
-      <tbody>
-        <?php foreach ($missingTranslations as $row): ?>
-          <tr>
-            <td><code><?= h($row['language_code']) ?></code></td>
-            <td><?= h((string)$row['total']) ?></td>
-          </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-  </div>
-</section>
+<script>
+(() => {
+  const organizations = <?= json_encode($searchData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+  const input = document.querySelector('[data-organization-search]');
+  const results = document.querySelector('[data-organization-results]');
+  const count = document.querySelector('[data-organization-count]');
+
+  if (!input || !results || !count) {
+    return;
+  }
+
+  const escapeHtml = (value) => String(value || '').replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[character]);
+
+  const renderEmpty = (message) => {
+    count.textContent = message;
+    results.innerHTML = '';
+  };
+
+  const renderResults = () => {
+    const query = input.value.trim().toLowerCase();
+    if (query.length === 0) {
+      renderEmpty('Begin met typen om een organisatie te zoeken.');
+      return;
+    }
+
+    const matches = organizations.filter((organization) => [
+      organization.name,
+      organization.slug,
+      organization.externalKey,
+      organization.islands,
+      organization.islandCodes,
+      organization.typeLabel,
+      organization.ageRange,
+      organization.audiences
+    ].join(' ').toLowerCase().includes(query)).slice(0, 12);
+
+    if (matches.length === 0) {
+      renderEmpty('Geen organisatie gevonden.');
+      return;
+    }
+
+    count.textContent = matches.length === 1 ? '1 organisatie gevonden.' : `${matches.length} organisaties gevonden.`;
+    results.innerHTML = matches.map((organization) => {
+      const meta = [organization.typeLabel, organization.ageRange, organization.audiences].filter(Boolean).join(' - ');
+      return `
+        <article class="dashboard-result-card">
+          <div>
+            <h3>${escapeHtml(organization.name)}</h3>
+            <div class="dashboard-result-badges">
+              ${organization.islands ? `<span class="badge">${escapeHtml(organization.islands)}</span>` : ''}
+              <span class="badge">${escapeHtml(organization.status)}</span>
+              <span class="badge">${escapeHtml(organization.visibility)}</span>
+            </div>
+            ${meta ? `<p class="muted">${escapeHtml(meta)}</p>` : ''}
+            <small><code>${escapeHtml(organization.slug || organization.externalKey)}</code></small>
+          </div>
+          <div class="dashboard-result-actions">
+            <a class="button button-small primary" href="organization.php?id=${encodeURIComponent(organization.id)}">Open organisatie</a>
+            <a class="button button-small" href="organization_profile_edit.php?id=${encodeURIComponent(organization.id)}&amp;audience=youth">Jongerenprofiel</a>
+            <a class="button button-small" href="organization_profile_edit.php?id=${encodeURIComponent(organization.id)}&amp;audience=professional">Professionalsprofiel</a>
+          </div>
+        </article>
+      `;
+    }).join('');
+  };
+
+  input.addEventListener('input', renderResults);
+})();
+</script>
 <?php admin_footer(); ?>

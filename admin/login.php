@@ -39,14 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inloggen - Kadena Admin</title>
+  <title>Inloggen - Sociale Kaart BES Admin</title>
   <link rel="stylesheet" href="admin.css">
 </head>
 <body class="login-page">
   <main class="login-panel">
     <p class="eyebrow">Beheeromgeving</p>
     <h1>Admin login</h1>
-    <p class="muted">Kadena Hubenil / Sociale Kaart BES</p>
+    <p class="muted">Sociale Kaart BES</p>
 
     <?php if ($error !== ''): ?>
       <p class="error"><?= h($error) ?></p>

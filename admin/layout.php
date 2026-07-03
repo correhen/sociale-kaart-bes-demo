@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/auth.php';
 
-function admin_header(string $title, string $active = ''): void
+function admin_header(string $title, string $active = '', string $actionsHtml = ''): void
 {
     $user = current_admin_user();
     ?>
@@ -13,15 +13,15 @@ function admin_header(string $title, string $active = ''): void
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= h($title) ?> - Kadena Admin</title>
+  <title><?= h($title) ?> - Sociale Kaart BES Admin</title>
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
   <header class="admin-header">
     <div class="admin-header-main">
       <a class="admin-brand" href="dashboard.php">
-        <span>Kadena Hubenil</span>
-        <small>Sociale Kaart BES · Admin</small>
+        <span>Sociale Kaart BES</span>
+        <small>Beheeromgeving</small>
       </a>
       <nav class="admin-nav" aria-label="Admin navigatie">
         <a class="<?= $active === 'dashboard' ? 'is-active' : '' ?>" href="dashboard.php">Dashboard</a>
@@ -50,6 +50,9 @@ function admin_header(string $title, string $active = ''): void
   <main class="admin-main">
     <div class="page-title page-heading">
       <h1><?= h($title) ?></h1>
+      <?php if ($actionsHtml !== ''): ?>
+        <div class="page-title-actions"><?= $actionsHtml ?></div>
+      <?php endif; ?>
     </div>
 <?php
 }
