@@ -1,0 +1,480 @@
+{
+  "name": "admin_assetpack_sociale_kaart_bes_v1",
+  "project": "Sociale Kaart BES / Kadena Hubenil / YouthCare Compass",
+  "version": "1.0.0",
+  "notes": [
+    "Normal icons are stroke-based SVGs using currentColor.",
+    "No fonts or external dependencies.",
+    "flag-pap uses the Bonaire flag.",
+    "flag-bonaire is an alias/copy of flag-pap."
+  ],
+  "assets": [
+    {
+      "name": "edit",
+      "category": "actions",
+      "filename": "icons/actions/edit.svg",
+      "suggested_usage": "Edit button or edit link",
+      "status_color": null
+    },
+    {
+      "name": "save",
+      "category": "actions",
+      "filename": "icons/actions/save.svg",
+      "suggested_usage": "Save action",
+      "status_color": null
+    },
+    {
+      "name": "cancel",
+      "category": "actions",
+      "filename": "icons/actions/cancel.svg",
+      "suggested_usage": "Cancel or close action",
+      "status_color": null
+    },
+    {
+      "name": "approve",
+      "category": "actions",
+      "filename": "icons/actions/approve.svg",
+      "suggested_usage": "Approve/reviewed action",
+      "status_color": null
+    },
+    {
+      "name": "delete",
+      "category": "actions",
+      "filename": "icons/actions/delete.svg",
+      "suggested_usage": "Delete action",
+      "status_color": null
+    },
+    {
+      "name": "add",
+      "category": "actions",
+      "filename": "icons/actions/add.svg",
+      "suggested_usage": "Add/create action",
+      "status_color": null
+    },
+    {
+      "name": "duplicate",
+      "category": "actions",
+      "filename": "icons/actions/duplicate.svg",
+      "suggested_usage": "Duplicate/copy action",
+      "status_color": null
+    },
+    {
+      "name": "upload-import",
+      "category": "actions",
+      "filename": "icons/actions/upload-import.svg",
+      "suggested_usage": "Import/upload action",
+      "status_color": null
+    },
+    {
+      "name": "download-export",
+      "category": "actions",
+      "filename": "icons/actions/download-export.svg",
+      "suggested_usage": "Export/download action",
+      "status_color": null
+    },
+    {
+      "name": "ready",
+      "category": "status",
+      "filename": "icons/status/ready.svg",
+      "suggested_usage": "Ready/complete status",
+      "status_color": "green"
+    },
+    {
+      "name": "review-needed",
+      "category": "status",
+      "filename": "icons/status/review-needed.svg",
+      "suggested_usage": "AI draft or review needed status",
+      "status_color": "orange"
+    },
+    {
+      "name": "empty",
+      "category": "status",
+      "filename": "icons/status/empty.svg",
+      "suggested_usage": "Empty/missing status",
+      "status_color": "red"
+    },
+    {
+      "name": "warning",
+      "category": "status",
+      "filename": "icons/status/warning.svg",
+      "suggested_usage": "Warning message",
+      "status_color": "orange"
+    },
+    {
+      "name": "info",
+      "category": "status",
+      "filename": "icons/status/info.svg",
+      "suggested_usage": "Info message",
+      "status_color": "blue"
+    },
+    {
+      "name": "draft",
+      "category": "status",
+      "filename": "icons/status/draft.svg",
+      "suggested_usage": "Draft status",
+      "status_color": "gray"
+    },
+    {
+      "name": "published",
+      "category": "status",
+      "filename": "icons/status/published.svg",
+      "suggested_usage": "Public/published visibility",
+      "status_color": "green"
+    },
+    {
+      "name": "hidden",
+      "category": "status",
+      "filename": "icons/status/hidden.svg",
+      "suggested_usage": "Private/hidden visibility",
+      "status_color": "gray"
+    },
+    {
+      "name": "locked",
+      "category": "status",
+      "filename": "icons/status/locked.svg",
+      "suggested_usage": "Locked field",
+      "status_color": null
+    },
+    {
+      "name": "source-locked",
+      "category": "status",
+      "filename": "icons/status/source-locked.svg",
+      "suggested_usage": "Locked source content",
+      "status_color": null
+    },
+    {
+      "name": "fallback",
+      "category": "status",
+      "filename": "icons/status/fallback.svg",
+      "suggested_usage": "Fallback value indicator",
+      "status_color": "blue"
+    },
+    {
+      "name": "back",
+      "category": "navigation",
+      "filename": "icons/navigation/back.svg",
+      "suggested_usage": "Back icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "open-public-page",
+      "category": "navigation",
+      "filename": "icons/navigation/open-public-page.svg",
+      "suggested_usage": "Open Public Page icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "expand",
+      "category": "navigation",
+      "filename": "icons/navigation/expand.svg",
+      "suggested_usage": "Expand icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "collapse",
+      "category": "navigation",
+      "filename": "icons/navigation/collapse.svg",
+      "suggested_usage": "Collapse icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "all-open",
+      "category": "navigation",
+      "filename": "icons/navigation/all-open.svg",
+      "suggested_usage": "All Open icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "all-closed",
+      "category": "navigation",
+      "filename": "icons/navigation/all-closed.svg",
+      "suggested_usage": "All Closed icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "search",
+      "category": "navigation",
+      "filename": "icons/navigation/search.svg",
+      "suggested_usage": "Search icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "filter",
+      "category": "navigation",
+      "filename": "icons/navigation/filter.svg",
+      "suggested_usage": "Filter icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "reset",
+      "category": "navigation",
+      "filename": "icons/navigation/reset.svg",
+      "suggested_usage": "Reset icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "chevron-down",
+      "category": "navigation",
+      "filename": "icons/navigation/chevron-down.svg",
+      "suggested_usage": "Chevron Down icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "chevron-up",
+      "category": "navigation",
+      "filename": "icons/navigation/chevron-up.svg",
+      "suggested_usage": "Chevron Up icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "organization-profile",
+      "category": "content",
+      "filename": "icons/content/organization-profile.svg",
+      "suggested_usage": "Organization Profile icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "youth-profile",
+      "category": "content",
+      "filename": "icons/content/youth-profile.svg",
+      "suggested_usage": "Youth Profile icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "professional-profile",
+      "category": "content",
+      "filename": "icons/content/professional-profile.svg",
+      "suggested_usage": "Professional Profile icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "question",
+      "category": "content",
+      "filename": "icons/content/question.svg",
+      "suggested_usage": "Question icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "section",
+      "category": "content",
+      "filename": "icons/content/section.svg",
+      "suggested_usage": "Section icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "translation",
+      "category": "content",
+      "filename": "icons/content/translation.svg",
+      "suggested_usage": "Translation icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "source-text",
+      "category": "content",
+      "filename": "icons/content/source-text.svg",
+      "suggested_usage": "Source Text icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "review",
+      "category": "content",
+      "filename": "icons/content/review.svg",
+      "suggested_usage": "Review icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "audit",
+      "category": "content",
+      "filename": "icons/content/audit.svg",
+      "suggested_usage": "Audit icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "calendar",
+      "category": "content",
+      "filename": "icons/content/calendar.svg",
+      "suggested_usage": "Calendar icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "theme",
+      "category": "content",
+      "filename": "icons/content/theme.svg",
+      "suggested_usage": "Theme icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "visibility",
+      "category": "content",
+      "filename": "icons/content/visibility.svg",
+      "suggested_usage": "Visibility icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "organization",
+      "category": "people",
+      "filename": "icons/people/organization.svg",
+      "suggested_usage": "Organization icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "user-editor",
+      "category": "people",
+      "filename": "icons/people/user-editor.svg",
+      "suggested_usage": "User Editor icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "admin",
+      "category": "people",
+      "filename": "icons/people/admin.svg",
+      "suggested_usage": "Admin icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "contact-mail",
+      "category": "people",
+      "filename": "icons/people/contact-mail.svg",
+      "suggested_usage": "Contact Mail icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "phone",
+      "category": "people",
+      "filename": "icons/people/phone.svg",
+      "suggested_usage": "Phone icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "website",
+      "category": "people",
+      "filename": "icons/people/website.svg",
+      "suggested_usage": "Website icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "address-location",
+      "category": "people",
+      "filename": "icons/people/address-location.svg",
+      "suggested_usage": "Address Location icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "settings",
+      "category": "system",
+      "filename": "icons/system/settings.svg",
+      "suggested_usage": "Settings icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "data-records",
+      "category": "system",
+      "filename": "icons/system/data-records.svg",
+      "suggested_usage": "Data Records icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "backup",
+      "category": "system",
+      "filename": "icons/system/backup.svg",
+      "suggested_usage": "Backup icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "security",
+      "category": "system",
+      "filename": "icons/system/security.svg",
+      "suggested_usage": "Security icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "integrations",
+      "category": "system",
+      "filename": "icons/system/integrations.svg",
+      "suggested_usage": "Integrations icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "system",
+      "category": "system",
+      "filename": "icons/system/system.svg",
+      "suggested_usage": "System icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "reports",
+      "category": "system",
+      "filename": "icons/system/reports.svg",
+      "suggested_usage": "Reports icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "language",
+      "category": "language",
+      "filename": "icons/language/language.svg",
+      "suggested_usage": "Language icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "translate",
+      "category": "language",
+      "filename": "icons/language/translate.svg",
+      "suggested_usage": "Translate icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "island-switch",
+      "category": "language",
+      "filename": "icons/language/island-switch.svg",
+      "suggested_usage": "Island Switch icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "globe",
+      "category": "language",
+      "filename": "icons/language/globe.svg",
+      "suggested_usage": "Globe icon for admin UI",
+      "status_color": null
+    },
+    {
+      "name": "flag-nl",
+      "category": "flags",
+      "filename": "flags/svg/flag-nl.svg",
+      "png_filename": "flags/png/flag-nl.png",
+      "suggested_usage": "Language selector flag.",
+      "status_color": null
+    },
+    {
+      "name": "flag-en",
+      "category": "flags",
+      "filename": "flags/svg/flag-en.svg",
+      "png_filename": "flags/png/flag-en.png",
+      "suggested_usage": "Language selector flag.",
+      "status_color": null
+    },
+    {
+      "name": "flag-es",
+      "category": "flags",
+      "filename": "flags/svg/flag-es.svg",
+      "png_filename": "flags/png/flag-es.png",
+      "suggested_usage": "Language selector flag.",
+      "status_color": null
+    },
+    {
+      "name": "flag-pap",
+      "category": "flags",
+      "filename": "flags/svg/flag-pap.svg",
+      "png_filename": "flags/png/flag-pap.png",
+      "suggested_usage": "Language selector flag. flag-pap/flag-bonaire uses the Bonaire flag.",
+      "status_color": null
+    },
+    {
+      "name": "flag-bonaire",
+      "category": "flags",
+      "filename": "flags/svg/flag-bonaire.svg",
+      "png_filename": "flags/png/flag-bonaire.png",
+      "suggested_usage": "Language selector flag. flag-pap/flag-bonaire uses the Bonaire flag.",
+      "status_color": null
+    }
+  ]
+}

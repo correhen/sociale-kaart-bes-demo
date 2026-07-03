@@ -1,0 +1,43 @@
+/* Sociale Kaart BES / Kadena Hubenil / YouthCare Compass admin icon helpers.
+   Scope these classes to the admin. They do not target public frontend selectors. */
+
+.admin-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-block;
+  vertical-align: -0.2em;
+  color: currentColor;
+  flex: 0 0 auto;
+}
+
+.admin-icon--sm { width: 1rem; height: 1rem; }
+.admin-icon--md { width: 1.25rem; height: 1.25rem; }
+.admin-icon--lg { width: 1.75rem; height: 1.75rem; }
+
+.admin-icon--ready { color: #198754; }
+.admin-icon--review { color: #f97316; }
+.admin-icon--empty { color: #dc2626; }
+.admin-icon--info { color: #0f8fa3; }
+.admin-icon--muted { color: #64748b; }
+
+.admin-flag {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-block;
+  object-fit: cover;
+  vertical-align: -0.35em;
+  border-radius: 0.375rem;
+  box-shadow: 0 0 0 1px rgba(15, 43, 70, 0.12);
+}
+
+/* Example with <img>:
+   <img class="admin-icon admin-icon--sm" src="/assets/admin-icons/icons/status/review-needed.svg" alt="">
+   Note: SVGs use currentColor when inlined. When used via <img>, color is fixed by the SVG renderer.
+   For dynamic colors, inline the SVG or use CSS mask/background.
+*/
+
+/* Example inline SVG:
+   <span class="admin-icon admin-icon--review">
+     ...inline contents of icons/status/review-needed.svg...
+   </span>
+*/

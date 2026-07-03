@@ -74,6 +74,30 @@ function organization_island_label(array $islands): string
     ));
 }
 
+function admin_asset_icon(string $path, string $class = 'admin-icon admin-icon--sm'): string
+{
+    return '<img class="' . h($class) . '" src="../assets/admin-icons/admin_assetpack_sociale_kaart_bes_v1/' . h($path) . '" alt="" aria-hidden="true">';
+}
+
+function admin_language_flag(string $language): string
+{
+    return admin_asset_icon('flags/svg/flag-' . $language . '.svg', 'admin-flag');
+}
+
+function admin_status_icon(string $statusClass): string
+{
+    $icons = [
+        'status-filled' => 'icons/status/ready.svg',
+        'status-ready' => 'icons/status/ready.svg',
+        'status-review' => 'icons/status/review-needed.svg',
+        'status-draft' => 'icons/status/draft.svg',
+        'status-empty' => 'icons/status/empty.svg',
+        'status-fallback' => 'icons/status/fallback.svg',
+    ];
+
+    return admin_asset_icon($icons[$statusClass] ?? 'icons/status/info.svg');
+}
+
 function profile_language_state(array $answers, string $language, string $sourceLanguage): array
 {
     $total = count($answers);
@@ -124,14 +148,14 @@ function render_profile_status_card(string $title, array $answers, array $langua
         <p class="eyebrow">Profielstatus</p>
         <h2><?= h($title) ?></h2>
       </div>
-      <a class="button" href="<?= h($href) ?>"><?= h($title) ?> bewerken</a>
+      <a class="button" href="<?= h($href) ?>"><?= admin_asset_icon('icons/actions/edit.svg') ?><?= h($title) ?> bewerken</a>
     </div>
     <div class="language-status-grid">
       <?php foreach ($languages as $language): ?>
         <?php $state = profile_language_state($answers, $language, $sourceLanguage); ?>
         <div class="language-status-tile <?= h($state['class']) ?>">
-          <strong><?= h(strtoupper($language)) ?></strong>
-          <span><?= h($state['label']) ?></span>
+          <strong><?= admin_language_flag($language) ?><?= h(strtoupper($language)) ?></strong>
+          <span><?= admin_status_icon((string)$state['class']) ?><?= h($state['label']) ?></span>
           <small><?= h($state['meta']) ?></small>
         </div>
       <?php endforeach; ?>
@@ -249,7 +273,7 @@ $islandLabel = organization_island_label($islands);
 
 <section class="detail-hero organization-dashboard-hero">
   <div>
-    <a class="back-link" href="organizations.php">Terug naar organisaties</a>
+    <a class="back-link" href="organizations.php"><?= admin_asset_icon('icons/navigation/back.svg') ?>Terug naar organisaties</a>
     <p class="eyebrow">Organisatie</p>
     <h2><?= h((string)$organization['name']) ?></h2>
     <p><?= $islandLabel !== '' ? h($islandLabel) : '<span class="muted">Geen eiland gekoppeld</span>' ?></p>
@@ -260,16 +284,16 @@ $islandLabel = organization_island_label($islands);
     </div>
   </div>
   <div class="detail-actions">
-    <a class="button" href="organizations.php">Terug naar organisaties</a>
+    <a class="button" href="organizations.php"><?= admin_asset_icon('icons/navigation/back.svg') ?>Terug naar organisaties</a>
     <?php if (admin_can_edit_organizations()): ?>
-      <a class="button primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Basisgegevens bewerken</a>
+      <a class="button primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>"><?= admin_asset_icon('icons/actions/edit.svg') ?>Basisgegevens bewerken</a>
     <?php endif; ?>
-    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=youth">Jongerenprofiel bewerken</a>
-    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional">Professionalsprofiel bewerken</a>
+    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=youth"><?= admin_asset_icon('icons/content/youth-profile.svg') ?>Jongerenprofiel bewerken</a>
+    <a class="button" href="organization_profile_edit.php?id=<?= h((string)$organization['id']) ?>&amp;audience=professional"><?= admin_asset_icon('icons/content/professional-profile.svg') ?>Professionalsprofiel bewerken</a>
     <?php if ($publicYouthUrl): ?>
-      <a class="button" href="<?= h($publicYouthUrl) ?>">Open publieke pagina</a>
+      <a class="button" href="<?= h($publicYouthUrl) ?>"><?= admin_asset_icon('icons/navigation/open-public-page.svg') ?>Open publieke pagina</a>
     <?php elseif ($publicProfessionalUrl): ?>
-      <a class="button" href="<?= h($publicProfessionalUrl) ?>">Open publieke pagina</a>
+      <a class="button" href="<?= h($publicProfessionalUrl) ?>"><?= admin_asset_icon('icons/navigation/open-public-page.svg') ?>Open publieke pagina</a>
     <?php endif; ?>
   </div>
 </section>
@@ -280,7 +304,7 @@ $islandLabel = organization_island_label($islands);
 
 <div class="organization-dashboard">
   <section class="admin-dashboard-card">
-    <div class="admin-card-heading"><div><p class="eyebrow">Overzicht</p><h2>Algemene gegevens</h2></div></div>
+    <div class="admin-card-heading"><div><p class="eyebrow">Overzicht</p><h2><?= admin_asset_icon('icons/people/organization.svg') ?>Algemene gegevens</h2></div></div>
     <dl class="compact-detail-list">
       <dt>Naam</dt><dd><?= h($organization['name']) ?></dd>
       <dt>Slug</dt><dd><code><?= h($organization['slug']) ?></code></dd>
@@ -292,7 +316,7 @@ $islandLabel = organization_island_label($islands);
   </section>
 
   <section class="admin-dashboard-card">
-    <div class="admin-card-heading"><div><p class="eyebrow">Relaties</p><h2>Doelgroepen en thema's</h2></div></div>
+    <div class="admin-card-heading"><div><p class="eyebrow">Relaties</p><h2><?= admin_asset_icon('icons/content/theme.svg') ?>Doelgroepen en thema's</h2></div></div>
     <h3>Doelgroepen</h3>
     <div class="badge-list">
       <?php foreach ($audiences as $audience): ?>
@@ -310,7 +334,7 @@ $islandLabel = organization_island_label($islands);
   </section>
 
   <section class="admin-dashboard-card">
-    <div class="admin-card-heading"><div><p class="eyebrow">Contact</p><h2>Contactgegevens</h2></div></div>
+    <div class="admin-card-heading"><div><p class="eyebrow">Contact</p><h2><?= admin_asset_icon('icons/people/contact-mail.svg') ?>Contactgegevens</h2></div></div>
     <dl class="compact-detail-list">
       <dt>Telefoon</dt><dd><?= empty_label($contact['phone'] ?? '') ?></dd>
       <dt>WhatsApp</dt><dd><?= empty_label($contact['whatsapp'] ?? '') ?></dd>
@@ -321,7 +345,7 @@ $islandLabel = organization_island_label($islands);
   </section>
 
   <section class="admin-dashboard-card">
-    <div class="admin-card-heading"><div><p class="eyebrow">Controle</p><h2>Bron en controle</h2></div></div>
+    <div class="admin-card-heading"><div><p class="eyebrow">Controle</p><h2><?= admin_asset_icon('icons/status/source-locked.svg') ?>Bron en controle</h2></div></div>
     <dl class="compact-detail-list">
       <dt>Bronstatus</dt><dd><?= status_badge($organization['source_status']) ?></dd>
       <dt>Laatst gecontroleerd</dt><dd><?= readable_date($organization['last_checked_at']) ?></dd>
@@ -335,8 +359,8 @@ $islandLabel = organization_island_label($islands);
 
   <section class="admin-dashboard-card audit-summary-card">
     <div class="admin-card-heading">
-      <div><p class="eyebrow">Audit</p><h2>Laatste wijzigingen</h2></div>
-      <a class="button" href="audit_log.php">Volledige auditlog</a>
+      <div><p class="eyebrow">Audit</p><h2><?= admin_asset_icon('icons/content/audit.svg') ?>Laatste wijzigingen</h2></div>
+      <a class="button" href="audit_log.php"><?= admin_asset_icon('icons/content/audit.svg') ?>Volledige auditlog</a>
     </div>
     <?php if (!$auditEntries): ?>
       <p class="muted">Nog geen wijzigingen gevonden.</p>

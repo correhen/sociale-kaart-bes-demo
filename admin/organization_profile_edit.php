@@ -344,6 +344,30 @@ function profile_source_language(array $islands): string
     return 'nl';
 }
 
+function admin_asset_icon(string $path, string $class = 'admin-icon admin-icon--sm'): string
+{
+    return '<img class="' . h($class) . '" src="../assets/admin-icons/admin_assetpack_sociale_kaart_bes_v1/' . h($path) . '" alt="" aria-hidden="true">';
+}
+
+function admin_language_flag(string $language): string
+{
+    return admin_asset_icon('flags/svg/flag-' . $language . '.svg', 'admin-flag');
+}
+
+function admin_status_icon(string $statusClass): string
+{
+    $icons = [
+        'status-filled' => 'icons/status/ready.svg',
+        'status-ready' => 'icons/status/ready.svg',
+        'status-review' => 'icons/status/review-needed.svg',
+        'status-draft' => 'icons/status/draft.svg',
+        'status-empty' => 'icons/status/empty.svg',
+        'status-fallback' => 'icons/status/fallback.svg',
+    ];
+
+    return admin_asset_icon($icons[$statusClass] ?? 'icons/status/info.svg');
+}
+
 function profile_editor_state(array $cell, string $language, string $sourceLanguage, string $sourceText = ''): array
 {
     $text = trim((string)($cell['answer_text'] ?? ''));
@@ -366,7 +390,7 @@ function profile_editor_state(array $cell, string $language, string $sourceLangu
 
 function profile_editor_badge(array $state): string
 {
-    return '<span class="admin-status-pill ' . h($state['class']) . '">' . h($state['label']) . '</span>';
+    return '<span class="admin-status-pill ' . h($state['class']) . '">' . admin_status_icon((string)$state['class']) . h($state['label']) . '</span>';
 }
 
 function profile_editor_summary(array $definition, array $values, array $introValues, string $language, string $sourceLanguage): array
@@ -629,25 +653,26 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
 
   <section class="profile-editor-hero">
     <div>
-      <a class="back-link" href="organization.php?id=<?= h((string)$id) ?>">Terug naar organisatie</a>
+      <a class="back-link" href="organization.php?id=<?= h((string)$id) ?>"><?= admin_asset_icon('icons/navigation/back.svg') ?>Terug naar organisatie</a>
       <p class="eyebrow">Redactie</p>
       <h2><?= h($profileLabel) ?> - <?= h((string)$organization['name']) ?></h2>
       <p><?= h($profileLabel) ?> / gekozen taal: <strong><?= h(strtoupper($selectedLanguage)) ?></strong> / brontaal: <strong><?= h(strtoupper($sourceLanguage)) ?></strong></p>
       <p class="save-state is-saved" data-save-state>Opgeslagen</p>
+      <p class="unsaved-notice" data-unsaved-notice hidden><?= admin_asset_icon('icons/status/warning.svg') ?>Je hebt onopgeslagen wijzigingen</p>
     </div>
     <div class="profile-editor-actions">
-      <button type="button" class="button" data-expand-all>Alles uitklappen</button>
-      <button type="button" class="button" data-collapse-all>Alles inklappen</button>
+      <button type="button" class="button is-secondary" data-expand-all><?= admin_asset_icon('icons/navigation/all-open.svg') ?>Alles uitklappen</button>
+      <button type="button" class="button is-secondary" data-collapse-all><?= admin_asset_icon('icons/navigation/all-closed.svg') ?>Alles inklappen</button>
       <?php if (admin_can_edit_profiles()): ?>
-        <button type="submit">Opslaan</button>
+        <button type="submit" class="admin-primary-action"><?= admin_asset_icon('icons/actions/save.svg') ?>Opslaan</button>
       <?php endif; ?>
     </div>
   </section>
 
   <section class="panel profile-editor-toolbar">
     <div class="profile-switcher" aria-label="Profieltype">
-      <a class="button<?= $audience === 'youth' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'youth&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link>Jongerenprofiel</a>
-      <a class="button<?= $audience === 'professional' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'professional&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link>Professionalsprofiel</a>
+      <a class="button<?= $audience === 'youth' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'youth&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link><?= admin_asset_icon('icons/content/youth-profile.svg') ?>Jongerenprofiel</a>
+      <a class="button<?= $audience === 'professional' ? ' is-active' : '' ?>" href="<?= h($baseProfileUrl . 'professional&language=' . rawurlencode($selectedLanguage)) ?>" data-language-link><?= admin_asset_icon('icons/content/professional-profile.svg') ?>Professionalsprofiel</a>
     </div>
     <div class="admin-language-switch" aria-label="Taal kiezen">
       <?php foreach (PROFILE_LANGUAGES as $language): ?>
@@ -662,14 +687,18 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
           href="organization_profile_edit.php?id=<?= h((string)$id) ?>&amp;audience=<?= h($audience) ?>&amp;language=<?= h($language) ?>"
           data-language-link
         >
-          <strong><?= h(strtoupper($language)) ?></strong>
-          <small><?= h((string)$languageSummary['filled']) ?>/<?= h((string)$languageSummary['total']) ?> gevuld</small>
+          <span class="language-button-top">
+            <?= admin_language_flag($language) ?>
+            <strong><?= h(strtoupper($language)) ?></strong>
+          </span>
+          <span class="language-button-count"><?= h((string)$languageSummary['filled']) ?>/<?= h((string)$languageSummary['total']) ?> gevuld</span>
+          <small><?= h((string)$languageSummary['review']) ?> review / <?= h((string)$languageSummary['fallback']) ?> fallback / <?= h((string)$languageSummary['empty']) ?> leeg</small>
         </a>
       <?php endforeach; ?>
     </div>
     <p class="form-help">Er wordt maar een taal tegelijk getoond. Wisselen met onopgeslagen wijzigingen vraagt eerst bevestiging.</p>
     <?php if ($publicUrl): ?>
-      <a class="button" href="<?= h($publicUrl) ?>">Bekijk publieke pagina</a>
+      <a class="button" href="<?= h($publicUrl) ?>"><?= admin_asset_icon('icons/navigation/open-public-page.svg') ?>Bekijk publieke pagina</a>
     <?php endif; ?>
   </section>
 
@@ -677,16 +706,18 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
     <div>
       <p class="eyebrow">Voortgang <?= h(strtoupper($selectedLanguage)) ?></p>
       <h2><?= h((string)$selectedSummary['total']) ?> vragen totaal</h2>
-      <p>
-        <?= h((string)$selectedSummary['filled']) ?> gevuld /
-        <?= h((string)$selectedSummary['review']) ?> review nodig /
-        <?= h((string)$selectedSummary['empty']) ?> leeg
-      </p>
+      <div class="progress-metrics" aria-label="Voortgang per status">
+        <span class="admin-status-pill status-filled"><?= admin_status_icon('status-filled') ?><?= h((string)$selectedSummary['filled']) ?> gevuld</span>
+        <span class="admin-status-pill status-review"><?= admin_status_icon('status-review') ?><?= h((string)$selectedSummary['review']) ?> review nodig</span>
+        <span class="admin-status-pill status-fallback"><?= admin_status_icon('status-fallback') ?><?= h((string)$selectedSummary['fallback']) ?> fallback</span>
+        <span class="admin-status-pill status-empty"><?= admin_status_icon('status-empty') ?><?= h((string)$selectedSummary['empty']) ?> leeg</span>
+      </div>
     </div>
     <div class="profile-filter-bar" aria-label="Velden filteren">
       <button type="button" class="button is-active" data-profile-filter="all">Alles</button>
       <button type="button" class="button" data-profile-filter="empty">Alleen leeg</button>
       <button type="button" class="button" data-profile-filter="review">Alleen review</button>
+      <button type="button" class="button" data-profile-filter="fallback">Alleen fallback</button>
       <button type="button" class="button" data-profile-filter="filled">Alleen ingevuld</button>
     </div>
   </section>
@@ -706,7 +737,7 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
         <span class="admin-section-marker" aria-hidden="true">i</span>
         <span>
           <strong><?= h($introDefinition['label']) ?></strong>
-          <small><?= h($introDefinition['help']) ?></small>
+          <small><?= admin_asset_icon('icons/content/source-text.svg') ?><?= h($introDefinition['help']) ?></small>
         </span>
         <?= profile_editor_badge($introState) ?>
         <span class="admin-chevron" aria-hidden="true"></span>
@@ -729,8 +760,8 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
           ><?= h((string)($introValues[$selectedLanguage] ?? '')) ?></textarea>
         </label>
         <div class="field-meta">
-          <span>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
-          <span>Reviewstatus: <?= h($introState['label']) ?></span>
+          <span><?= admin_asset_icon('icons/content/translation.svg') ?>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
+          <span><?= admin_status_icon((string)$introState['class']) ?>Reviewstatus: <?= h($introState['label']) ?></span>
           <span data-field-save-state>Opgeslagen</span>
         </div>
       </div>
@@ -757,7 +788,7 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
             <span class="admin-section-marker" aria-hidden="true"><?= h((string)$fieldIndex) ?></span>
             <span>
               <strong><?= h((string)$fieldLabel) ?></strong>
-              <small><code><?= h((string)$fieldKey) ?></code></small>
+              <small><?= admin_asset_icon('icons/content/question.svg') ?><code><?= h((string)$fieldKey) ?></code></small>
             </span>
             <?= profile_editor_badge($state) ?>
             <span class="admin-chevron" aria-hidden="true"></span>
@@ -765,7 +796,7 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
           <div class="profile-editor-panel-body">
             <?php if (!$canEditSelectedLanguage): ?><p class="readonly-note">Alleen-lezen voor jouw rol.</p><?php endif; ?>
             <?php if ($selectedLanguage === 'pap'): ?>
-              <p class="notice">Papiamentu concepttekst - bedoeld voor review. Lange detailteksten worden pas publiek getoond na redactionele goedkeuring.</p>
+              <p class="notice notice-review"><?= admin_asset_icon('icons/status/review-needed.svg') ?>Papiamentu concepttekst - bedoeld voor review. Lange detailteksten worden pas publiek getoond na redactionele goedkeuring.</p>
             <?php endif; ?>
             <?php if ($selectedLanguage !== $sourceLanguage && trim($sourceText) !== ''): ?>
               <details class="source-preview">
@@ -791,9 +822,9 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
               </select>
             </label>
             <div class="field-meta">
-              <span>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
-              <span>Vertaalstatus: <?= h((string)$cell['translation_status']) ?></span>
-              <span>Reviewstatus: <?= h($state['label']) ?></span>
+              <span><?= admin_asset_icon('icons/content/translation.svg') ?>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
+              <span><?= admin_asset_icon('icons/content/review.svg') ?>Vertaalstatus: <?= h((string)$cell['translation_status']) ?></span>
+              <span><?= admin_status_icon((string)$state['class']) ?>Reviewstatus: <?= h($state['label']) ?></span>
               <span data-field-save-state>Opgeslagen</span>
             </div>
           </div>
@@ -816,8 +847,10 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
   if (!form) return;
   let dirty = false;
   const saveState = document.querySelector('[data-save-state]');
+  const unsavedNotice = document.querySelector('[data-unsaved-notice]');
   const markDirty = () => {
     dirty = true;
+    if (unsavedNotice) unsavedNotice.hidden = false;
     if (saveState) {
       saveState.textContent = 'Wijzigingen nog niet opgeslagen';
       saveState.classList.remove('is-saved');
