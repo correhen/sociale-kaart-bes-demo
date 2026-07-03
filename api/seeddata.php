@@ -122,7 +122,10 @@ function public_organizations(string $island): array
                 ? $legacySections['professional_sections']
                 : [],
             'youth_profile' => [],
+            'youth_profile_status' => [],
             'professional_profile' => [],
+            'professional_profile_status' => [],
+            'translation_status' => [],
         ];
     }
 
@@ -173,6 +176,7 @@ function public_organizations(string $island): array
             'age_range' => (string)$row['age_range'],
             'translation_status' => (string)$row['translation_status'],
         ];
+        $organizations[$organizationId]['translation_status'][$language] = (string)$row['translation_status'];
         if ($language === 'nl' && trim((string)$row['name']) !== '') {
             $organizations[$organizationId]['name'] = (string)$row['name'];
         }
@@ -260,7 +264,8 @@ function public_organizations(string $island): array
             group_key,
             field_key,
             language_code,
-            answer_text
+            answer_text,
+            translation_status
         FROM organization_profile_answers
         WHERE organization_id IN ($placeholders)
         ORDER BY organization_id ASC, audience_code ASC, sort_order ASC, group_key ASC, field_key ASC, language_code ASC",
@@ -277,14 +282,17 @@ function public_organizations(string $island): array
         }
 
         $answer = (string)($row['answer_text'] ?? '');
+        $status = (string)($row['translation_status'] ?? 'missing');
         $field = (string)$row['field_key'];
         if ((string)$row['audience_code'] === 'youth') {
             $organizations[$organizationId]['youth_profile'][$field][$language] = $answer;
+            $organizations[$organizationId]['youth_profile_status'][$field][$language] = $status;
             continue;
         }
         if ((string)$row['audience_code'] === 'professional') {
             $group = (string)$row['group_key'];
             $organizations[$organizationId]['professional_profile'][$group][$field][$language] = $answer;
+            $organizations[$organizationId]['professional_profile_status'][$group][$field][$language] = $status;
         }
     }
 

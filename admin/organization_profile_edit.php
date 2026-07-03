@@ -76,6 +76,7 @@ $organization = null;
 $islands = [];
 $values = [];
 $introValues = [];
+$introStatuses = [];
 $errors = [];
 $error = '';
 $saved = (string)($_GET['saved'] ?? '') === '1';
@@ -173,6 +174,9 @@ function profile_posted_values(array $current, array $definition): array
                 $postedStatus = is_array($cell) && is_scalar($cell['translation_status'] ?? null)
                     ? trim((string)$cell['translation_status'])
                     : $current[$groupKey][$fieldKey][$language]['translation_status'];
+                if (trim($postedText) === '' && $postedStatus === 'published') {
+                    $postedStatus = 'missing';
+                }
                 $values[$groupKey][$fieldKey][$language] = [
                     'answer_text' => $postedText,
                     'translation_status' => $postedStatus,
@@ -265,6 +269,11 @@ function profile_intro_empty_values(): array
     return array_fill_keys(PROFILE_LANGUAGES, '');
 }
 
+function profile_intro_empty_statuses(): array
+{
+    return array_fill_keys(PROFILE_LANGUAGES, 'missing');
+}
+
 function profile_intro_load_values(int $organizationId, string $audience): array
 {
     $field = PROFILE_INTRO_FIELDS[$audience]['field'];
@@ -285,6 +294,28 @@ function profile_intro_load_values(int $organizationId, string $audience): array
     }
 
     return $values;
+}
+
+function profile_intro_load_statuses(int $organizationId): array
+{
+    $statuses = profile_intro_empty_statuses();
+    $rows = fetch_all(
+        "SELECT language_code, translation_status
+        FROM organization_translations
+        WHERE organization_id = :organization_id
+        ORDER BY language_code ASC",
+        ['organization_id' => $organizationId]
+    );
+
+    foreach ($rows as $row) {
+        $language = (string)$row['language_code'];
+        $status = (string)($row['translation_status'] ?? 'missing');
+        if (in_array($language, PROFILE_LANGUAGES, true) && in_array($status, PROFILE_TRANSLATION_STATUSES, true)) {
+            $statuses[$language] = $status;
+        }
+    }
+
+    return $statuses;
 }
 
 function profile_intro_posted_values(array $current): array
@@ -322,6 +353,26 @@ function profile_intro_changes(array $before, array $after): array
     return $changes;
 }
 
+function profile_intro_status_changes(array $before, array $after): array
+{
+    $changes = [];
+    foreach (PROFILE_LANGUAGES as $language) {
+        if (!admin_can_edit_profile_language($language)) {
+            continue;
+        }
+        if (!audit_values_differ($before[$language] ?? 'missing', $after[$language] ?? 'missing')) {
+            continue;
+        }
+        $changes[] = [
+            'language_code' => $language,
+            'before' => (string)($before[$language] ?? 'missing'),
+            'after' => (string)($after[$language] ?? 'missing'),
+        ];
+    }
+
+    return $changes;
+}
+
 function profile_intro_audit_values(array $changes, string $field, string $side): array
 {
     $values = [];
@@ -330,6 +381,24 @@ function profile_intro_audit_values(array $changes, string $field, string $side)
     }
 
     return $values;
+}
+
+function publish_selected_language(array $values, array $definition, array $introValues, array $introStatuses, string $language): array
+{
+    if (!admin_can_edit_profile_language($language)) {
+        return [$values, $introStatuses];
+    }
+
+    foreach ($definition as $groupKey => $group) {
+        foreach ($group['fields'] as $fieldKey => $label) {
+            $text = trim((string)($values[$groupKey][$fieldKey][$language]['answer_text'] ?? ''));
+            $values[$groupKey][$fieldKey][$language]['translation_status'] = $text === '' ? 'missing' : 'published';
+        }
+    }
+
+    $introStatuses[$language] = trim((string)($introValues[$language] ?? '')) === '' ? 'missing' : 'published';
+
+    return [$values, $introStatuses];
 }
 
 function profile_source_language(array $islands): string
@@ -368,20 +437,27 @@ function admin_status_icon(string $statusClass): string
     return admin_asset_icon($icons[$statusClass] ?? 'icons/status/info.svg');
 }
 
+function profile_translation_status_label(string $status): string
+{
+    return [
+        'missing' => 'Ontbreekt',
+        'draft' => 'Concept',
+        'reviewed' => 'Gecontroleerd',
+        'published' => 'Gepubliceerd',
+    ][$status] ?? $status;
+}
+
 function profile_editor_state(array $cell, string $language, string $sourceLanguage, string $sourceText = ''): array
 {
     $text = trim((string)($cell['answer_text'] ?? ''));
     $status = (string)($cell['translation_status'] ?? 'missing');
-    if ($text === '' && $language !== $sourceLanguage && trim($sourceText) !== '') {
-        return ['label' => 'Fallback', 'class' => 'status-fallback', 'filter' => 'fallback'];
+    if ($language !== $sourceLanguage && trim($sourceText) !== '' && ($text === '' || $status !== 'published')) {
+        return ['label' => 'Gebruikt brontaal', 'class' => 'status-fallback', 'filter' => 'fallback'];
     }
     if ($text === '') {
         return ['label' => 'Leeg', 'class' => 'status-empty', 'filter' => 'empty'];
     }
-    if ($language === 'pap') {
-        return ['label' => 'Review nodig', 'class' => 'status-review', 'filter' => 'review'];
-    }
-    if ($language === $sourceLanguage || in_array($status, ['published', 'reviewed'], true)) {
+    if ($language === $sourceLanguage || $status === 'published') {
         return ['label' => 'Gevuld', 'class' => 'status-filled', 'filter' => 'filled'];
     }
 
@@ -393,12 +469,12 @@ function profile_editor_badge(array $state): string
     return '<span class="admin-status-pill ' . h($state['class']) . '">' . admin_status_icon((string)$state['class']) . h($state['label']) . '</span>';
 }
 
-function profile_editor_summary(array $definition, array $values, array $introValues, string $language, string $sourceLanguage): array
+function profile_editor_summary(array $definition, array $values, array $introValues, array $introStatuses, string $language, string $sourceLanguage): array
 {
     $summary = ['total' => 1, 'filled' => 0, 'review' => 0, 'empty' => 0, 'fallback' => 0];
     $introCell = [
         'answer_text' => (string)($introValues[$language] ?? ''),
-        'translation_status' => trim((string)($introValues[$language] ?? '')) === '' ? 'missing' : 'draft',
+        'translation_status' => (string)($introStatuses[$language] ?? 'missing'),
     ];
     $introState = profile_editor_state($introCell, $language, $sourceLanguage, (string)($introValues[$sourceLanguage] ?? ''));
     $summary[$introState['filter']]++;
@@ -418,6 +494,8 @@ function profile_editor_summary(array $definition, array $values, array $introVa
             }
         }
     }
+
+    $summary['filled'] = min($summary['filled'], $summary['total']);
 
     return $summary;
 }
@@ -458,6 +536,7 @@ try {
     $definition = profile_definition($audience);
     $values = profile_load_values($id, $audience, $definition);
     $introValues = profile_intro_load_values($id, $audience);
+    $introStatuses = profile_intro_load_statuses($id);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!admin_can_edit_profiles()) {
@@ -469,14 +548,19 @@ try {
 
         $before = $values;
         $introBefore = $introValues;
+        $introStatusBefore = $introStatuses;
         $values = profile_posted_values($before, $definition);
         $introValues = profile_intro_posted_values($introBefore);
+        if ((string)($_POST['action'] ?? '') === 'publish_language') {
+            [$values, $introStatuses] = publish_selected_language($values, $definition, $introValues, $introStatuses, $selectedLanguage);
+        }
         $errors = array_merge($errors, profile_validate($values, $definition));
 
         if (!$errors) {
             $changes = profile_changes($before, $values, $definition);
             $introChanges = profile_intro_changes($introBefore, $introValues);
-            if ($changes || $introChanges) {
+            $introStatusChanges = profile_intro_status_changes($introStatusBefore, $introStatuses);
+            if ($changes || $introChanges || $introStatusChanges) {
                 $pdo = admin_db();
                 $pdo->beginTransaction();
                 if ($changes) {
@@ -540,7 +624,7 @@ try {
                     );
                 }
 
-                if ($introChanges) {
+                if ($introChanges || $introStatusChanges) {
                     $introField = PROFILE_INTRO_FIELDS[$audience]['field'];
                     $introSql = "INSERT INTO organization_translations (
                             organization_id,
@@ -552,16 +636,22 @@ try {
                             :organization_id,
                             :language_code,
                             :intro_text,
-                            'draft'
+                            :translation_status
                         )
                         ON DUPLICATE KEY UPDATE
-                            {$introField} = VALUES({$introField})";
+                            {$introField} = VALUES({$introField}),
+                            translation_status = VALUES(translation_status)";
                     $upsertIntro = $pdo->prepare($introSql);
-                    foreach ($introChanges as $change) {
+                    $introLanguages = array_unique(array_merge(
+                        array_map(static fn(array $change): string => $change['language_code'], $introChanges),
+                        array_map(static fn(array $change): string => $change['language_code'], $introStatusChanges)
+                    ));
+                    foreach ($introLanguages as $language) {
                         $upsertIntro->execute([
                             'organization_id' => $id,
-                            'language_code' => $change['language_code'],
-                            'intro_text' => $change['after'],
+                            'language_code' => $language,
+                            'intro_text' => $introValues[$language] ?? '',
+                            'translation_status' => $introStatuses[$language] ?? 'missing',
                         ]);
                     }
 
@@ -572,10 +662,12 @@ try {
                         [
                             'audience' => $audience,
                             'translations' => profile_intro_audit_values($introChanges, $introField, 'before'),
+                            'translation_status' => profile_intro_audit_values($introStatusChanges, $introField . '.status', 'before'),
                         ],
                         [
                             'audience' => $audience,
                             'translations' => profile_intro_audit_values($introChanges, $introField, 'after'),
+                            'translation_status' => profile_intro_audit_values($introStatusChanges, $introField . '.status', 'after'),
                         ]
                     );
                 }
@@ -610,16 +702,17 @@ try {
 }
 
 $profileLabel = $audience === 'professional' ? 'Professionalprofiel' : 'Jongerenprofiel';
+$profileContextLabel = $audience === 'professional' ? 'Professionalsprofiel' : 'Jongerenprofiel';
 $introDefinition = PROFILE_INTRO_FIELDS[$audience] ?? PROFILE_INTRO_FIELDS['youth'];
 $sourceLanguage = profile_source_language($islands);
-$selectedSummary = profile_editor_summary($definition, $values, $introValues, $selectedLanguage, $sourceLanguage);
+$selectedSummary = profile_editor_summary($definition, $values, $introValues, $introStatuses, $selectedLanguage, $sourceLanguage);
 $languageSummaries = [];
 foreach (PROFILE_LANGUAGES as $language) {
-    $languageSummaries[$language] = profile_editor_summary($definition, $values, $introValues, $language, $sourceLanguage);
+    $languageSummaries[$language] = profile_editor_summary($definition, $values, $introValues, $introStatuses, $language, $sourceLanguage);
 }
 $baseProfileUrl = 'organization_profile_edit.php?id=' . rawurlencode((string)$id) . '&audience=';
 admin_header(
-    $organization ? $profileLabel . ': ' . (string)$organization['name'] : $profileLabel,
+    $organization ? (string)$organization['name'] : $profileLabel,
     'organizations'
 );
 $publicUrl = $organization ? admin_public_organization_url($organization, $audience, $islands) : null;
@@ -655,8 +748,11 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
     <div>
       <a class="back-link" href="organization.php?id=<?= h((string)$id) ?>"><?= admin_asset_icon('icons/navigation/back.svg') ?>Terug naar organisatie</a>
       <p class="eyebrow">Redactie</p>
-      <h2><?= h($profileLabel) ?> - <?= h((string)$organization['name']) ?></h2>
-      <p><?= h($profileLabel) ?> / gekozen taal: <strong><?= h(strtoupper($selectedLanguage)) ?></strong> / brontaal: <strong><?= h(strtoupper($sourceLanguage)) ?></strong></p>
+      <h2><?= h($profileContextLabel) ?> bewerken</h2>
+      <p><?= h($profileContextLabel) ?> - taal <?= h(strtoupper($selectedLanguage)) ?> - brontaal <?= h(strtoupper($sourceLanguage)) ?></p>
+      <?php if ($selectedLanguage === 'pap'): ?>
+        <p class="notice notice-review"><?= admin_asset_icon('icons/status/review-needed.svg') ?>Controleer Papiamentu-teksten op toon, spelling en begrijpelijkheid voordat je ze publiceert.</p>
+      <?php endif; ?>
       <p class="save-state is-saved" data-save-state>Opgeslagen</p>
       <p class="unsaved-notice" data-unsaved-notice hidden><?= admin_asset_icon('icons/status/warning.svg') ?>Je hebt onopgeslagen wijzigingen</p>
     </div>
@@ -664,10 +760,12 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
       <button type="button" class="button is-secondary" data-expand-all><?= admin_asset_icon('icons/navigation/all-open.svg') ?>Alles uitklappen</button>
       <button type="button" class="button is-secondary" data-collapse-all><?= admin_asset_icon('icons/navigation/all-closed.svg') ?>Alles inklappen</button>
       <?php if (admin_can_edit_profiles()): ?>
+        <button type="submit" name="action" value="publish_language" class="button"><?= admin_asset_icon('icons/actions/approve.svg') ?>Deze taal publiceren</button>
         <button type="submit" class="admin-primary-action"><?= admin_asset_icon('icons/actions/save.svg') ?>Opslaan</button>
       <?php endif; ?>
     </div>
   </section>
+  <p class="form-help profile-publish-help">Publiceert alle ingevulde teksten in deze taal. Lege onderdelen blijven terugvallen op de brontaal.</p>
 
   <section class="panel profile-editor-toolbar">
     <div class="profile-switcher" aria-label="Profieltype">
@@ -691,8 +789,8 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
             <?= admin_language_flag($language) ?>
             <strong><?= h(strtoupper($language)) ?></strong>
           </span>
-          <span class="language-button-count"><?= h((string)$languageSummary['filled']) ?>/<?= h((string)$languageSummary['total']) ?> gevuld</span>
-          <small><?= h((string)$languageSummary['review']) ?> review / <?= h((string)$languageSummary['fallback']) ?> fallback / <?= h((string)$languageSummary['empty']) ?> leeg</small>
+          <span class="language-button-count"><?= h((string)$languageSummary['filled']) ?> van <?= h((string)$languageSummary['total']) ?> ingevuld</span>
+          <small><?= h((string)$languageSummary['review']) ?> aandacht nodig / <?= h((string)$languageSummary['fallback']) ?> gebruikt brontaal / <?= h((string)$languageSummary['empty']) ?> leeg</small>
         </a>
       <?php endforeach; ?>
     </div>
@@ -705,19 +803,19 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
   <section class="admin-progress-card">
     <div>
       <p class="eyebrow">Voortgang <?= h(strtoupper($selectedLanguage)) ?></p>
-      <h2><?= h((string)$selectedSummary['total']) ?> vragen totaal</h2>
+      <h2><?= h((string)$selectedSummary['filled']) ?> van <?= h((string)$selectedSummary['total']) ?> ingevuld</h2>
       <div class="progress-metrics" aria-label="Voortgang per status">
-        <span class="admin-status-pill status-filled"><?= admin_status_icon('status-filled') ?><?= h((string)$selectedSummary['filled']) ?> gevuld</span>
-        <span class="admin-status-pill status-review"><?= admin_status_icon('status-review') ?><?= h((string)$selectedSummary['review']) ?> review nodig</span>
-        <span class="admin-status-pill status-fallback"><?= admin_status_icon('status-fallback') ?><?= h((string)$selectedSummary['fallback']) ?> fallback</span>
+        <span class="admin-status-pill status-filled"><?= admin_status_icon('status-filled') ?><?= h((string)$selectedSummary['filled']) ?> ingevuld</span>
         <span class="admin-status-pill status-empty"><?= admin_status_icon('status-empty') ?><?= h((string)$selectedSummary['empty']) ?> leeg</span>
+        <span class="admin-status-pill status-fallback"><?= admin_status_icon('status-fallback') ?><?= h((string)$selectedSummary['fallback']) ?> gebruikt brontaal</span>
+        <span class="admin-status-pill status-review"><?= admin_status_icon('status-review') ?><?= h((string)$selectedSummary['review']) ?> aandacht nodig</span>
       </div>
     </div>
     <div class="profile-filter-bar" aria-label="Velden filteren">
       <button type="button" class="button is-active" data-profile-filter="all">Alles</button>
       <button type="button" class="button" data-profile-filter="empty">Alleen leeg</button>
-      <button type="button" class="button" data-profile-filter="review">Alleen review</button>
-      <button type="button" class="button" data-profile-filter="fallback">Alleen fallback</button>
+      <button type="button" class="button" data-profile-filter="review">Aandacht nodig</button>
+      <button type="button" class="button" data-profile-filter="fallback">Gebruikt brontaal</button>
       <button type="button" class="button" data-profile-filter="filled">Alleen ingevuld</button>
     </div>
   </section>
@@ -727,7 +825,7 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
     $introSourceText = (string)($introValues[$sourceLanguage] ?? '');
     $introCell = [
         'answer_text' => (string)($introValues[$selectedLanguage] ?? ''),
-        'translation_status' => trim((string)($introValues[$selectedLanguage] ?? '')) === '' ? 'missing' : 'draft',
+        'translation_status' => (string)($introStatuses[$selectedLanguage] ?? 'missing'),
     ];
     $introState = profile_editor_state($introCell, $selectedLanguage, $sourceLanguage, $introSourceText);
     $canEditSelectedLanguage = admin_can_edit_profile_language($selectedLanguage);
@@ -737,7 +835,7 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
         <span class="admin-section-marker" aria-hidden="true">i</span>
         <span>
           <strong><?= h($introDefinition['label']) ?></strong>
-          <small><?= admin_asset_icon('icons/content/source-text.svg') ?><?= h($introDefinition['help']) ?></small>
+          <small><?= admin_asset_icon('icons/content/source-text.svg') ?><?= h($introDefinition['help']) ?> Deze tekst wordt opgeslagen met de knop Opslaan en gepubliceerd wanneer deze taal gepubliceerd is.</small>
         </span>
         <?= profile_editor_badge($introState) ?>
         <span class="admin-chevron" aria-hidden="true"></span>
@@ -746,7 +844,8 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
         <?php if (!$canEditSelectedLanguage): ?><p class="readonly-note">Alleen-lezen voor jouw rol.</p><?php endif; ?>
         <?php if ($selectedLanguage !== $sourceLanguage && trim($introSourceText) !== ''): ?>
           <details class="source-preview">
-            <summary>Brontekst <?= h(strtoupper($sourceLanguage)) ?></summary>
+            <summary>Vergelijk met brontekst <?= h(strtoupper($sourceLanguage)) ?></summary>
+            <p class="form-help">Open dit als hulpmiddel bij vertalen of controleren.</p>
             <div><?= nl2br(h($introSourceText)) ?></div>
           </details>
         <?php endif; ?>
@@ -761,7 +860,8 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
         </label>
         <div class="field-meta">
           <span><?= admin_asset_icon('icons/content/translation.svg') ?>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
-          <span><?= admin_status_icon((string)$introState['class']) ?>Reviewstatus: <?= h($introState['label']) ?></span>
+          <span><?= admin_status_icon((string)$introState['class']) ?>Publieke weergave: <?= h($introState['label']) ?></span>
+          <span><?= admin_asset_icon('icons/content/review.svg') ?>Publicatiestatus: <?= h(profile_translation_status_label((string)($introStatuses[$selectedLanguage] ?? 'missing'))) ?></span>
           <span data-field-save-state>Opgeslagen</span>
         </div>
       </div>
@@ -788,19 +888,17 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
             <span class="admin-section-marker" aria-hidden="true"><?= h((string)$fieldIndex) ?></span>
             <span>
               <strong><?= h((string)$fieldLabel) ?></strong>
-              <small><?= admin_asset_icon('icons/content/question.svg') ?><code><?= h((string)$fieldKey) ?></code></small>
+              <small><?= admin_asset_icon('icons/content/question.svg') ?>Profielonderdeel</small>
             </span>
             <?= profile_editor_badge($state) ?>
             <span class="admin-chevron" aria-hidden="true"></span>
           </summary>
           <div class="profile-editor-panel-body">
             <?php if (!$canEditSelectedLanguage): ?><p class="readonly-note">Alleen-lezen voor jouw rol.</p><?php endif; ?>
-            <?php if ($selectedLanguage === 'pap'): ?>
-              <p class="notice notice-review"><?= admin_asset_icon('icons/status/review-needed.svg') ?>Papiamentu concepttekst - bedoeld voor review. Lange detailteksten worden pas publiek getoond na redactionele goedkeuring.</p>
-            <?php endif; ?>
             <?php if ($selectedLanguage !== $sourceLanguage && trim($sourceText) !== ''): ?>
               <details class="source-preview">
-                <summary>Brontekst <?= h(strtoupper($sourceLanguage)) ?></summary>
+                <summary>Vergelijk met brontekst <?= h(strtoupper($sourceLanguage)) ?></summary>
+                <p class="form-help">Open dit als hulpmiddel bij vertalen of controleren.</p>
                 <div><?= nl2br(h($sourceText)) ?></div>
               </details>
             <?php endif; ?>
@@ -814,17 +912,18 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
               ><?= h((string)$cell['answer_text']) ?></textarea>
             </label>
             <label>
-              Vertaalstatus
+              Publicatiestatus
               <select name="<?= h($inputBase) ?>[translation_status]" <?= $canEditSelectedLanguage ? '' : 'disabled' ?>>
                 <?php foreach (PROFILE_TRANSLATION_STATUSES as $status): ?>
-                  <option value="<?= h($status) ?>" <?= $cell['translation_status'] === $status ? 'selected' : '' ?>><?= h($status) ?></option>
+                  <option value="<?= h($status) ?>" <?= $cell['translation_status'] === $status ? 'selected' : '' ?>><?= h(profile_translation_status_label($status)) ?></option>
                 <?php endforeach; ?>
               </select>
+              <small>Gepubliceerd betekent dat deze taaltekst publiek mag worden getoond. Bij niet-brontalen vallen concept of gecontroleerd publiek terug op de brontaal.</small>
             </label>
             <div class="field-meta">
               <span><?= admin_asset_icon('icons/content/translation.svg') ?>Brontaal: <?= h(strtoupper($sourceLanguage)) ?></span>
-              <span><?= admin_asset_icon('icons/content/review.svg') ?>Vertaalstatus: <?= h((string)$cell['translation_status']) ?></span>
-              <span><?= admin_status_icon((string)$state['class']) ?>Reviewstatus: <?= h($state['label']) ?></span>
+              <span><?= admin_asset_icon('icons/content/review.svg') ?>Publicatiestatus: <?= h(profile_translation_status_label((string)$cell['translation_status'])) ?></span>
+              <span><?= admin_status_icon((string)$state['class']) ?>Publieke weergave: <?= h($state['label']) ?></span>
               <span data-field-save-state>Opgeslagen</span>
             </div>
           </div>

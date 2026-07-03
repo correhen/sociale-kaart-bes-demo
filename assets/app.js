@@ -731,19 +731,30 @@ function getTranslatedValue(value, lang = currentLanguage(), fallbackLang = 'nl'
 }
 
 function publicDetailLanguage(){
-  // PAP long-form detail copy is still in editorial review; public detail text falls back to NL until approved.
-  return currentLanguage() === 'pap' ? 'nl' : currentLanguage();
+  return currentLanguage();
+}
+
+function sourceLanguageForOrganization(org){
+  const island = org?.island || currentIsland();
+  return island === 'bonaire' ? 'nl' : 'en';
+}
+
+function canUsePublishedLanguage(org, lang, status, text){
+  if(!hasMeaningfulValue(text)) return false;
+  return lang === sourceLanguageForOrganization(org) || status === 'published';
 }
 
 function getTranslatedField(item, field, lang = currentLanguage(), fallbackLang = 'nl'){
-  const translated = getTranslatedValue(item?.translations?.[lang]?.[field], lang, fallbackLang);
-  if(translated) return translated;
-  if(currentIsland() !== 'bonaire') {
-    const english = getTranslatedValue(item?.translations?.en?.[field], 'en', 'en');
-    if(english) return english;
+  const sourceLang = sourceLanguageForOrganization(item);
+  const translated = getTranslatedValue(item?.translations?.[lang]?.[field], lang, sourceLang);
+  const translatedStatus = item?.translation_status?.[lang] || item?.translations?.[lang]?.translation_status || 'missing';
+  if(canUsePublishedLanguage(item, lang, translatedStatus, translated)) return translated;
+  const source = getTranslatedValue(item?.translations?.[sourceLang]?.[field], sourceLang, sourceLang);
+  if(source) return source;
+  if(sourceLang !== fallbackLang) {
+    const fallbackSource = getTranslatedValue(item?.translations?.[fallbackLang]?.[field], fallbackLang, fallbackLang);
+    if(fallbackSource) return fallbackSource;
   }
-  const fallback = getTranslatedValue(item?.translations?.[fallbackLang]?.[field], fallbackLang, fallbackLang);
-  if(fallback) return fallback;
   return getTranslatedValue(item?.[field], lang, fallbackLang);
 }
 
@@ -1629,8 +1640,22 @@ function profileLabel(config){
   return getTranslatedValue(config?.labels || config?.title || '');
 }
 
-function profileAnswerText(value){
-  const text = getTranslatedValue(value, publicDetailLanguage(), 'nl');
+function profileAnswerStatus(org, audience, groupKey, fieldKey, language){
+  if(audience === 'youth') return org?.youth_profile_status?.[fieldKey]?.[language] || 'missing';
+  return org?.professional_profile_status?.[groupKey]?.[fieldKey]?.[language] || 'missing';
+}
+
+function profileAnswerText(value, org = null, audience = '', groupKey = '', fieldKey = ''){
+  const language = publicDetailLanguage();
+  if(org && audience && fieldKey) {
+    const sourceLang = sourceLanguageForOrganization(org);
+    const text = getTranslatedValue(value?.[language], language, sourceLang);
+    const status = profileAnswerStatus(org, audience, groupKey, fieldKey, language);
+    if(canUsePublishedLanguage(org, language, status, text)) return text;
+    const sourceText = getTranslatedValue(value?.[sourceLang], sourceLang, sourceLang);
+    return hasMeaningfulValue(sourceText) ? sourceText : '';
+  }
+  const text = getTranslatedValue(value, language, 'nl');
   return hasMeaningfulValue(text) ? text : '';
 }
 
@@ -1721,13 +1746,13 @@ function renderRichText(text){
   return html.join('');
 }
 
-function profileAnswerHtml(value){
-  const html = renderRichText(profileAnswerText(value));
+function profileAnswerHtml(value, org = null, audience = '', groupKey = '', fieldKey = ''){
+  const html = renderRichText(profileAnswerText(value, org, audience, groupKey, fieldKey));
   return html ? `<div class="rich-text profile-rich-text">${html}</div>` : '';
 }
 
-function profileQuestionBlock(fieldConfig, value, groupKey){
-  const body = profileAnswerHtml(value);
+function profileQuestionBlock(fieldConfig, value, groupKey, org){
+  const body = profileAnswerHtml(value, org, 'professional', groupKey, fieldConfig.key);
   if(!body && !canInlineEditProfiles()) return '';
   const editLabel = `Bewerk profielblok: ${profileLabel(fieldConfig)}`;
   return `<div class="detail-profile-field" data-profile-field data-profile-audience="professional" data-profile-group="${escapeHtml(groupKey)}" data-profile-key="${escapeHtml(fieldConfig.key)}">
@@ -1786,7 +1811,7 @@ function youthProfileAccordionSections(org){
   if(!org.youth_profile) return '';
   let openCount = 0;
   const sections = PROFILE_I18N.youth.fields.map(field => {
-    const body = profileAnswerHtml(org.youth_profile[field.key]);
+    const body = profileAnswerHtml(org.youth_profile[field.key], org, 'youth', '', field.key);
     if(!body && !canInlineEditProfiles()) return null;
     const id = `detail-profile-youth-${field.key}`;
     const open = openCount < 2;
@@ -1818,14 +1843,14 @@ function professionalProfileAccordionSections(org){
   if(!org.professional_profile) return '';
   const hasProfileContent = canInlineEditProfiles() || PROFILE_I18N.professional.groups.some(group => {
     const profileGroup = org.professional_profile[group.key] || {};
-    return group.fields.some(field => field.key !== 'organisation_name' && profileAnswerHtml(profileGroup[field.key]));
+    return group.fields.some(field => field.key !== 'organisation_name' && profileAnswerHtml(profileGroup[field.key], org, 'professional', group.key, field.key));
   });
   if(!hasProfileContent) return '';
   const sections = PROFILE_I18N.professional.groups.map(group => {
     const profileGroup = org.professional_profile[group.key] || {};
     const body = group.fields
       .filter(field => field.key !== 'organisation_name')
-      .map(field => profileQuestionBlock(field, profileGroup[field.key], group.key))
+      .map(field => profileQuestionBlock(field, profileGroup[field.key], group.key, org))
       .filter(Boolean)
       .join('');
     if(!body) return null;
