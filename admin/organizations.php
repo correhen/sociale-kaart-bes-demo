@@ -113,16 +113,7 @@ admin_header('Organisaties', 'organizations');
   <div>
     <p class="eyebrow">Organisatiebeheer</p>
     <h2>Zoek, controleer en werk organisaties bij</h2>
-    <p><?= h((string)count($organizations)) ?> organisaties in dit overzicht. Organisaties zijn eilandgebonden; gebruik het filter en de kolom Eiland(en) om Bonaire, Saba en Statia te controleren.</p>
-  </div>
-</section>
-
-<section class="panel">
-  <div class="panel-heading">
-    <div>
-      <h2>Nieuwe organisatie toevoegen</h2>
-      <p class="muted">Nieuwe organisaties per eiland worden in een volgende beheerfase toegevoegd. Geef de gegevens door aan de beheerder/ontwikkelaar.</p>
-    </div>
+    <p><?= h((string)count($organizations)) ?> organisaties in dit overzicht.</p>
   </div>
 </section>
 

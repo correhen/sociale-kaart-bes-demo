@@ -10,13 +10,13 @@ const PROFILE_TRANSLATION_STATUSES = ['missing', 'draft', 'reviewed', 'published
 const PROFILE_INTRO_FIELDS = [
     'youth' => [
         'field' => 'youth_short',
-        'label' => 'Korte titel jongeren / introtekst',
-        'help' => 'Deze tekst verschijnt kort onder de organisatietitel op de publieke pagina en op organisatiekaarten. De aparte jongerentitel wordt via vertalingen beheerd.',
+        'label' => 'Korte tekst jongerenpagina',
+        'help' => 'Deze tekst verschijnt kort onder de organisatietitel op de publieke pagina en op organisatiekaarten.',
     ],
     'professional' => [
         'field' => 'professional_summary',
-        'label' => 'Korte titel professionals / introtekst',
-        'help' => 'Deze titel of naam wordt gebruikt in de professionele weergave als korte samenvatting/intro op kaarten en detailpagina's.',
+        'label' => 'Korte tekst professionalpagina',
+        'help' => 'Deze tekst verschijnt kort onder de organisatietitel op de publieke pagina en op organisatiekaarten.',
     ],
 ];
 const YOUTH_PROFILE_FIELDS = [
@@ -33,7 +33,7 @@ const PROFESSIONAL_PROFILE_GROUPS = [
     'general' => [
         'label' => 'Algemene informatie',
         'fields' => [
-            'organisation_name' => 'Officiele organisatienaam',
+            'organisation_name' => 'Naam van de organisatie/instantie',
             'short_description' => 'Korte omschrijving van de organisatie',
             'target_group' => 'Doelgroep',
             'support_offer' => 'Hulpaanbod/dienstverlening',
@@ -68,11 +68,6 @@ const PROFESSIONAL_PROFILE_GROUPS = [
             'other_information' => 'Overige relevante informatie voor professionals',
         ],
     ],
-];
-const PROFILE_FIELD_HELP = [
-    'organisation_name' => 'Dit is de formele naam van de organisatie. Deze wordt gebruikt in de organisatielijst en bij professionals.',
-    'youth_short' => 'Deze tekst verschijnt op jongerenpagina\'s en jongerenkaarten. Gebruik alleen een korte naam als die bewust anders mag zijn.',
-    'professional_summary' => 'Deze titel of naam wordt gebruikt in de professionele weergave.',
 ];
 
 $id = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
@@ -537,7 +532,7 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
 <?php endif; ?>
 
 <section class="panel">
-  <p class="notice">Nederlands is de brontekst. Vertalingen per taal worden hier aangepast voor NL / PAP / EN / ES. Laat een veld leeg als de vertaling nog niet beschikbaar is.</p>
+  <p class="notice">Nederlands is de brontekst. Vertalingen kunnen per taal worden bijgewerkt voor NL / PAP / EN / ES.</p>
   <dl class="detail-list">
     <dt>Organisatie</dt><dd><?= h((string)$organization['name']) ?></dd>
     <dt>Slug</dt><dd><code><?= h((string)$organization['slug']) ?></code></dd>
@@ -583,9 +578,6 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
   <section class="profile-group profile-intro-group">
     <div class="section-heading"><div><p class="eyebrow">Intro</p><h2><?= h($introDefinition['label']) ?></h2></div></div>
     <p class="form-help"><?= h($introDefinition['help']) ?></p>
-    <?php if (isset(PROFILE_FIELD_HELP[$introDefinition['field']])): ?>
-      <p class="form-help"><?= h(PROFILE_FIELD_HELP[$introDefinition['field']]) ?></p>
-    <?php endif; ?>
     <div class="profile-language-grid">
       <?php foreach (PROFILE_LANGUAGES as $language): ?>
         <?php $canEditLanguage = admin_can_edit_profile_language($language); ?>
@@ -618,9 +610,6 @@ $publicUrl = $organization ? admin_public_organization_url($organization, $audie
             <h3><?= h((string)$fieldLabel) ?></h3>
             <code class="field-key"><?= h((string)$fieldKey) ?></code>
           </div>
-          <?php if (isset(PROFILE_FIELD_HELP[$fieldKey])): ?>
-            <p class="form-help"><?= h(PROFILE_FIELD_HELP[$fieldKey]) ?></p>
-          <?php endif; ?>
 
           <div class="profile-language-grid">
             <?php foreach (PROFILE_LANGUAGES as $language): ?>

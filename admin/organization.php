@@ -13,7 +13,6 @@ $islands = [];
 $themes = [];
 $audiences = [];
 $translations = [];
-$keywords = [];
 $youthAnswers = [];
 $professionalAnswers = [];
 $languages = ['nl', 'pap', 'en', 'es'];
@@ -142,13 +141,6 @@ try {
         ORDER BY a.sort_order ASC",
         ['id' => $id]
     );
-    $keywords = fetch_all(
-        "SELECT keyword
-        FROM organization_keywords
-        WHERE organization_id = :id
-        ORDER BY keyword ASC",
-        ['id' => $id]
-    );
     $translations = translation_by_language(fetch_all(
         'SELECT * FROM organization_translations WHERE organization_id = :id ORDER BY language_code ASC',
         ['id' => $id]
@@ -219,7 +211,6 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
 <div class="section-nav">
   <a class="button" href="#basis">Basis</a>
   <a class="button" href="#contact">Contact</a>
-  <a class="button" href="#search">Zoektermen</a>
   <a class="button" href="#youth">Jongerenprofiel</a>
   <a class="button" href="#professional">Professionalprofiel</a>
   <a class="button" href="#translations">Vertalingen/status</a>
@@ -263,20 +254,6 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
   </div>
 </section>
 
-<section class="panel detail-section" id="search">
-  <h2>Zoektermen / aliassen</h2>
-  <p class="muted">Oude namen, afkortingen en veelgebruikte zoekwoorden blijven hier zichtbaar, zodat organisaties vindbaar blijven nadat de publieke naam wijzigt.</p>
-  <?php if ($keywords): ?>
-    <ul class="compact-list">
-      <?php foreach ($keywords as $keyword): ?>
-        <li><?= h((string)$keyword['keyword']) ?></li>
-      <?php endforeach; ?>
-    </ul>
-  <?php else: ?>
-    <p class="muted">Geen zoektermen vastgelegd.</p>
-  <?php endif; ?>
-</section>
-
 <section class="panel detail-section" id="contact">
   <h2>Contact</h2>
   <dl class="detail-list">
@@ -302,7 +279,6 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
 
 <section class="panel detail-section" id="translations">
   <h2>Vertalingen/status</h2>
-  <p class="muted">Vertalingen per taal worden hier gecontroleerd voor NL / PAP / EN / ES. Laat een veld leeg als de vertaling nog niet beschikbaar is.</p>
   <div class="table-wrap">
     <table>
       <thead>

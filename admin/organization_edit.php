@@ -14,7 +14,6 @@ $errors = [];
 $organization = null;
 $contact = null;
 $islands = [];
-$keywords = [];
 $values = [
     'name' => '',
     'professional_summary' => '',
@@ -177,13 +176,6 @@ try {
         INNER JOIN islands i ON i.id = oi.island_id
         WHERE oi.organization_id = :id
         ORDER BY oi.is_primary DESC, i.sort_order ASC",
-        ['id' => $id]
-    );
-    $keywords = fetch_all(
-        "SELECT keyword
-        FROM organization_keywords
-        WHERE organization_id = :id
-        ORDER BY keyword ASC",
         ['id' => $id]
     );
     $translation = fetch_one(
@@ -365,22 +357,6 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
     <dd><?= h($organization['name']) ?></dd>
     <dt>Slug</dt>
     <dd><code><?= h($organization['slug']) ?></code></dd>
-    <dt>Eiland(en)</dt>
-    <dd>
-      <?php if ($islands): ?>
-        <?= h(implode(', ', array_map(static fn(array $island): string => (string)$island['name'] . ((int)$island['is_primary'] === 1 ? ' (primair)' : ''), $islands))) ?>
-      <?php else: ?>
-        <span class="muted">Geen eiland gekoppeld</span>
-      <?php endif; ?>
-    </dd>
-    <dt>Zoektermen / aliassen</dt>
-    <dd>
-      <?php if ($keywords): ?>
-        <?= h(implode(', ', array_map(static fn(array $keyword): string => (string)$keyword['keyword'], $keywords))) ?>
-      <?php else: ?>
-        <span class="muted">Geen zoektermen vastgelegd</span>
-      <?php endif; ?>
-    </dd>
   </dl>
   <div class="form-actions">
     <a class="button" href="organization.php?id=<?= h((string)$id) ?>">Terug naar organisatie</a>
@@ -410,17 +386,14 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
 
   <section class="form-section">
   <div class="section-heading"><div><p class="eyebrow">Inhoud</p><h2>Basisgegevens</h2></div></div>
-  <p class="form-help">Alleen Nederlandse basisvelden. Vertalingen, jongerentitel, profielantwoorden, zoektermen en eilandkoppelingen worden in deze beheerfase apart beheerd.</p>
-  <p class="notice">Let op: de jongerenkaart gebruikt mogelijk ook het veld 'Korte titel jongeren'. Pas dit veld ook aan via een vertaalpatch of profielbeheer als de naam daar hetzelfde moet zijn.</p>
+  <p class="form-help">Alleen Nederlandse basisvelden. De slug en profielantwoorden blijven ongewijzigd.</p>
   <label>
-    Officiele organisatienaam
+    Organisatienaam (NL)
     <input name="name" value="<?= h($values['name']) ?>" required>
-    <small>Dit is de formele naam van de organisatie. Deze wordt gebruikt in de organisatielijst en bij professionals.</small>
   </label>
   <label>
-    Korte titel professionals
+    Korte omschrijving / summary (NL)
     <textarea name="professional_summary" rows="5" data-richtext-editor><?= h($values['professional_summary']) ?></textarea>
-    <small>Deze titel of naam wordt gebruikt in de professionele weergave als korte samenvatting/intro op kaarten en detailpagina's.</small>
   </label>
   <div class="form-grid">
     <label>
@@ -439,15 +412,7 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
   <label>
     Slug (alleen-lezen)
     <input value="<?= h($organization['slug']) ?>" readonly>
-    <small>De slug blijft stabiel voor bestaande publieke links.</small>
   </label>
-  </section>
-
-  <section class="form-section">
-  <div class="section-heading"><div><p class="eyebrow">Vindbaarheid</p><h2>Zoektermen, talen en eiland</h2></div></div>
-  <p class="form-help">Zoektermen / aliassen: voeg oude namen, afkortingen en veelgebruikte zoekwoorden toe. Zo blijft de organisatie vindbaar, ook als de zichtbare naam verandert.</p>
-  <p class="form-help">Vertalingen per taal worden beheerd in het jongeren- en professionalprofiel. Daar staan NL / PAP / EN / ES naast elkaar. Laat een veld leeg als de vertaling nog niet beschikbaar is.</p>
-  <p class="form-help">Organisaties zijn eilandgebonden. Nieuwe organisaties per eiland worden in een volgende beheerfase toegevoegd. Geef de gegevens door aan de beheerder/ontwikkelaar.</p>
   </section>
 
   <section class="form-section">
