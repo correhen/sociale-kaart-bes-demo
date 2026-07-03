@@ -98,6 +98,36 @@ function admin_status_icon(string $statusClass): string
     return admin_asset_icon($icons[$statusClass] ?? 'icons/status/info.svg');
 }
 
+function organization_status_text(string $status): string
+{
+    $labels = [
+        'published' => 'Gepubliceerd',
+        'draft' => 'Concept',
+        'needs_review' => 'Review nodig',
+        'review_needed' => 'Review nodig',
+        'archived' => 'Archief',
+    ];
+
+    return $labels[$status] ?? $status;
+}
+
+function organization_visibility_text(array $organization): string
+{
+    return (int)($organization['visibility_public'] ?? 0) === 1
+        ? 'publiek zichtbaar'
+        : 'niet publiek zichtbaar';
+}
+
+function should_show_audience_summary(array $audience): bool
+{
+    $code = strtolower((string)($audience['code'] ?? ''));
+    $label = strtolower((string)($audience['label_nl'] ?? ''));
+
+    return !in_array($code, ['parent', 'parents', 'caregiver', 'ouders'], true)
+        && strpos($label, 'ouder') === false
+        && strpos($label, 'verzorger') === false;
+}
+
 function profile_language_state(array $answers, string $language, string $sourceLanguage): array
 {
     $total = count($answers);
@@ -264,6 +294,7 @@ $publicYouthUrl = $organization ? admin_public_organization_url($organization, '
 $publicProfessionalUrl = $organization ? admin_public_organization_url($organization, 'professional', $islands) : null;
 $sourceLanguage = organization_source_language($islands);
 $islandLabel = organization_island_label($islands);
+$latestAuditDate = $auditEntries[0]['created_at'] ?? null;
 ?>
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
@@ -278,9 +309,12 @@ $islandLabel = organization_island_label($islands);
     <h2><?= h((string)$organization['name']) ?></h2>
     <p><?= $islandLabel !== '' ? h($islandLabel) : '<span class="muted">Geen eiland gekoppeld</span>' ?></p>
     <div class="status-row">
+      <span class="badge badge-action">Publicatie</span>
       <?= status_badge($organization['status']) ?>
+      <span class="badge badge-action">Bron/controle</span>
       <?= status_badge($organization['source_status']) ?>
-      <span class="badge"><?= ((int)$organization['visibility_public'] === 1) ? 'publiek zichtbaar' : 'niet publiek' ?></span>
+      <span class="badge badge-action">Zichtbaarheid</span>
+      <?= status_badge(organization_visibility_text($organization)) ?>
     </div>
   </div>
   <div class="detail-actions">
@@ -304,25 +338,28 @@ $islandLabel = organization_island_label($islands);
 
 <div class="organization-dashboard">
   <section class="admin-dashboard-card">
-    <div class="admin-card-heading"><div><p class="eyebrow">Overzicht</p><h2><?= admin_asset_icon('icons/people/organization.svg') ?>Algemene gegevens</h2></div></div>
+    <div class="admin-card-heading">
+      <div><p class="eyebrow">Overzicht</p><h2><?= admin_asset_icon('icons/people/organization.svg') ?>Algemene gegevens</h2></div>
+      <?php if (admin_can_edit_organizations()): ?>
+        <a class="button button-small" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>#basisgegevens"><?= admin_asset_icon('icons/actions/edit.svg') ?>Bewerken</a>
+      <?php endif; ?>
+    </div>
     <dl class="compact-detail-list">
       <dt>Naam</dt><dd><?= h($organization['name']) ?></dd>
-      <dt>Slug</dt><dd><code><?= h($organization['slug']) ?></code></dd>
-      <dt>External key</dt><dd><code><?= h((string)$organization['external_key']) ?></code></dd>
       <dt>Eiland</dt><dd><?= $islandLabel !== '' ? h($islandLabel) : '<span class="muted">ontbreekt</span>' ?></dd>
-      <dt>Status</dt><dd><?= status_badge($organization['status']) ?></dd>
-      <dt>Zichtbaarheid</dt><dd><?= ((int)$organization['visibility_public'] === 1) ? status_badge('publiek') : status_badge('niet publiek') ?></dd>
+      <dt>Publicatie</dt><dd><?= h(organization_status_text((string)$organization['status'])) ?> - <?= h(organization_visibility_text($organization)) ?></dd>
     </dl>
   </section>
 
   <section class="admin-dashboard-card">
-    <div class="admin-card-heading"><div><p class="eyebrow">Relaties</p><h2><?= admin_asset_icon('icons/content/theme.svg') ?>Doelgroepen en thema's</h2></div></div>
+    <div class="admin-card-heading"><div><p class="eyebrow">Samenvatting</p><h2><?= admin_asset_icon('icons/content/theme.svg') ?>Voor wie en thema's</h2></div></div>
     <h3>Doelgroepen</h3>
     <div class="badge-list">
-      <?php foreach ($audiences as $audience): ?>
+      <?php $visibleAudiences = array_values(array_filter($audiences, 'should_show_audience_summary')); ?>
+      <?php foreach ($visibleAudiences as $audience): ?>
         <span class="badge"><?= h($audience['label_nl']) ?></span>
       <?php endforeach; ?>
-      <?php if (!$audiences): ?><span class="muted">Geen doelgroepen gekoppeld.</span><?php endif; ?>
+      <?php if (!$visibleAudiences): ?><span class="muted">Geen doelgroepen gekoppeld.</span><?php endif; ?>
     </div>
     <h3>Thema's</h3>
     <div class="badge-list">
@@ -334,13 +371,18 @@ $islandLabel = organization_island_label($islands);
   </section>
 
   <section class="admin-dashboard-card">
-    <div class="admin-card-heading"><div><p class="eyebrow">Contact</p><h2><?= admin_asset_icon('icons/people/contact-mail.svg') ?>Contactgegevens</h2></div></div>
+    <div class="admin-card-heading">
+      <div><p class="eyebrow">Contact</p><h2><?= admin_asset_icon('icons/people/contact-mail.svg') ?>Contactgegevens</h2></div>
+      <?php if (admin_can_edit_organizations()): ?>
+        <a class="button button-small" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>#contactgegevens"><?= admin_asset_icon('icons/actions/edit.svg') ?>Bewerken</a>
+      <?php endif; ?>
+    </div>
     <dl class="compact-detail-list">
       <dt>Telefoon</dt><dd><?= empty_label($contact['phone'] ?? '') ?></dd>
       <dt>WhatsApp</dt><dd><?= empty_label($contact['whatsapp'] ?? '') ?></dd>
       <dt>E-mail</dt><dd><?= empty_label($contact['email'] ?? '') ?></dd>
       <dt>Website</dt><dd><?= empty_label($contact['website'] ?? '') ?></dd>
-      <dt>Adres NL</dt><dd><?= empty_label($contact['address_nl'] ?? '') ?></dd>
+      <dt>Adres</dt><dd><?= empty_label($contact['address_nl'] ?? '') ?></dd>
     </dl>
   </section>
 
@@ -349,8 +391,9 @@ $islandLabel = organization_island_label($islands);
     <dl class="compact-detail-list">
       <dt>Bronstatus</dt><dd><?= status_badge($organization['source_status']) ?></dd>
       <dt>Laatst gecontroleerd</dt><dd><?= readable_date($organization['last_checked_at']) ?></dd>
-      <dt>Bijgewerkt</dt><dd><?= readable_datetime($organization['updated_at']) ?></dd>
-      <dt>Source locked</dt><dd><?= ((int)$organization['source_locked'] === 1) ? 'ja' : 'nee' ?></dd>
+      <dt>Basisgegevens bijgewerkt</dt><dd><?= readable_datetime($organization['updated_at']) ?></dd>
+      <dt>Laatste wijziging</dt><dd><?= readable_datetime($latestAuditDate) ?></dd>
+      <dt>Bron beschermd</dt><dd><?= ((int)$organization['source_locked'] === 1) ? 'Ja' : 'Nee' ?></dd>
     </dl>
   </section>
 

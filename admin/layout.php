@@ -70,8 +70,26 @@ function admin_footer(): void
 function status_badge(string $status): string
 {
     $class = preg_replace('/[^a-z0-9_-]+/i', '-', $status);
+    $labels = [
+        'published' => 'Gepubliceerd',
+        'draft' => 'Concept',
+        'needs_review' => 'Review nodig',
+        'review_needed' => 'Review nodig',
+        'archived' => 'Archief',
+        'submitted' => 'Aangeleverd',
+        'verified' => 'Gecontroleerd',
+        'needs_check' => 'Controle nodig',
+        'expired' => 'Verlopen',
+        'demo' => 'Demo/oude data',
+        'public' => 'Publiek zichtbaar',
+        'publiek' => 'Publiek zichtbaar',
+        'publiek zichtbaar' => 'Publiek zichtbaar',
+        'not public' => 'Niet publiek zichtbaar',
+        'niet publiek' => 'Niet publiek zichtbaar',
+        'niet publiek zichtbaar' => 'Niet publiek zichtbaar',
+    ];
 
-    return '<span class="badge badge-' . h($class) . '">' . h($status) . '</span>';
+    return '<span class="badge badge-' . h($class) . '">' . h($labels[$status] ?? $status) . '</span>';
 }
 
 function empty_label(?string $value = null): string

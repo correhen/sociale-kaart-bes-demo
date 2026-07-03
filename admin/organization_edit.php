@@ -62,6 +62,27 @@ function valid_date_or_empty(string $value): bool
     return checkdate($month, $day, $year);
 }
 
+function organization_edit_status_label(string $status): string
+{
+    return [
+        'published' => 'Gepubliceerd',
+        'draft' => 'Concept',
+        'needs_review' => 'Review nodig',
+        'archived' => 'Archief',
+    ][$status] ?? $status;
+}
+
+function organization_edit_source_status_label(string $status): string
+{
+    return [
+        'demo' => 'Demo/oude data',
+        'submitted' => 'Aangeleverd',
+        'verified' => 'Gecontroleerd',
+        'needs_check' => 'Controle nodig',
+        'expired' => 'Verlopen',
+    ][$status] ?? $status;
+}
+
 function posted_values(): array
 {
     return [
@@ -384,7 +405,7 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
   <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
   <input type="hidden" name="id" value="<?= h((string)$id) ?>">
 
-  <section class="form-section">
+  <section class="form-section" id="basisgegevens">
   <div class="section-heading"><div><p class="eyebrow">Inhoud</p><h2>Basisgegevens</h2></div></div>
   <p class="form-help">Alleen Nederlandse basisvelden. De slug en profielantwoorden blijven ongewijzigd.</p>
   <label>
@@ -415,7 +436,7 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
   </label>
   </section>
 
-  <section class="form-section">
+  <section class="form-section" id="publicatie">
   <div class="section-heading"><div><p class="eyebrow">Publicatie</p><h2>Status</h2></div></div>
   <p class="form-help">De publicatiestatus bepaalt of een organisatie gepubliceerd is. Bronstatus en controledatum helpen bij redactionele opvolging.</p>
   <div class="form-grid">
@@ -423,7 +444,7 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
       Publicatiestatus
       <select name="status" required>
         <?php foreach (ORGANIZATION_STATUSES as $status): ?>
-          <option value="<?= h($status) ?>" <?= $values['status'] === $status ? 'selected' : '' ?>><?= h($status) ?></option>
+          <option value="<?= h($status) ?>" <?= $values['status'] === $status ? 'selected' : '' ?>><?= h(organization_edit_status_label($status)) ?></option>
         <?php endforeach; ?>
       </select>
       <small>Gebruik gepubliceerd alleen wanneer de gegevens publiek mogen verschijnen.</small>
@@ -432,7 +453,7 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
       Bronstatus
       <select name="source_status" required>
         <?php foreach (ORGANIZATION_SOURCE_STATUSES as $sourceStatus): ?>
-          <option value="<?= h($sourceStatus) ?>" <?= $values['source_status'] === $sourceStatus ? 'selected' : '' ?>><?= h($sourceStatus) ?></option>
+          <option value="<?= h($sourceStatus) ?>" <?= $values['source_status'] === $sourceStatus ? 'selected' : '' ?>><?= h(organization_edit_source_status_label($sourceStatus)) ?></option>
         <?php endforeach; ?>
       </select>
       <small>Geeft aan hoe actueel en betrouwbaar de broninformatie is.</small>
@@ -445,7 +466,7 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
   </div>
   </section>
 
-  <section class="form-section">
+  <section class="form-section" id="contactgegevens">
   <div class="section-heading"><div><p class="eyebrow">Bereikbaarheid</p><h2>Contactgegevens</h2></div></div>
   <div class="form-grid">
     <label>
