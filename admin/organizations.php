@@ -6,17 +6,103 @@ require __DIR__ . '/layout.php';
 require_admin_login();
 
 $filters = [
-    'q' => trim((string)($_GET['q'] ?? '')),
     'status' => trim((string)($_GET['status'] ?? '')),
     'island' => trim((string)($_GET['island'] ?? '')),
-    'source_status' => trim((string)($_GET['source_status'] ?? '')),
     'theme' => trim((string)($_GET['theme'] ?? '')),
+    'show_archived' => (string)($_GET['show_archived'] ?? '') === '1',
 ];
 
 $organizations = [];
 $islands = [];
 $themes = [];
 $error = '';
+
+function admin_icon(string $path, string $class = 'admin-icon'): string
+{
+    return '<img class="' . h($class) . '" src="../assets/admin-icons/admin_assetpack_sociale_kaart_bes_v1/' . h($path) . '" alt="" aria-hidden="true">';
+}
+
+function organization_status_label(string $status): string
+{
+    return [
+        'published' => 'Gepubliceerd',
+        'draft' => 'Concept',
+        'needs_review' => 'Review nodig',
+        'archived' => 'Archief',
+    ][$status] ?? ucfirst(str_replace('_', ' ', $status));
+}
+
+function organization_status_badge(string $status): string
+{
+    $class = preg_replace('/[^a-z0-9_-]+/i', '-', $status);
+
+    return '<span class="badge badge-' . h($class) . '">' . h(organization_status_label($status)) . '</span>';
+}
+
+function source_status_label(string $status): string
+{
+    return [
+        'demo' => 'Demo/oud',
+        'submitted' => 'Aangeleverd',
+        'verified' => 'Gecontroleerd',
+        'needs_check' => 'Controleren',
+        'expired' => 'Verouderd',
+    ][$status] ?? ucfirst(str_replace('_', ' ', $status));
+}
+
+function visible_date(?string $value): string
+{
+    $dateTime = trim((string)$value);
+    if ($dateTime === '') {
+        return 'Onbekend';
+    }
+
+    $parsed = DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $dateTime);
+    if (!$parsed || $parsed->format('Y-m-d H:i:s') !== $dateTime) {
+        return h($dateTime);
+    }
+
+    return h($parsed->format('d-m-Y'));
+}
+
+function split_labels(?string $value): array
+{
+    $parts = array_filter(array_map('trim', explode(',', (string)$value)), static fn(string $part): bool => $part !== '');
+
+    return array_values($parts);
+}
+
+function render_compact_labels(?string $value, string $emptyText = 'Geen'): string
+{
+    $labels = split_labels($value);
+    if (!$labels) {
+        return '<span class="muted">' . h($emptyText) . '</span>';
+    }
+
+    $visible = array_slice($labels, 0, 2);
+    $html = '<span class="compact-badges">';
+    foreach ($visible as $label) {
+        $html .= '<span class="badge">' . h($label) . '</span>';
+    }
+    $remaining = count($labels) - count($visible);
+    if ($remaining > 0) {
+        $html .= '<span class="badge badge-count">+' . h((string)$remaining) . ' meer</span>';
+    }
+    $html .= '</span>';
+
+    return $html;
+}
+
+function public_profile_url(array $organization, string $audience): ?string
+{
+    $code = (string)($organization['primary_island_code'] ?: $organization['first_island_code'] ?: 'bonaire');
+
+    return admin_public_organization_url(
+        $organization,
+        $audience,
+        [['code' => $code, 'is_primary' => 1]]
+    );
+}
 
 try {
     $islands = fetch_all('SELECT code, name FROM islands ORDER BY sort_order ASC, name ASC');
@@ -32,17 +118,11 @@ try {
     $where = [];
     $params = [];
 
-    if ($filters['q'] !== '') {
-        $where[] = "(o.slug LIKE :q OR ot_nl.name LIKE :q OR ot_en.name LIKE :q OR ot_nl.type_label LIKE :q OR ot_en.type_label LIKE :q)";
-        $params['q'] = '%' . $filters['q'] . '%';
-    }
     if ($filters['status'] !== '') {
         $where[] = 'o.status = :status';
         $params['status'] = $filters['status'];
-    }
-    if ($filters['source_status'] !== '') {
-        $where[] = 'o.source_status = :source_status';
-        $params['source_status'] = $filters['source_status'];
+    } elseif (!$filters['show_archived']) {
+        $where[] = "o.status <> 'archived'";
     }
     if ($filters['island'] !== '') {
         $where[] = "EXISTS (
@@ -68,10 +148,11 @@ try {
     $sql = "SELECT
             o.id,
             o.slug,
+            o.external_key,
             o.status,
             o.source_status,
+            o.visibility_public,
             o.updated_at,
-            o.last_checked_at,
             COALESCE(NULLIF(ot_nl.name, ''), NULLIF(ot_en.name, ''), o.slug) AS name,
             COALESCE(NULLIF(ot_nl.type_label, ''), NULLIF(ot_en.type_label, '')) AS type_label,
             (
@@ -80,6 +161,29 @@ try {
                 INNER JOIN islands i ON i.id = oi.island_id
                 WHERE oi.organization_id = o.id
             ) AS islands,
+            (
+                SELECT GROUP_CONCAT(i.code ORDER BY oi.is_primary DESC, i.sort_order ASC SEPARATOR ' ')
+                FROM organization_islands oi
+                INNER JOIN islands i ON i.id = oi.island_id
+                WHERE oi.organization_id = o.id
+            ) AS island_codes,
+            (
+                SELECT i.code
+                FROM organization_islands oi
+                INNER JOIN islands i ON i.id = oi.island_id
+                WHERE oi.organization_id = o.id
+                    AND oi.is_primary = 1
+                ORDER BY i.sort_order ASC
+                LIMIT 1
+            ) AS primary_island_code,
+            (
+                SELECT i.code
+                FROM organization_islands oi
+                INNER JOIN islands i ON i.id = oi.island_id
+                WHERE oi.organization_id = o.id
+                ORDER BY oi.is_primary DESC, i.sort_order ASC
+                LIMIT 1
+            ) AS first_island_code,
             (
                 SELECT GROUP_CONCAT(COALESCE(NULLIF(tt.name, ''), t.slug) ORDER BY oth.is_primary DESC, oth.sort_order ASC SEPARATOR ', ')
                 FROM organization_theme oth
@@ -101,118 +205,167 @@ try {
         $sql .= ' WHERE ' . implode(' AND ', $where);
     }
 
-    $sql .= ' ORDER BY name ASC LIMIT 200';
+    $sql .= ' ORDER BY name ASC LIMIT 300';
     $organizations = fetch_all($sql, $params);
 } catch (Throwable) {
     $error = 'Organisaties konden niet worden geladen.';
 }
 
-admin_header('Organisaties', 'organizations');
-?>
-<section class="page-intro compact">
-  <div>
-    <p class="eyebrow">Organisatiebeheer</p>
-    <h2>Zoek, controleer en werk organisaties bij</h2>
-    <p><?= h((string)count($organizations)) ?> organisaties in dit overzicht.</p>
-  </div>
-</section>
+$titleAction = '<span class="button button-disabled" title="Nieuwe organisatie toevoegen wordt nog ingericht" aria-disabled="true">+ Nieuwe organisatie toevoegen</span>';
 
+admin_header('Organisaties', 'organizations', $titleAction);
+?>
 <?php if ($error !== ''): ?>
   <p class="error"><?= h($error) ?></p>
 <?php endif; ?>
 
-<section class="panel filter-panel">
+<section class="panel filter-panel organizations-filter-panel">
   <div class="panel-heading">
-    <div><h2>Filters</h2><p class="muted">Combineer zoekterm, status, eiland, bronstatus en thema.</p></div>
+    <div>
+      <h2>Zoeken en filteren</h2>
+      <p class="muted"><span data-organization-visible-count><?= h((string)count($organizations)) ?></span> organisaties in dit overzicht.</p>
+    </div>
     <a class="button button-small" href="organizations.php">Wis filters</a>
   </div>
-  <form class="filters" method="get" action="organizations.php">
-    <label>
+  <form class="filters organizations-filters" method="get" action="organizations.php">
+    <label class="organizations-search-field">
       Zoekterm
-      <input name="q" value="<?= h($filters['q']) ?>" placeholder="Naam, slug of type">
-    </label>
-    <label>
-      Status
-      <select name="status">
-        <option value="">Alle</option>
-        <?php foreach (['draft', 'published', 'needs_review', 'archived'] as $status): ?>
-          <option value="<?= h($status) ?>" <?= $filters['status'] === $status ? 'selected' : '' ?>><?= h($status) ?></option>
-        <?php endforeach; ?>
-      </select>
+      <input name="q" value="" placeholder="Zoek op naam, afkorting of eiland..." autocomplete="off" data-organizations-search>
     </label>
     <label>
       Eiland
       <select name="island">
-        <option value="">Alle</option>
+        <option value="">Alle eilanden</option>
         <?php foreach ($islands as $island): ?>
           <option value="<?= h($island['code']) ?>" <?= $filters['island'] === $island['code'] ? 'selected' : '' ?>><?= h($island['name']) ?></option>
         <?php endforeach; ?>
       </select>
     </label>
     <label>
-      Bronstatus
-      <select name="source_status">
-        <option value="">Alle</option>
-        <?php foreach (['demo', 'submitted', 'verified', 'needs_check', 'expired'] as $sourceStatus): ?>
-          <option value="<?= h($sourceStatus) ?>" <?= $filters['source_status'] === $sourceStatus ? 'selected' : '' ?>><?= h($sourceStatus) ?></option>
+      Publicatiestatus
+      <select name="status">
+        <option value="">Alle actieve statussen</option>
+        <?php foreach (['published', 'draft', 'needs_review', 'archived'] as $status): ?>
+          <option value="<?= h($status) ?>" <?= $filters['status'] === $status ? 'selected' : '' ?>><?= h(organization_status_label($status)) ?></option>
         <?php endforeach; ?>
       </select>
     </label>
     <label>
       Thema
       <select name="theme">
-        <option value="">Alle</option>
+        <option value="">Alle thema's</option>
         <?php foreach ($themes as $theme): ?>
           <option value="<?= h($theme['external_key']) ?>" <?= $filters['theme'] === $theme['external_key'] ? 'selected' : '' ?>><?= h($theme['name']) ?></option>
         <?php endforeach; ?>
       </select>
     </label>
-    <button type="submit">Toepassen</button>
+    <label class="checkbox-label">
+      <input type="checkbox" name="show_archived" value="1" <?= $filters['show_archived'] ? 'checked' : '' ?>>
+      Archief tonen
+    </label>
+    <button type="submit">Filters toepassen</button>
   </form>
 </section>
 
-<section class="panel">
-  <div class="table-wrap">
-    <table>
+<section class="panel organizations-list-panel">
+  <div class="table-wrap organizations-table-wrap">
+    <table class="organizations-table">
       <thead>
         <tr>
-          <th>Naam</th>
-          <th>Slug</th>
-          <th>Status</th>
-          <th>Bronstatus</th>
-          <th>Eiland(en)</th>
+          <th>Organisatie</th>
+          <th>Eiland</th>
+          <th>Publicatie</th>
           <th>Thema's</th>
-          <th>Type</th>
-          <th>Bijgewerkt</th>
-          <th>Laatst gecontroleerd</th>
-          <th>Acties</th>
+          <th>Laatst bijgewerkt</th>
+          <th>Publiek</th>
         </tr>
       </thead>
-      <tbody>
-        <?php if (!$organizations): ?>
-          <tr><td colspan="10" class="empty-state">Geen organisaties gevonden. Pas de filters aan.</td></tr>
-        <?php endif; ?>
+      <tbody data-organizations-body>
         <?php foreach ($organizations as $organization): ?>
-          <tr>
-            <td><a href="organization.php?id=<?= h((string)$organization['id']) ?>"><?= h($organization['name']) ?></a></td>
-            <td><code><?= h($organization['slug']) ?></code></td>
-            <td><?= status_badge($organization['status']) ?></td>
-            <td><?= status_badge($organization['source_status']) ?></td>
-            <td><?= empty_label($organization['islands']) ?></td>
-            <td><?= empty_label($organization['themes']) ?></td>
-            <td><?= empty_label($organization['type_label']) ?></td>
-            <td><?= h((string)$organization['updated_at']) ?></td>
-            <td><?= readable_date($organization['last_checked_at']) ?></td>
-            <td class="table-actions">
-              <a class="button button-small" href="organization.php?id=<?= h((string)$organization['id']) ?>">Bekijken</a>
-              <?php if (admin_can_edit_organizations()): ?>
-                <a class="button button-small primary" href="organization_edit.php?id=<?= h((string)$organization['id']) ?>">Bewerken</a>
-              <?php endif; ?>
+          <?php
+            $publicYouthUrl = public_profile_url($organization, 'youth');
+            $publicProfessionalUrl = public_profile_url($organization, 'professional');
+            $searchText = implode(' ', [
+                $organization['name'],
+                $organization['slug'],
+                $organization['external_key'],
+                $organization['islands'],
+                $organization['island_codes'],
+                $organization['type_label'],
+                $organization['themes'],
+                organization_status_label((string)$organization['status']),
+                source_status_label((string)$organization['source_status']),
+            ]);
+            $rowClasses = ['organization-row'];
+            if ((string)$organization['status'] === 'archived' || (string)$organization['source_status'] === 'demo') {
+                $rowClasses[] = 'is-subtle';
+            }
+          ?>
+          <tr class="<?= h(implode(' ', $rowClasses)) ?>" data-search="<?= h(strtolower($searchText)) ?>">
+            <td class="organization-name-cell">
+              <a class="organization-name-link" href="organization.php?id=<?= h((string)$organization['id']) ?>"><?= h($organization['name']) ?></a>
+              <small>
+                <?= h($organization['slug']) ?>
+                <?php if ((string)$organization['source_status'] === 'demo'): ?>
+                  <span class="source-note"><?= h(source_status_label((string)$organization['source_status'])) ?></span>
+                <?php endif; ?>
+              </small>
+            </td>
+            <td><?= render_compact_labels($organization['islands'], 'Geen eiland') ?></td>
+            <td><?= organization_status_badge((string)$organization['status']) ?></td>
+            <td><?= render_compact_labels($organization['themes'], 'Geen thema') ?></td>
+            <td><?= visible_date($organization['updated_at']) ?></td>
+            <td>
+              <div class="public-link-actions">
+                <?php if ($publicYouthUrl): ?>
+                  <a class="icon-button" href="<?= h($publicYouthUrl) ?>" title="Jongerenpagina bekijken" aria-label="Jongerenpagina bekijken"><?= admin_icon('icons/content/youth-profile.svg') ?></a>
+                <?php else: ?>
+                  <span class="icon-button is-disabled" title="Jongerenpagina niet publiek beschikbaar" aria-label="Jongerenpagina niet publiek beschikbaar"><?= admin_icon('icons/content/youth-profile.svg') ?></span>
+                <?php endif; ?>
+                <?php if ($publicProfessionalUrl): ?>
+                  <a class="icon-button" href="<?= h($publicProfessionalUrl) ?>" title="Professionalspagina bekijken" aria-label="Professionalspagina bekijken"><?= admin_icon('icons/content/professional-profile.svg') ?></a>
+                <?php else: ?>
+                  <span class="icon-button is-disabled" title="Professionalspagina niet publiek beschikbaar" aria-label="Professionalspagina niet publiek beschikbaar"><?= admin_icon('icons/content/professional-profile.svg') ?></span>
+                <?php endif; ?>
+              </div>
             </td>
           </tr>
         <?php endforeach; ?>
+        <tr data-organizations-empty <?= $organizations ? 'hidden' : '' ?>><td colspan="6" class="empty-state">Geen organisaties gevonden.</td></tr>
       </tbody>
     </table>
   </div>
 </section>
+
+<script>
+(() => {
+  const input = document.querySelector('[data-organizations-search]');
+  const rows = Array.from(document.querySelectorAll('[data-search]'));
+  const emptyRow = document.querySelector('[data-organizations-empty]');
+  const count = document.querySelector('[data-organization-visible-count]');
+
+  if (!input || !emptyRow || !count) {
+    return;
+  }
+
+  const updateRows = () => {
+    const query = input.value.trim().toLowerCase();
+    let visible = 0;
+
+    rows.forEach((row) => {
+      const matches = query === '' || row.dataset.search.includes(query);
+      row.hidden = !matches;
+      if (matches) {
+        visible += 1;
+      }
+    });
+
+    emptyRow.hidden = visible !== 0;
+    count.textContent = String(visible);
+  };
+
+  input.addEventListener('input', updateRows);
+  updateRows();
+})();
+</script>
 <?php admin_footer(); ?>
