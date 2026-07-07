@@ -1,2 +1,9 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /database/
+Disallow: /data/
+Disallow: /tools/
+
+Sitemap: https://socialekaartbes.nl/sitemap.xml
