@@ -150,8 +150,8 @@ admin_header('Dashboard', 'dashboard');
         <p>Zoek op organisatie, eiland of thema en open direct het juiste beheerprofiel.</p>
       </div>
       <div class="dashboard-create-action">
-        <span class="dashboard-placeholder-action" aria-disabled="true"><?= dashboard_asset('icons/actions/add.svg', 'admin-icon') ?>Nieuwe organisatie toevoegen</span>
-        <small>Binnenkort beschikbaar: eerst veilig aanmaken als concept.</small>
+        <a class="button primary" href="organization_create.php"><?= dashboard_asset('icons/actions/add.svg', 'admin-icon') ?>Nieuwe organisatie toevoegen</a>
+        <small>Wordt aangemaakt als concept, daarna kun je profielen aanvullen.</small>
       </div>
     </div>
 

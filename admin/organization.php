@@ -18,6 +18,7 @@ $professionalAnswers = [];
 $auditEntries = [];
 $languages = ['nl', 'pap', 'en', 'es'];
 $saved = (string)($_GET['saved'] ?? '') === '1';
+$created = (string)($_GET['created'] ?? '') === '1';
 
 function translation_by_language(array $rows): array
 {
@@ -197,6 +198,7 @@ function render_profile_status_card(string $title, array $answers, array $langua
 function audit_action_label_short(string $action): string
 {
     $labels = [
+        'organization.create' => 'Organisatie aangemaakt',
         'organization.update_basic' => 'Basisgegevens gewijzigd',
         'organization.update_profile' => 'Profiel gewijzigd',
         'organization.update_translation_intro' => 'Korte introtekst gewijzigd',
@@ -334,6 +336,10 @@ $latestAuditDate = $auditEntries[0]['created_at'] ?? null;
 
 <?php if ($saved): ?>
   <p class="notice">Wijzigingen zijn opgeslagen.</p>
+<?php endif; ?>
+
+<?php if ($created): ?>
+  <p class="notice">Organisatie aangemaakt als concept.</p>
 <?php endif; ?>
 
 <div class="organization-dashboard">

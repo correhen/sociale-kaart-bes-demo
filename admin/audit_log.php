@@ -22,6 +22,7 @@ function audit_values(?string $json): array
 function audit_action_label(string $action): string
 {
     $labels = [
+        'organization.create' => 'Organisatie aangemaakt',
         'organization.update_basic' => 'Basisgegevens gewijzigd',
         'organization.update_profile' => 'Profiel gewijzigd',
         'organization.update_translation_intro' => 'Korte introtekst gewijzigd',
