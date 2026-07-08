@@ -1559,15 +1559,10 @@ function organizationCard(org, audience){
 }
 
 function organizationHref(org, audience){
-  if(currentIsland() !== 'bonaire') {
-    const detail = document.body.dataset.page === 'audience-home'
-      ? 'organisaties/detail.html'
-      : 'detail.html';
-    return `${detail}?slug=${encodeURIComponent(org.slug)}`;
-  }
-  const slug = `${encodeURIComponent(org.slug)}/`;
-  if(document.body.dataset.page === 'audience-home') return `organisaties/${slug}`;
-  return slug;
+  const detail = document.body.dataset.page === 'audience-home'
+    ? 'organisaties/detail.html'
+    : 'detail.html';
+  return `${detail}?slug=${encodeURIComponent(org.slug)}`;
 }
 
 function hasMeaningfulValue(value){

@@ -163,5 +163,5 @@ function admin_public_organization_url(array $organization, string $audience, ar
     $audiencePath = $audience === 'professional' ? 'professionals' : 'jongeren';
     $prefix = $islandCode === 'bonaire' ? '' : $islandCode . '/';
 
-    return '../' . $prefix . $audiencePath . '/organisaties/' . rawurlencode($slug) . '/';
+    return '../' . $prefix . $audiencePath . '/organisaties/detail.html?slug=' . rawurlencode($slug);
 }

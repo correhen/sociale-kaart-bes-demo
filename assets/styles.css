@@ -1180,7 +1180,8 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 }
 .kh-home{
   position:relative;
-  overflow:hidden;
+  overflow:visible;
+  z-index:5;
   min-height:520px;
   display:flex;
   flex-direction:column;
@@ -1244,6 +1245,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 }
 .youth-hero-shell{
   position:relative;
+  z-index:5;
   overflow:visible;
   margin:20px 0 26px;
   isolation:isolate;
@@ -1254,7 +1256,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   grid-template-columns:minmax(0,1fr) minmax(390px,1.05fr);
   align-items:stretch;
   min-height:560px;
-  overflow:hidden;
+  overflow:visible;
   border-radius:30px;
   color:white;
   background:
@@ -1289,6 +1291,8 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   position:relative;
   min-width:0;
   min-height:100%;
+  overflow:hidden;
+  border-radius:0 30px 30px 0;
 }
 .youth-hero-media::before{
   content:"";
@@ -1341,7 +1345,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 }
 .youth-live-search{
   position:relative;
-  z-index:4;
+  z-index:40;
   margin-top:30px;
   margin-bottom:14px;
 }
@@ -1381,7 +1385,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   left:16px;
   right:16px;
   top:calc(100% + 10px);
-  z-index:30;
+  z-index:200;
   max-height:430px;
   overflow:auto;
   border:1px solid rgba(2,26,77,.1);
@@ -1484,6 +1488,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   grid-template-columns:minmax(0,1fr) minmax(220px,340px);
   align-items:center;
   gap:28px;
+  z-index:5;
   background:
     radial-gradient(circle at 95% 8%,rgba(163,221,240,.22),transparent 30%),
     var(--kh-gradient-professional);
@@ -1535,6 +1540,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
 }
 .professional-home .kh-search{
   position:relative;
+  z-index:40;
 }
 .professional-home .kh-search button{
   background:var(--turquoise);
@@ -2960,6 +2966,7 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   .youth-hero-media{
     min-height:320px;
     order:-1;
+    border-radius:30px 30px 0 0;
   }
   .youth-hero-media::before{
     background:linear-gradient(0deg,rgba(3,168,175,.86),rgba(3,168,175,.1) 52%,rgba(3,168,175,0));
@@ -2996,6 +3003,9 @@ main{max-width:1180px;margin:0 auto;padding:28px min(4vw,34px) 60px}
   }
   .youth-hero-card{
     border-radius:22px;
+  }
+  .youth-hero-media{
+    border-radius:22px 22px 0 0;
   }
   .youth-hero-copy{
     padding:30px 20px;
