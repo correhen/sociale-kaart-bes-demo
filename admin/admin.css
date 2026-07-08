@@ -699,6 +699,13 @@ textarea {
   font: inherit;
 }
 
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  min-height: 0;
+  padding: 0;
+}
+
 input:focus,
 select:focus,
 textarea:focus {
@@ -946,6 +953,41 @@ tbody tr:last-child td {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
+}
+
+.checkbox-list,
+.relation-choice-list {
+  display: grid;
+  gap: 10px;
+}
+
+.checkbox-list label,
+.checkbox-inline,
+.relation-choice,
+.primary-choice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.checkbox-list label,
+.checkbox-inline,
+.relation-choice label {
+  color: var(--text);
+}
+
+.relation-choice {
+  justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fbfcfe;
+}
+
+.primary-choice {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .form-actions {

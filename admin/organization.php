@@ -200,6 +200,9 @@ function audit_action_label_short(string $action): string
     $labels = [
         'organization.create' => 'Organisatie aangemaakt',
         'organization.update_basic' => 'Basisgegevens gewijzigd',
+        'organization.update_visibility' => 'Zichtbaarheid gewijzigd',
+        'organization.update_audiences' => 'Doelgroepen gewijzigd',
+        'organization.update_themes' => 'Thema\'s gewijzigd',
         'organization.update_profile' => 'Profiel gewijzigd',
         'organization.update_translation_intro' => 'Korte introtekst gewijzigd',
     ];
@@ -353,7 +356,7 @@ $latestAuditDate = $auditEntries[0]['created_at'] ?? null;
     <dl class="compact-detail-list">
       <dt>Naam</dt><dd><?= h($organization['name']) ?></dd>
       <dt>Eiland</dt><dd><?= $islandLabel !== '' ? h($islandLabel) : '<span class="muted">ontbreekt</span>' ?></dd>
-      <dt>Publicatie</dt><dd><?= h(organization_status_text((string)$organization['status'])) ?> - <?= h(organization_visibility_text($organization)) ?></dd>
+      <dt>Publicatie</dt><dd><?= h(organization_status_text((string)$organization['status'])) ?> &middot; <?= h(organization_visibility_text($organization)) ?></dd>
     </dl>
   </section>
 

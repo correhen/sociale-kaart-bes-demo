@@ -24,6 +24,9 @@ function audit_action_label(string $action): string
     $labels = [
         'organization.create' => 'Organisatie aangemaakt',
         'organization.update_basic' => 'Basisgegevens gewijzigd',
+        'organization.update_visibility' => 'Zichtbaarheid gewijzigd',
+        'organization.update_audiences' => 'Doelgroepen gewijzigd',
+        'organization.update_themes' => 'Thema\'s gewijzigd',
         'organization.update_profile' => 'Profiel gewijzigd',
         'organization.update_translation_intro' => 'Korte introtekst gewijzigd',
         'user.create' => 'Gebruiker aangemaakt',
@@ -82,8 +85,11 @@ function audit_field_label(string $field, string $action = ''): string
         'contact.website' => 'Website',
         'contact.address_nl' => 'Adres (NL)',
         'status' => 'Publicatiestatus',
+        'visibility_public' => 'Publieke zichtbaarheid',
         'source_status' => 'Bronstatus',
         'last_checked_at' => 'Laatst gecontroleerd',
+        'audiences' => 'Doelgroepen',
+        'themes' => 'Thema\'s',
         'name' => 'Organisatienaam',
         'professional_summary' => 'Korte omschrijving',
         'type_label' => 'Type-label',
@@ -220,6 +226,24 @@ function audit_display_value($value): string
     }
     if (is_array($value) && array_key_exists('translation_status', $value)) {
         return 'Status: ' . (string)$value['translation_status'];
+    }
+    if (is_array($value) && array_key_exists('label', $value)) {
+        $label = (string)$value['label'];
+        if ((int)($value['is_primary'] ?? 0) === 1) {
+            $label .= ' (primair)';
+        }
+
+        return $label !== '' ? $label : 'ID ' . (string)($value['id'] ?? '');
+    }
+    if (is_array($value)) {
+        $items = [];
+        foreach ($value as $item) {
+            $items[] = audit_display_value($item);
+        }
+
+        $items = array_values(array_filter($items, static fn(string $item): bool => $item !== 'Leeg'));
+
+        return $items ? implode("\n", $items) : 'Leeg';
     }
 
     $text = trim((string)($value ?? ''));
