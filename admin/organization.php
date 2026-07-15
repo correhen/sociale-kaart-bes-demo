@@ -19,6 +19,8 @@ $auditEntries = [];
 $languages = ['nl', 'pap', 'en', 'es'];
 $saved = (string)($_GET['saved'] ?? '') === '1';
 $created = (string)($_GET['created'] ?? '') === '1';
+$archived = (string)($_GET['archived'] ?? '') === '1';
+$restored = (string)($_GET['restored'] ?? '') === '1';
 
 function translation_by_language(array $rows): array
 {
@@ -205,6 +207,8 @@ function audit_action_label_short(string $action): string
         'organization.update_themes' => 'Thema\'s gewijzigd',
         'organization.update_profile' => 'Profiel gewijzigd',
         'organization.update_translation_intro' => 'Korte introtekst gewijzigd',
+        'organization.archive' => 'Organisatie gearchiveerd',
+        'organization.restore' => 'Organisatie hersteld',
     ];
 
     return $labels[$action] ?? $action;
@@ -334,6 +338,19 @@ $latestAuditDate = $auditEntries[0]['created_at'] ?? null;
     <?php elseif ($publicProfessionalUrl): ?>
       <a class="button" href="<?= h($publicProfessionalUrl) ?>"><?= admin_asset_icon('icons/navigation/open-public-page.svg') ?>Open publieke pagina</a>
     <?php endif; ?>
+    <?php if (admin_can_edit_organizations()): ?>
+      <form class="inline-action-form" method="post" action="organization_archive.php">
+        <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+        <input type="hidden" name="id" value="<?= h((string)$organization['id']) ?>">
+        <?php if ((string)$organization['status'] === 'archived'): ?>
+          <input type="hidden" name="action" value="restore">
+          <button class="button is-secondary" type="submit" onclick="return confirm('Weet je zeker dat je deze organisatie wilt herstellen als concept? De organisatie wordt niet automatisch publiek zichtbaar.');">Herstellen als concept</button>
+        <?php else: ?>
+          <input type="hidden" name="action" value="archive">
+          <button class="button danger" type="submit" onclick="return confirm('Weet je zeker dat je deze organisatie wilt archiveren? De organisatie verdwijnt uit de publieke site.');">Archiveren</button>
+        <?php endif; ?>
+      </form>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -343,6 +360,14 @@ $latestAuditDate = $auditEntries[0]['created_at'] ?? null;
 
 <?php if ($created): ?>
   <p class="notice">Organisatie aangemaakt als concept.</p>
+<?php endif; ?>
+
+<?php if ($archived): ?>
+  <p class="notice">Organisatie gearchiveerd. De organisatie is niet meer publiek zichtbaar.</p>
+<?php endif; ?>
+
+<?php if ($restored): ?>
+  <p class="notice">Organisatie hersteld als concept. Controleer de gegevens voordat je opnieuw publiceert.</p>
 <?php endif; ?>
 
 <div class="organization-dashboard">

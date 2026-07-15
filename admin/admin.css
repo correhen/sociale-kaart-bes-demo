@@ -239,6 +239,11 @@ p {
   justify-content: flex-end;
 }
 
+.inline-action-form {
+  display: inline-flex;
+  margin: 0;
+}
+
 .back-link {
   display: inline-block;
   margin-bottom: 12px;
@@ -751,6 +756,12 @@ button:hover,
 .button.is-secondary {
   color: #344256;
   background: #f8fafc;
+}
+
+.button.danger {
+  border-color: #e5b9b9;
+  background: #fff4f4;
+  color: var(--danger);
 }
 
 .button:hover {

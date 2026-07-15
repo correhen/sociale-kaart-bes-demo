@@ -19,6 +19,7 @@ $availableThemes = [];
 $selectedAudienceIds = [];
 $selectedThemeIds = [];
 $primaryThemeId = 0;
+$forcedArchivedPrivate = false;
 $values = [
     'name' => '',
     'professional_summary' => '',
@@ -332,6 +333,10 @@ try {
         }
 
         $values = posted_values();
+        if ($values['status'] === 'archived' && (int)$values['visibility_public'] === 1) {
+            $values['visibility_public'] = 0;
+            $forcedArchivedPrivate = true;
+        }
         $selectedAudienceIds = posted_int_list('audience_ids');
         $selectedThemeIds = posted_int_list('theme_ids');
         $primaryThemeId = (int)($_POST['primary_theme_id'] ?? 0);
@@ -550,7 +555,11 @@ try {
                 $pdo->commit();
             }
 
-            header('Location: organization_edit.php?id=' . rawurlencode((string)$id) . '&saved=1');
+            $redirect = 'organization_edit.php?id=' . rawurlencode((string)$id) . '&saved=1';
+            if ($forcedArchivedPrivate) {
+                $redirect .= '&archived_private=1';
+            }
+            header('Location: ' . $redirect);
             exit;
         }
     }
@@ -586,6 +595,10 @@ $publicProfessionalUrl = $organization ? admin_public_organization_url($organiza
 
 <?php if ((string)($_GET['saved'] ?? '') === '1'): ?>
   <p class="notice">De wijzigingen zijn succesvol opgeslagen.</p>
+<?php endif; ?>
+
+<?php if ((string)($_GET['archived_private'] ?? '') === '1'): ?>
+  <p class="notice notice-review">Publieke zichtbaarheid is uitgezet omdat de organisatie als archief is opgeslagen.</p>
 <?php endif; ?>
 
 <section class="panel">
