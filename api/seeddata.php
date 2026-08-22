@@ -9,6 +9,80 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
     api_json_response(['error' => 'Alleen GET is toegestaan.'], 405);
 }
 
+const API_HIDDEN_PROFESSIONAL_PROFILE_FIELDS = [
+    'general' => ['services'],
+    'referral' => ['criteria', 'indications_required'],
+    'practical' => ['waiting_times'],
+    'additional' => ['partners', 'other_information'],
+];
+
+const API_HIDDEN_PROFESSIONAL_LEGACY_TITLES = [
+    'Welke diensten biedt u aan?',
+    'Kua servisionan boso ta ofresé?',
+    'Which services do you offer?',
+    '¿Qué servicios ofrecen?',
+    'Wat zijn de verwijscriteria? Is een verwijzing nodig, bijvoorbeeld via huisarts of andere professional, of is uw aanbod vrij toegankelijk?',
+    'Kua ta e kriterianan di referensia? Un referensia ta nesesario, por ehèmpel via dokter di kas òf otro profeshonal, òf boso oferta ta libermente aksesibel?',
+    'What are the referral criteria? Is a referral required, for example through a general practitioner or another professional, or is your service freely accessible?',
+    '¿Cuáles son los criterios de derivación? ¿Se necesita una derivación, por ejemplo a través del médico de cabecera u otro profesional, o el servicio es de libre acceso?',
+    'Zijn er indicaties nodig? Ja/nee.',
+    'Indikashon ta nesesario? Si/no.',
+    'Are indications required? Yes/no.',
+    '¿Se necesitan indicaciones? Sí/no.',
+    'Eventuele wachttijden',
+    'Eventual tempu di espera',
+    'Any waiting times',
+    'Posibles tiempos de espera',
+    'Aanvullende informatie voor hulpverleners',
+    'Informashon adishonal pa dunadónan di yudansa',
+    'Additional information for care providers/professionals',
+    'Información adicional para profesionales',
+    'Samenwerkingspartners',
+    'Partnernan di kolaborashon',
+    'Cooperation partners',
+    'Organizaciones colaboradoras',
+    'Overige relevante informatie die belangrijk is voor verwijzers/professionals',
+    'Otro informashon relevante ku ta importante pa referidónan/profeshonalnan',
+    'Other relevant information that is important for referrers/professionals',
+    'Otra información relevante que sea importante para derivadores/profesionales',
+];
+
+function api_is_hidden_professional_profile_field(string $groupKey, string $fieldKey): bool
+{
+    return in_array($fieldKey, API_HIDDEN_PROFESSIONAL_PROFILE_FIELDS[$groupKey] ?? [], true);
+}
+
+function api_normalize_legacy_title(string $value): string
+{
+    $normalized = trim(preg_replace('/\s+/u', ' ', $value) ?? $value);
+    return function_exists('mb_strtolower')
+        ? mb_strtolower($normalized, 'UTF-8')
+        : strtolower($normalized);
+}
+
+function api_is_hidden_professional_legacy_section(array $section): bool
+{
+    $titles = $section['title'] ?? '';
+    $titles = is_array($titles) ? $titles : [$titles];
+    $hiddenTitles = array_map('api_normalize_legacy_title', API_HIDDEN_PROFESSIONAL_LEGACY_TITLES);
+
+    foreach ($titles as $title) {
+        if (in_array(api_normalize_legacy_title((string)$title), $hiddenTitles, true)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function api_visible_professional_sections(array $sections): array
+{
+    return array_values(array_filter(
+        $sections,
+        static fn ($section): bool => !is_array($section) || !api_is_hidden_professional_legacy_section($section)
+    ));
+}
+
 function public_themes(): array
 {
     $themes = [];
@@ -119,7 +193,7 @@ function public_organizations(string $island): array
                 ? $legacySections['youth_sections']
                 : [],
             'professional_sections' => is_array($legacySections['professional_sections'] ?? null)
-                ? $legacySections['professional_sections']
+                ? api_visible_professional_sections($legacySections['professional_sections'])
                 : [],
             'youth_profile' => [],
             'youth_profile_status' => [],
@@ -274,23 +348,25 @@ function public_organizations(string $island): array
     foreach ($profileRows as $row) {
         $organizationId = (int)$row['organization_id'];
         $language = (string)$row['language_code'];
+        $audience = (string)$row['audience_code'];
+        $group = (string)$row['group_key'];
+        $field = (string)$row['field_key'];
         if (
             !isset($organizations[$organizationId])
             || !in_array($language, API_LANGUAGES, true)
+            || ($audience === 'professional' && api_is_hidden_professional_profile_field($group, $field))
         ) {
             continue;
         }
 
         $answer = (string)($row['answer_text'] ?? '');
         $status = (string)($row['translation_status'] ?? 'missing');
-        $field = (string)$row['field_key'];
-        if ((string)$row['audience_code'] === 'youth') {
+        if ($audience === 'youth') {
             $organizations[$organizationId]['youth_profile'][$field][$language] = $answer;
             $organizations[$organizationId]['youth_profile_status'][$field][$language] = $status;
             continue;
         }
-        if ((string)$row['audience_code'] === 'professional') {
-            $group = (string)$row['group_key'];
+        if ($audience === 'professional') {
             $organizations[$organizationId]['professional_profile'][$group][$field][$language] = $answer;
             $organizations[$organizationId]['professional_profile_status'][$group][$field][$language] = $status;
         }

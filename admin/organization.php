@@ -53,6 +53,20 @@ function profile_matrix(array $rows): array
     return array_values($matrix);
 }
 
+function organization_visible_professional_profile_row(array $row): bool
+{
+    $hiddenFields = [
+        'general' => ['services'],
+        'referral' => ['criteria', 'indications_required'],
+        'practical' => ['waiting_times'],
+        'additional' => ['partners', 'other_information'],
+    ];
+    $group = (string)($row['group_key'] ?? '');
+    $field = (string)($row['field_key'] ?? '');
+
+    return !in_array($field, $hiddenFields[$group] ?? [], true);
+}
+
 function organization_source_language(array $islands): string
 {
     foreach ($islands as $island) {
@@ -277,7 +291,11 @@ try {
         ['id' => $id]
     );
     $youthAnswers = profile_matrix(array_values(array_filter($profileRows, static fn(array $row): bool => $row['audience_code'] === 'youth')));
-    $professionalAnswers = profile_matrix(array_values(array_filter($profileRows, static fn(array $row): bool => $row['audience_code'] === 'professional')));
+    $professionalAnswers = profile_matrix(array_values(array_filter(
+        $profileRows,
+        static fn(array $row): bool => $row['audience_code'] === 'professional'
+            && organization_visible_professional_profile_row($row)
+    )));
     $auditEntries = fetch_all(
         "SELECT a.action, a.created_at, u.name AS user_name, u.email AS user_email
         FROM audit_log a

@@ -53,22 +53,36 @@ function audit_profile_field_label(string $field): string
         'short_description' => 'Korte omschrijving',
         'target_group' => 'Doelgroep',
         'support_offer' => 'Hulpaanbod',
-        'services' => 'Diensten',
         'methods' => 'Werkwijzen en methodieken',
         'execution' => 'Uitvoering',
         'problems' => 'Problematiek en hulpvragen',
         'trajectory' => 'Trajectverloop',
         'average_duration' => 'Gemiddelde duur',
         'when_appropriate' => 'Passende doorverwijzing',
-        'criteria' => 'Verwijscriteria',
-        'indications_required' => 'Indicaties vereist',
         'contact_details' => 'Contactgegevens',
         'opening_hours' => 'Openingstijden',
-        'waiting_times' => 'Wachttijden',
-        'other_information' => 'Overige informatie',
     ];
 
     return $labels[$field] ?? str_replace('_', ' ', $field);
+}
+
+function audit_is_hidden_professional_profile_key(string $key): bool
+{
+    $hiddenFields = [
+        'general' => ['services'],
+        'referral' => ['criteria', 'indications_required'],
+        'practical' => ['waiting_times'],
+        'additional' => ['partners', 'other_information'],
+    ];
+    $parts = explode('.', $key);
+    $lastPart = end($parts);
+    if (in_array($lastPart, ['nl', 'pap', 'en', 'es'], true)) {
+        array_pop($parts);
+    }
+    $field = (string)(array_pop($parts) ?? '');
+    $group = (string)(array_pop($parts) ?? '');
+
+    return in_array($field, $hiddenFields[$group] ?? [], true);
 }
 
 function audit_field_label(string $field, string $action = ''): string
@@ -181,6 +195,9 @@ function audit_changes(array $before, array $after, string $action): array
         $afterAnswers = is_array($after['answers'] ?? null) ? $after['answers'] : [];
         $keys = array_values(array_unique(array_merge(array_keys($beforeAnswers), array_keys($afterAnswers))));
         foreach ($keys as $key) {
+            if (audit_is_hidden_professional_profile_key((string)$key)) {
+                continue;
+            }
             $old = audit_profile_cell($beforeAnswers[$key] ?? null);
             $new = audit_profile_cell($afterAnswers[$key] ?? null);
             $components = array_values(array_unique(array_merge(array_keys($old), array_keys($new))));

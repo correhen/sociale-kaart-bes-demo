@@ -26,7 +26,6 @@ const INLINE_PROFESSIONAL_FIELDS = [
         'short_description',
         'target_group',
         'support_offer',
-        'services',
         'methods',
         'execution',
         'problems',
@@ -35,17 +34,10 @@ const INLINE_PROFESSIONAL_FIELDS = [
     ],
     'referral' => [
         'when_appropriate',
-        'criteria',
-        'indications_required',
     ],
     'practical' => [
         'contact_details',
         'opening_hours',
-        'waiting_times',
-    ],
-    'additional' => [
-        'partners',
-        'other_information',
     ],
 ];
 const INLINE_PROFILE_MAX_LENGTH = 100000;

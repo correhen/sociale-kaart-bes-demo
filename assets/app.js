@@ -96,7 +96,6 @@ const PROFILE_I18N = {
           { key: 'short_description', labels: { nl: 'Korte omschrijving van de organisatie', pap: 'Deskripshon kòrtiku di e organisashon', en: 'Short description of the organisation', es: 'Breve descripción de la organización' } },
           { key: 'target_group', labels: { nl: 'Doelgroep?', pap: 'Grupo meta?', en: 'Target group?', es: 'Grupo destinatario' } },
           { key: 'support_offer', labels: { nl: 'Hulpaanbod/dienstverlening', pap: 'Oferta di yudansa/servisio', en: 'Support/services offered', es: 'Oferta de ayuda/servicios' } },
-          { key: 'services', labels: { nl: 'Welke diensten biedt u aan?', pap: 'Kua servisionan boso ta ofresé?', en: 'Which services do you offer?', es: '¿Qué servicios ofrecen?' } },
           { key: 'methods', labels: { nl: 'Welke werkwijzen, methodieken of trainingen worden ingezet?', pap: 'Kua forma di trabou, metodikanan òf entrenamentunan boso ta usa?', en: 'Which approaches, methods or training programmes are used?', es: '¿Qué formas de trabajo, metodologías o capacitaciones se utilizan?' } },
           { key: 'execution', labels: { nl: 'Hoe ziet de uitvoering hiervan eruit?', pap: 'Kon e ehersisio di esaki ta mira den práktika?', en: 'What does this look like in practice?', es: '¿Cómo se lleva esto a cabo en la práctica?' } },
           { key: 'problems', labels: { nl: 'Op welke problematiek of hulpvragen is het aanbod gericht?', pap: 'Riba kua problemátika òf preguntanan di yudansa e oferta ta enfoká?', en: 'Which problems or support needs is the offer aimed at?', es: '¿A qué problemáticas o necesidades de ayuda está dirigida la oferta?' } },
@@ -108,9 +107,7 @@ const PROFILE_I18N = {
         key: 'referral',
         labels: { nl: 'Verwijzing en toegankelijkheid', pap: 'Referensia i aksesibilidat', en: 'Referral and accessibility', es: 'Derivación y accesibilidad' },
         fields: [
-          { key: 'when_appropriate', labels: { nl: 'Wanneer is doorverwijzing naar uw organisatie passend?', pap: 'Ki ora referí na boso organisashon ta adekuá?', en: 'When is referral to your organisation appropriate?', es: '¿Cuándo es apropiado derivar a alguien a su organización?' } },
-          { key: 'criteria', labels: { nl: 'Wat zijn de verwijscriteria? Is een verwijzing nodig, bijvoorbeeld via huisarts of andere professional, of is uw aanbod vrij toegankelijk?', pap: 'Kua ta e kriterianan di referensia? Un referensia ta nesesario, por ehèmpel via dokter di kas òf otro profeshonal, òf boso oferta ta libermente aksesibel?', en: 'What are the referral criteria? Is a referral required, for example through a general practitioner or another professional, or is your service freely accessible?', es: '¿Cuáles son los criterios de derivación? ¿Se necesita una derivación, por ejemplo a través del médico de cabecera u otro profesional, o el servicio es de libre acceso?' } },
-          { key: 'indications_required', labels: { nl: 'Zijn er indicaties nodig? Ja/nee.', pap: 'Indikashon ta nesesario? Si/no.', en: 'Are indications required? Yes/no.', es: '¿Se necesitan indicaciones? Sí/no.' } }
+          { key: 'when_appropriate', labels: { nl: 'Wanneer is doorverwijzing naar uw organisatie passend?', pap: 'Ki ora referí na boso organisashon ta adekuá?', en: 'When is referral to your organisation appropriate?', es: '¿Cuándo es apropiado derivar a alguien a su organización?' } }
         ]
       },
       {
@@ -118,21 +115,81 @@ const PROFILE_I18N = {
         labels: { nl: 'Praktische informatie', pap: 'Informashon práktiko', en: 'Practical information', es: 'Información práctica' },
         fields: [
           { key: 'contact_details', labels: { nl: 'Contactgegevens', pap: 'Detayenan di kontakto', en: 'Contact details', es: 'Datos de contacto' } },
-          { key: 'opening_hours', labels: { nl: 'Openingstijden', pap: 'Orario di apertura', en: 'Opening hours', es: 'Horario de atención' } },
-          { key: 'waiting_times', labels: { nl: 'Eventuele wachttijden', pap: 'Eventual tempu di espera', en: 'Any waiting times', es: 'Posibles tiempos de espera' } }
-        ]
-      },
-      {
-        key: 'additional',
-        labels: { nl: 'Aanvullende informatie voor hulpverleners', pap: 'Informashon adishonal pa dunadónan di yudansa', en: 'Additional information for care providers/professionals', es: 'Información adicional para profesionales' },
-        fields: [
-          { key: 'partners', labels: { nl: 'Samenwerkingspartners', pap: 'Partnernan di kolaborashon', en: 'Cooperation partners', es: 'Organizaciones colaboradoras' } },
-          { key: 'other_information', labels: { nl: 'Overige relevante informatie die belangrijk is voor verwijzers/professionals', pap: 'Otro informashon relevante ku ta importante pa referidónan/profeshonalnan', en: 'Other relevant information that is important for referrers/professionals', es: 'Otra información relevante que sea importante para derivadores/profesionales' } }
+          { key: 'opening_hours', labels: { nl: 'Openingstijden', pap: 'Orario di apertura', en: 'Opening hours', es: 'Horario de atención' } }
         ]
       }
     ]
   }
 };
+const HIDDEN_PROFESSIONAL_PROFILE_FIELDS = {
+  general: new Set(['services']),
+  referral: new Set(['criteria', 'indications_required']),
+  practical: new Set(['waiting_times']),
+  additional: new Set(['partners', 'other_information'])
+};
+const HIDDEN_PROFESSIONAL_LEGACY_TITLES = new Set([
+  'Welke diensten biedt u aan?',
+  'Kua servisionan boso ta ofresé?',
+  'Which services do you offer?',
+  '¿Qué servicios ofrecen?',
+  'Wat zijn de verwijscriteria? Is een verwijzing nodig, bijvoorbeeld via huisarts of andere professional, of is uw aanbod vrij toegankelijk?',
+  'Kua ta e kriterianan di referensia? Un referensia ta nesesario, por ehèmpel via dokter di kas òf otro profeshonal, òf boso oferta ta libermente aksesibel?',
+  'What are the referral criteria? Is a referral required, for example through a general practitioner or another professional, or is your service freely accessible?',
+  '¿Cuáles son los criterios de derivación? ¿Se necesita una derivación, por ejemplo a través del médico de cabecera u otro profesional, o el servicio es de libre acceso?',
+  'Zijn er indicaties nodig? Ja/nee.',
+  'Indikashon ta nesesario? Si/no.',
+  'Are indications required? Yes/no.',
+  '¿Se necesitan indicaciones? Sí/no.',
+  'Eventuele wachttijden',
+  'Eventual tempu di espera',
+  'Any waiting times',
+  'Posibles tiempos de espera',
+  'Aanvullende informatie voor hulpverleners',
+  'Informashon adishonal pa dunadónan di yudansa',
+  'Additional information for care providers/professionals',
+  'Información adicional para profesionales',
+  'Samenwerkingspartners',
+  'Partnernan di kolaborashon',
+  'Cooperation partners',
+  'Organizaciones colaboradoras',
+  'Overige relevante informatie die belangrijk is voor verwijzers/professionals',
+  'Otro informashon relevante ku ta importante pa referidónan/profeshonalnan',
+  'Other relevant information that is important for referrers/professionals',
+  'Otra información relevante que sea importante para derivadores/profesionales'
+].map(normalizeText));
+
+function isHiddenProfessionalProfileField(groupKey, fieldKey){
+  return HIDDEN_PROFESSIONAL_PROFILE_FIELDS[groupKey]?.has(fieldKey) || false;
+}
+
+function isHiddenProfessionalLegacySection(section){
+  const title = section?.title;
+  const values = title && typeof title === 'object' ? Object.values(title) : [title];
+  return values.some(value => HIDDEN_PROFESSIONAL_LEGACY_TITLES.has(normalizeText(value)));
+}
+
+function visibleProfessionalProfile(profile){
+  if(!profile || typeof profile !== 'object' || Array.isArray(profile)) return profile;
+  return Object.fromEntries(Object.entries(profile).map(([groupKey, fields]) => [
+    groupKey,
+    Object.fromEntries(Object.entries(fields || {}).filter(([fieldKey]) => !isHiddenProfessionalProfileField(groupKey, fieldKey)))
+  ]).filter(([, fields]) => Object.keys(fields).length));
+}
+
+function sanitizePublicSeedData(seed){
+  if(!seed || !Array.isArray(seed.organizations)) return seed;
+  return {
+    ...seed,
+    organizations: seed.organizations.map(org => ({
+      ...org,
+      professional_profile: visibleProfessionalProfile(org.professional_profile),
+      professional_profile_status: visibleProfessionalProfile(org.professional_profile_status),
+      professional_sections: Array.isArray(org.professional_sections)
+        ? org.professional_sections.filter(section => !isHiddenProfessionalLegacySection(section))
+        : org.professional_sections
+    }))
+  };
+}
 const SEARCH_SYNONYMS = {
   themes: {
     health_wellbeing: ['ziek', 'gezondheid', 'dokter', 'ggd', 'stress', 'somber', 'depressief', 'paniek', 'malu', 'salú', 'médiko', 'tristu', 'strès', 'sick', 'health', 'doctor', 'sad', 'depressed', 'ill', 'enfermo', 'salud', 'médico', 'triste', 'deprimido'],
@@ -578,7 +635,7 @@ async function fetchPublicSeedData(){
     if(!seed || !Array.isArray(seed.themes) || !Array.isArray(seed.organizations)) {
       throw new Error('Ongeldige API-data');
     }
-    return seed;
+    return sanitizePublicSeedData(seed);
   } catch(error) {
     console.warn('Publieke database-API niet beschikbaar; statische seeddata wordt gebruikt.', error);
     const bonaireSeed = await fetchJson('kadena_hubentut_seeddata_bonaire_v0_1.json', {
@@ -586,17 +643,17 @@ async function fetchPublicSeedData(){
       organizations: [],
       metadata: {}
     });
-    if(island === 'bonaire') return bonaireSeed;
+    if(island === 'bonaire') return sanitizePublicSeedData(bonaireSeed);
     const islandSeed = await fetchJson('youthcare_compass_saba_statia_v0_1.json', {
       themes: [],
       organizations: [],
       metadata: {}
     });
-    return {
+    return sanitizePublicSeedData({
       metadata: { ...(bonaireSeed.metadata || {}), ...(islandSeed.metadata || {}), requested_island: island },
       themes: bonaireSeed.themes || [],
       organizations: (islandSeed.organizations || []).filter(org => org.island === island)
-    };
+    });
   }
 }
 
@@ -1776,6 +1833,7 @@ function legacyDetailAccordionSections(org, audience){
   if(!Array.isArray(org[key])) return '';
   const language = publicDetailLanguage();
   const sections = org[key].map((section, index) => {
+    if(audience === 'professional' && isHiddenProfessionalLegacySection(section)) return null;
     const title = getTranslatedValue(section.title, language, 'nl');
     const body = detailSectionBody(section);
     if(!hasMeaningfulValue(title) || !body) return null;

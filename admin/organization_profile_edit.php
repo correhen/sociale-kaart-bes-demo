@@ -37,7 +37,6 @@ const PROFESSIONAL_PROFILE_GROUPS = [
             'short_description' => 'Korte omschrijving van de organisatie',
             'target_group' => 'Doelgroep',
             'support_offer' => 'Hulpaanbod/dienstverlening',
-            'services' => 'Welke diensten biedt u aan?',
             'methods' => 'Werkwijzen, methodieken of trainingen',
             'execution' => 'Uitvoering in de praktijk',
             'problems' => 'Problematiek of hulpvragen',
@@ -49,8 +48,6 @@ const PROFESSIONAL_PROFILE_GROUPS = [
         'label' => 'Verwijzing en toegankelijkheid',
         'fields' => [
             'when_appropriate' => 'Wanneer is doorverwijzing passend?',
-            'criteria' => 'Verwijscriteria en toegankelijkheid',
-            'indications_required' => 'Zijn indicaties nodig?',
         ],
     ],
     'practical' => [
@@ -58,14 +55,6 @@ const PROFESSIONAL_PROFILE_GROUPS = [
         'fields' => [
             'contact_details' => 'Contactgegevens',
             'opening_hours' => 'Openingstijden',
-            'waiting_times' => 'Eventuele wachttijden',
-        ],
-    ],
-    'additional' => [
-        'label' => 'Aanvullende informatie',
-        'fields' => [
-            'partners' => 'Samenwerkingspartners',
-            'other_information' => 'Overige relevante informatie voor professionals',
         ],
     ],
 ];
